@@ -1,0 +1,1 @@
+import {useTranslation} from 'react-i18next';export default function Account(){const {t}=useTranslation();return <div className="page-heading"><h1>{t('profile')}</h1><p>{t('authUnavailable')}</p></div>}

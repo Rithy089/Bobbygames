@@ -1,0 +1,1 @@
+import {useTranslation} from 'react-i18next';export default function Leaderboard(){const {t}=useTranslation();return <div className="page-heading"><h1>{t('leaderboards')}</h1><p>{t('offlineBoard')}</p></div>}
