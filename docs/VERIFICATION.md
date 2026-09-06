@@ -17,3 +17,10 @@
 - Upgraded Vite to 8.2.2 and removed unused server runtime scaffold; npm audit reports zero vulnerabilities.
 - ESLint uses rules-of-hooks and exhaustive-deps; React Compiler is not enabled.
 
+
+## Phase 3
+- Strict TypeScript, ESLint, 24 unit/component/database tests, production build and source secret scan passed.
+- Ten database security tests execute real PostgreSQL functions, roles, RLS, score rejection, one-use sessions and rate limits in PGlite.
+- Four auth API boundary tests use mocked Supabase; two component tests verify favorites and guest access.
+- Live hosted Supabase and real email delivery remain unconfigured and unverified.
+
