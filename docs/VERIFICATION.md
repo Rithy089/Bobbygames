@@ -24,3 +24,8 @@
 - Four auth API boundary tests use mocked Supabase; two component tests verify favorites and guest access.
 - Live hosted Supabase and real email delivery remain unconfigured and unverified.
 
+## Phase 4
+- Temple Tower and Tuk-Tuk Rush completed with isolated lazy imports, shared controls/audio/lifecycle, dedicated scoring/difficulty rules and tests.
+- TypeScript, lint, 31 unit/component/database tests, production build and secret scan passed before the polish additions.
+- Desktop/mobile Chromium checks passed for all three games, score persistence, pause/restart, route cleanup, search/categories/sorting/favorites, language/theme persistence and mobile navigation.
+- Browser tests found a Khmer encoding defect and an overly broad search locator; corrected both. A later 200% desktop-text overflow is tracked for the final polish phase.
