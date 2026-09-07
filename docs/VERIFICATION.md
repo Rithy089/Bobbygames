@@ -39,3 +39,4 @@
 - Homepage checks confirm that game engine modules are not downloaded until a player route opens. Production output contains independently split game engines.
 - Dependency audit reports zero vulnerabilities. This and the source pattern scan are point-in-time checks, not a complete security audit.
 - Live Supabase, real email flows, physical devices and native WebMCP remain outside the verified scope, as detailed in RELEASE.md.
+- Vercel production deployment succeeded; deployed HTTP/metadata checks and all three game start/pause flows passed on desktop and emulated Pixel 5 with no page errors or horizontal overflow. Sites separately reports a successful owner-private deployment. See RELEASE.md for URLs and the deployed source revision.
