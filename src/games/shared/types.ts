@@ -28,6 +28,8 @@ export type GameOptions = {
   onSnapshot: (s: Snapshot) => void;
   onFinish: (s: Snapshot) => void;
   audio: (kind: 'catch' | 'miss' | 'perfect') => void;
+  reducedMotion?: () => boolean;
+  labels?: { perfect: string; missed: string; hazard: string };
 };
 export type Scene = {
   snapshot: Snapshot;

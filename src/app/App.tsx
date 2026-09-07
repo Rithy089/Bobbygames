@@ -33,7 +33,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { usePortal } from '../lib/store';
-import { portfolio, github, linkedin } from '../lib/catalog';
+import { portfolio, github, projectGithub, linkedin } from '../lib/catalog';
 import { AuthBridge, useAccount } from '../features/account';
 import WebTools from '../features/WebTools';
 import { Seo } from '../lib/seo';
@@ -353,6 +353,9 @@ export default function App() {
                 </a>
                 <a href={github} target="_blank" rel="noopener noreferrer">
                   GitHub
+                </a>
+                <a href={projectGithub} target="_blank" rel="noopener noreferrer">
+                  {t('sourceCode')}
                 </a>
                 <a href={linkedin} target="_blank" rel="noopener noreferrer">
                   LinkedIn

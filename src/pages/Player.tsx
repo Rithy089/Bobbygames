@@ -45,6 +45,14 @@ function PlayerGame() {
   const [starting, setStarting] = useState(false);
   const [scoreMessage, setScoreMessage] = useState('');
   const { t } = useTranslation();
+  const labels = useRef({ perfect: '', missed: '', hazard: '' });
+  useEffect(() => {
+    labels.current = {
+      perfect: t('perfectPlacement'),
+      missed: t('missedFruit'),
+      hazard: t('stoneHit'),
+    };
+  }, [t]);
   const game = games.find((g) => g.id === id);
   const canvas = useRef<HTMLCanvasElement>(null);
   const frame = useRef<HTMLDivElement>(null);
@@ -78,7 +86,15 @@ function PlayerGame() {
       return () => sound.destroy();
     }
     void loader()
-      .then((module) => {
+      .then(async (module) => {
+        const { loadSprites } = await import('../games/shared/sprites');
+        await loadSprites(
+          game.id === 'mango-catch'
+            ? ['mango', 'dragon', 'basket', 'countryside']
+            : game.id === 'tuk-tuk-rush'
+              ? ['mango', 'bananas', 'basket']
+              : [],
+        );
         if (disposed || !canvas.current) return;
         engine.current = module.default({
           canvas: canvas.current,
@@ -116,6 +132,11 @@ function PlayerGame() {
             } else setScoreMessage('localScore');
           },
           audio: sound.effect,
+          reducedMotion: () =>
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+          get labels() {
+            return labels.current;
+          },
         });
         setLoaded(true);
       })

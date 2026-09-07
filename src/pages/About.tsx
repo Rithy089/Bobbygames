@@ -1,6 +1,6 @@
 import { ArrowUpRight, Code2, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { portfolio, github, linkedin } from '../lib/catalog';
+import { portfolio, github, projectGithub, linkedin } from '../lib/catalog';
 export default function About() {
   const { t } = useTranslation();
   return (
@@ -42,6 +42,7 @@ export default function About() {
             {[
               [portfolio, 'viewPortfolio'],
               [github, 'github'],
+              [projectGithub, 'sourceCode'],
               [linkedin, 'linkedin'],
             ].map(([href, key]) => (
               <a

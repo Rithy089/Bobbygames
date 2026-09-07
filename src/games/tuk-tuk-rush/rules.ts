@@ -18,3 +18,17 @@ export const collides = (
   Math.abs(item.y - config.playerY) < (item.type === 'coin' ? 37 : 49);
 export const scoreFor = (distance: number, coins: number) =>
   Math.floor(distance) + coins * 25;
+// Inset hit boxes follow the rendered vehicle, with swept vertical overlap.
+export const collidesAt = (
+  playerX: number,
+  item: { lane: number; y: number; type: string },
+  previousY = item.y,
+) => {
+  const halfY = item.type === 'car' ? 64 : item.type === 'cone' ? 43 : 37;
+  const halfX = item.type === 'car' ? 59 : item.type === 'cone' ? 47 : 43;
+  return (
+    Math.abs(playerX - config.lanes[item.lane]) < halfX &&
+    previousY < config.playerY + halfY &&
+    item.y > config.playerY - halfY
+  );
+};

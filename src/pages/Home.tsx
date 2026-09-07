@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Play,
   Sparkles,
-  Globe,
   MousePointer2,
   Zap,
   Heart,
@@ -67,7 +66,7 @@ export default function Home() {
           </span>
           <div className="hero-game-bottom">
             <div>
-              <span className="small">01 / 03</span>
+              <span className="small">01 / 04</span>
               <h2>{t('mango-catch.title')}</h2>
               <p>{t('mango-catch.hint')}</p>
             </div>
@@ -109,7 +108,7 @@ export default function Home() {
       )}
       <section className="culture-banner">
         <div className="culture-emblem" aria-hidden="true">
-          <Globe size={60} strokeWidth={1} />
+          <img src="/discover/countryside-480.webp" width="480" height="320" loading="lazy" alt="" />
           <span>កម្ពុជា</span>
         </div>
         <div>

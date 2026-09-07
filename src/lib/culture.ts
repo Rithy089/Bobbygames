@@ -56,4 +56,96 @@ export const culture = [
     },
     source: 'https://ich.unesco.org/en/RL/sbek-thom-khmer-shadow-theatre-00108',
   },
+  {
+    id: 'phnom-penh',
+    en: {
+      title: 'Phnom Penh',
+      description:
+        'Cambodia’s capital sits where the Mekong, Tonlé Sap and Bassac rivers meet. Its riverside is part of the city’s everyday setting.',
+    },
+    km: {
+      title: 'ភ្នំពេញ',
+      description:
+        'រាជធានីកម្ពុជាស្ថិតនៅកន្លែងប្រសព្វនៃទន្លេមេគង្គ ទន្លេសាប និងទន្លេបាសាក់។ មាត់ទន្លេជាផ្នែកមួយនៃទិដ្ឋភាពជីវិតប្រចាំថ្ងៃរបស់ទីក្រុង។',
+    },
+    source: 'https://phnompenh.gov.kh/en/phnom-penh-city/facts/',
+  },
+  {
+    id: 'countryside',
+    en: {
+      title: 'Rice-field countryside',
+      description:
+        'Rice cultivation is an important part of Cambodia’s agriculture. Fields and rural communities inspire the setting of Mango Catch.',
+    },
+    km: {
+      title: 'ជនបទ និងវាលស្រែ',
+      description:
+        'ការដាំដុះស្រូវជាផ្នែកសំខាន់នៃកសិកម្មកម្ពុជា។ វាលស្រែ និងសហគមន៍ជនបទជាគំនិតសម្រាប់ទិដ្ឋភាពហ្គេមចាប់ផ្លែស្វាយ។',
+    },
+    source: 'https://www.fao.org/cambodia/our-office/cambodia-at-a-glance/en',
+  },
+  {
+    id: 'food',
+    en: {
+      title: 'At the Cambodian table',
+      description:
+        'Rice is a staple food in Cambodia. This illustrated meal celebrates the colors of rice, coconut and mango.',
+    },
+    km: {
+      title: 'អាហារកម្ពុជា',
+      description: 'បាយជាអាហារចម្បងនៅកម្ពុជា។ រូបគំនូរម្ហូបនេះបង្ហាញពណ៌ស្រស់នៃបាយ ដូង និងស្វាយ។',
+    },
+    source: 'https://www.fao.org/4/i3761e/i3761e.pdf',
+  },
+  {
+    id: 'market',
+    en: {
+      title: 'A morning at the market',
+      description:
+        'Phnom Penh’s Central Market has stalls selling fresh produce, cooked food and clothing. Our market illustration imagines an everyday produce stall.',
+    },
+    km: {
+      title: 'ពេលព្រឹកនៅផ្សារ',
+      description:
+        'ផ្សារធំថ្មីនៅភ្នំពេញមានតូបលក់បន្លែផ្លែឈើ អាហារឆ្អិន និងសម្លៀកបំពាក់។ រូបគំនូររបស់យើងបង្ហាញតូបបន្លែផ្លែឈើបែបប្រចាំថ្ងៃ។',
+    },
+    source:
+      'https://tourismcambodia.org/public/provinces/search/detail/1591/central-market',
+  },
 ];
+
+// These are original illustrations, not documentary photographs or exact reconstructions.
+export const cultureAlt: Record<string, { en: string; km: string }> = {
+  angkor: {
+    en: 'Painted illustration of Angkor Wat’s towers reflected in water, framed by trees.',
+    km: 'រូបគំនូរប្រាសាទអង្គរវត្តឆ្លុះក្នុងទឹក និងមានដើមឈើជុំវិញ។',
+  },
+  'phnom-penh': {
+    en: 'Illustrated Phnom Penh-inspired riverside, colorful buildings and a tuk-tuk.',
+    km: 'រូបគំនូរមាត់ទន្លេ អគារចម្រុះពណ៌ និងរ៉ឺម៉កកង់បី ដែលបំផុសគំនិតពីភ្នំពេញ។',
+  },
+  countryside: {
+    en: 'Illustrated green rice fields, palms and a small countryside house.',
+    km: 'រូបគំនូរវាលស្រែបៃតង ដើមត្នោត និងផ្ទះតូចនៅជនបទ។',
+  },
+  food: {
+    en: 'Illustrated rice, sliced mango, coconut and a leaf-wrapped parcel on a woven tray.',
+    km: 'រូបគំនូរបាយ ស្វាយ ដូង និងអាហារខ្ចប់ស្លឹកនៅលើថាសត្បាញ។',
+  },
+  market: {
+    en: 'Illustrated produce stalls with baskets of colorful fruit beneath striped awnings.',
+    km: 'រូបគំនូរតូបលក់ផ្លែឈើចម្រុះពណ៌ក្នុងកន្ត្រកក្រោមដំបូលឆ្នូត។',
+  },
+  shadow: {
+    en: 'Illustrated shadow-theatre puppets held before a warmly lit screen.',
+    km: 'រូបគំនូររូបស្បែកនៅមុខផ្ទាំងសំពត់ដែលមានពន្លឺ។',
+  },
+  'tonle-sap': {
+    en: 'Illustrated wetland with a boat, water birds and stilt houses.',
+    km: 'រូបគំនូរតំបន់ដីសើមមានទូក បក្សីទឹក និងផ្ទះលើសសរ។',
+  },
+  dance: {
+    en: 'Respectful illustration of a Khmer classical dancer in an elaborate costume.',
+    km: 'រូបគំនូរអ្នករបាំបុរាណខ្មែរក្នុងសម្លៀកបំពាក់ដ៏ប្រណិត។',
+  },
+};

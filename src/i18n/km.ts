@@ -1,4 +1,10 @@
 export default {
+  perfectPlacement: 'ល្អឥតខ្ចោះ!',
+  missedFruit: 'ខកខាន · −1 ♥',
+  stoneHit: 'ថ្ម · −1 ♥',
+  sourceCode: 'កូដប្រភព',
+  originalIllustration: 'រូបគំនូរដើម',
+  illustrationNote: 'ស្វែងយល់ពីកម្ពុជាតាមរូបគំនូរ។ ស្នាដៃដើមទាំងនេះជាការបកស្រាយបែបសិល្បៈ មិនមែនជារូបថត ឬការចម្លងសំណង់ពិតប្រាកដទេ។',
   tagline: 'លេងបន្តិច។ ញញឹមឱ្យច្រើន។',
   brand: 'BobbyGames',
   games: 'ហ្គេម',

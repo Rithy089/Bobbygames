@@ -35,6 +35,7 @@ export const games: Game[] = [
 ];
 export const portfolio = 'https://sayrithy-portfolio.vercel.app/';
 export const github = 'https://github.com/Rithy089';
+export const projectGithub = 'https://github.com/Rithy089/Bobbygames';
 export const linkedin = 'https://www.linkedin.com/in/rithy-say-a59aa32a0/';
 export const isGameId = (v: unknown): v is GameId =>
   games.some((g) => g.id === v);

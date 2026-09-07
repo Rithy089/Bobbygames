@@ -6,7 +6,7 @@ import {
   W,
   H,
 } from '../shared/types';
-import { rounded } from '../shared/draw';
+import { rounded, palm } from '../shared/draw';
 import { place, difficulty, config, award, type Block } from './rules';
 export default function createGame(options: GameOptions) {
   const snapshot = freshSnapshot();
@@ -14,6 +14,7 @@ export default function createGame(options: GameOptions) {
   let moving: Block = { x: 60, width: config.baseWidth };
   let direction = 1,
     pulse = 0;
+  let settle = 0;
   let fragments: { x: number; y: number; width: number; vy: number }[] = [];
   const scene: Scene = {
     snapshot,
@@ -24,9 +25,12 @@ export default function createGame(options: GameOptions) {
       direction = 1;
       pulse = 0;
       fragments = [];
+      settle = 0;
     },
     update(dt, input) {
-      moving.x += direction * difficulty(snapshot.height) * dt;
+      if (!input.action)
+        moving.x += direction * difficulty(snapshot.height) * dt;
+      settle = Math.max(0, settle - dt);
       if (moving.x < 25) {
         moving.x = 25;
         direction = 1;
@@ -59,12 +63,13 @@ export default function createGame(options: GameOptions) {
           });
         }
         blocks.push({ x: result.x, width: result.width });
+        settle = 0.18;
         Object.assign(
           snapshot,
           award(snapshot.height, snapshot.combo, result.perfect),
         );
         options.audio(result.perfect ? 'perfect' : 'catch');
-        pulse = result.perfect ? 0.3 : 0;
+        pulse = result.perfect ? 1.1 : 0;
         direction = blocks.length % 2 ? 1 : -1;
         moving = {
           x: direction === 1 ? 25 : W - 25 - result.width,
@@ -75,9 +80,9 @@ export default function createGame(options: GameOptions) {
     },
     draw(ctx) {
       const bg = ctx.createLinearGradient(0, 0, 0, H);
-      bg.addColorStop(0, '#453d6b');
-      bg.addColorStop(0.6, '#c18394');
-      bg.addColorStop(1, '#e9b885');
+      bg.addColorStop(0, '#425879');
+      bg.addColorStop(0.6, '#e29c79');
+      bg.addColorStop(1, '#f8d895');
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#f6c28e';
@@ -85,7 +90,7 @@ export default function createGame(options: GameOptions) {
       ctx.arc(615, 180, 68, 0, Math.PI * 2);
       ctx.fill();
       for (let i = 0; i < 3; i++) {
-        ctx.fillStyle = ['#716281', '#826a84', '#967687'][i];
+        ctx.fillStyle = ['#698776', '#48735e', '#325946'][i];
         ctx.beginPath();
         ctx.moveTo(0, 440 + i * 45);
         for (let x = 0; x <= 850; x += 100)
@@ -95,6 +100,8 @@ export default function createGame(options: GameOptions) {
         ctx.fill();
       }
       rounded(ctx, 195, 521, 410, 34, 9, '#544252');
+      palm(ctx, 95, 540, 1.25);
+      palm(ctx, 725, 545, 0.95);
       const start = Math.max(0, blocks.length - 12);
       const drawBlock = (b: Block, y: number, index: number) => {
         const color = ['#dec29b', '#cda47c', '#d9b58a', '#e7c89f'][index % 4];
@@ -115,7 +122,15 @@ export default function createGame(options: GameOptions) {
       blocks
         .slice(start)
         .forEach((b, i) =>
-          drawBlock(b, 490 - i * config.blockHeight, start + i),
+          drawBlock(
+            b,
+            490 -
+              i * config.blockHeight -
+              (start + i === blocks.length - 1 && !options.reducedMotion?.()
+                ? 12 * (settle / 0.18) ** 2
+                : 0),
+            start + i,
+          ),
         );
       drawBlock(
         moving,
@@ -125,17 +140,26 @@ export default function createGame(options: GameOptions) {
       ctx.strokeStyle = '#ffffff22';
       ctx.setLineDash([5, 7]);
       ctx.beginPath();
-      ctx.moveTo(400, 30);
-      ctx.lineTo(400, 510);
+      const top = blocks[blocks.length - 1];
+      ctx.moveTo(top.x, 70);
+      ctx.lineTo(top.x, 510);
+      ctx.moveTo(top.x + top.width, 70);
+      ctx.lineTo(top.x + top.width, 510);
       ctx.stroke();
       ctx.setLineDash([]);
-      for (const f of fragments)
+      for (const f of options.reducedMotion?.() ? [] : fragments)
         rounded(ctx, f.x, f.y, f.width, 28, 3, '#b48e73');
       if (pulse > 0) {
         ctx.fillStyle = '#ffe7b6';
-        ctx.font = 'bold 25px Inter, sans-serif';
+        ctx.font = 'bold 25px Inter, Noto Sans Khmer, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('✦ ×' + snapshot.combo, 400, 60);
+        rounded(ctx, 235, 25, 330, 49, 12, '#264e40');
+        ctx.fillStyle = '#fff0bf';
+        ctx.fillText(
+          (options.labels?.perfect || 'Perfect!') + ' ×' + snapshot.combo,
+          400,
+          59,
+        );
       }
     },
   };

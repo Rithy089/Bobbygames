@@ -7,7 +7,8 @@ import {
   H,
 } from '../shared/types';
 import { rounded, palm } from '../shared/draw';
-import { difficulty, changeLane, collides, scoreFor, config } from './rules';
+import { difficulty, changeLane, collidesAt, scoreFor, config } from './rules';
+import { sprite } from '../shared/sprites';
 export default function createGame(options: GameOptions) {
   const snapshot = freshSnapshot();
   let lane = 1,
@@ -52,8 +53,9 @@ export default function createGame(options: GameOptions) {
         });
       }
       for (const item of items) {
+        const previousY = item.y;
         item.y += d.speed * dt;
-        if (collides(lane, item)) {
+        if (collidesAt(visualX, item, previousY)) {
           if (item.type === 'coin') {
             coins++;
             snapshot.combo++;
@@ -64,6 +66,7 @@ export default function createGame(options: GameOptions) {
             snapshot.phase = 'over';
             snapshot.lives = 0;
             options.audio('miss');
+            break;
           }
         }
       }
@@ -91,7 +94,7 @@ export default function createGame(options: GameOptions) {
       }
       ctx.setLineDash([]);
       for (let i = -1; i < 4; i++) {
-        const y = i * 220 + (scroll % 220);
+        const y = i * 220 + (options.reducedMotion?.() ? 0 : scroll % 220);
         for (const [x, color] of [
           [20, '#bb7860'],
           [620, '#68928b'],
@@ -104,6 +107,8 @@ export default function createGame(options: GameOptions) {
           ctx.fillText(x === 20 ? 'ផ្សារ' : 'សួស្តី', x + 75, y + 34);
           rounded(ctx, x + 17, y + 62, 43, 67, 2, '#42535a');
           rounded(ctx, x + 80, y + 65, 52, 38, 2, '#ecd0a0');
+          sprite(ctx, 'basket', x + 73, y + 97, 62, 43);
+          sprite(ctx, x === 20 ? 'mango' : 'bananas', x + 85, y + 88, 40, 35);
           for (let k = 0; k < 6; k++)
             rounded(
               ctx,
@@ -161,12 +166,20 @@ export default function createGame(options: GameOptions) {
       rounded(ctx, x - 31, y - 32, 62, 24, 6, '#f4c766');
       rounded(ctx, x - 29, y - 4, 58, 33, 5, '#345e67');
       rounded(ctx, x - 33, y + 33, 66, 9, 4, '#f4c766');
+      // Original open passenger cabin, red canopy trim and blue chassis.
+      rounded(ctx, x - 37, y - 39, 74, 8, 3, '#b74443');
+      rounded(ctx, x - 25, y + 1, 50, 20, 4, '#e4a663');
+      rounded(ctx, x - 30, y + 24, 60, 8, 3, '#275a91');
+      rounded(ctx, x - 31, y - 6, 4, 39, 1, '#e8d6a3');
+      rounded(ctx, x + 27, y - 6, 4, 39, 1, '#e8d6a3');
+      rounded(ctx, x - 45, y - 22, 12, 5, 2, '#e8d6a3');
+      rounded(ctx, x + 33, y - 22, 12, 5, 2, '#e8d6a3');
       ctx.fillStyle = '#ffe9a6';
       ctx.beginPath();
       ctx.arc(x - 20, y - 20, 6, 0, Math.PI * 2);
       ctx.arc(x + 20, y - 20, 6, 0, Math.PI * 2);
       ctx.fill();
-      if (tokenGlow > 0) {
+      if (tokenGlow > 0 && !options.reducedMotion?.()) {
         ctx.strokeStyle = '#ffd563';
         ctx.lineWidth = 4;
         ctx.beginPath();

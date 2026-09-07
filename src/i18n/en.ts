@@ -1,4 +1,10 @@
 export default {
+  perfectPlacement: 'Perfect!',
+  missedFruit: 'Missed · −1 ♥',
+  stoneHit: 'Stone · −1 ♥',
+  sourceCode: 'Source code',
+  originalIllustration: 'Original illustration',
+  illustrationNote: 'An illustrated look at Cambodia. These original artworks are interpretations, not photographs or exact reconstructions.',
   tagline: 'PLAY A LITTLE. SMILE A LOT.',
   brand: 'BobbyGames',
   games: 'Games',

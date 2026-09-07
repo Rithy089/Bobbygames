@@ -1,31 +1,33 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Landmark,
-  Waves,
-  Flower2,
-  PanelsTopLeft,
-  ArrowUpRight,
-} from 'lucide-react';
-import { culture } from '../lib/culture';
+import { ArrowUpRight } from 'lucide-react';
+import { culture, cultureAlt } from '../lib/culture';
 export default function Discover() {
-  const { t } = useTranslation();
-  const icons = [Landmark, Waves, Flower2, PanelsTopLeft];
+  const { t, i18n } = useTranslation();
   return (
     <>
       <div className="page-heading">
         <span className="eyebrow">{t('cultureEyebrow')}</span>
         <h1>{t('discover')}</h1>
         <p>{t('cultureText')}</p>
+        <p className="illustration-note">{t('illustrationNote')}</p>
       </div>
       <div className="culture-grid">
         {culture.map((c, i) => {
-          const Icon = icons[i % icons.length];
           return (
             <article key={c.id} className="culture-card">
-              <div className={'culture-art tone-' + i} aria-hidden="true">
-                <Icon size={62} strokeWidth={1} />
-                <span>0{i + 1}</span>
-              </div>
+              <figure className="culture-picture">
+                <img
+                  src={`/discover/${c.id}-960.webp`}
+                  srcSet={`/discover/${c.id}-480.webp 480w, /discover/${c.id}-960.webp 960w`}
+                  sizes="(max-width: 1000px) 92vw, 42vw"
+                  width="960"
+                  height="640"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  alt={cultureAlt[c.id][i18n.language === 'km' ? 'km' : 'en']}
+                />
+                <figcaption>{t('originalIllustration')}</figcaption>
+              </figure>
               <div className="card-body">
                 <h2>{c.en.title}</h2>
                 <h3 lang="km">{c.km.title}</h3>
@@ -37,7 +39,7 @@ export default function Discover() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  UNESCO · {t('source')}
+                  {t('source')}
                   <ArrowUpRight size={16} />
                 </a>
               </div>

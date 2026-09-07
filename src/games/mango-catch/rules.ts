@@ -28,3 +28,15 @@ export function missItem(s: MangoState, hazard: boolean): MangoState {
     : { ...s, lives: Math.max(0, s.lives - 1), streak: 0, combo: 0 };
 }
 export const isOver = (s: MangoState) => s.lives <= 0;
+// Test the swept fruit center against the basket rim: no tunnelling on slow frames.
+export const catches = (
+  itemX: number,
+  previousY: number,
+  nextY: number,
+  basketX: number,
+) =>
+  previousY <= config.catchY + 12 &&
+  nextY >= config.catchY - 18 &&
+  Math.abs(itemX - basketX) <= config.basketWidth / 2;
+export const approach = (current: number, target: number, dt: number) =>
+  current + (target - current) * (1 - Math.exp(-18 * dt));

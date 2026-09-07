@@ -1,4 +1,5 @@
 import { W, H } from './types';
+import { sprite } from './sprites';
 export function rounded(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -43,6 +44,15 @@ export function palm(
   ctx.restore();
 }
 export function countryside(ctx: CanvasRenderingContext2D) {
+  if (sprite(ctx, 'countryside', 0, 0, W, H)) {
+    ctx.fillStyle = '#ffefc333';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#bb8b52';
+    ctx.fillRect(0, 558, W, 42);
+    ctx.fillStyle = '#ebc987';
+    ctx.fillRect(0, 558, W, 6);
+    return;
+  }
   const sky = ctx.createLinearGradient(0, 0, 0, H);
   sky.addColorStop(0, '#9acbbc');
   sky.addColorStop(0.7, '#f7d68d');
@@ -87,6 +97,10 @@ export function fruit(
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(angle);
+  if (type !== 'stone' && sprite(ctx, type, -25, -28, 50, 56)) {
+    ctx.restore();
+    return;
+  }
   if (type === 'stone') {
     ctx.fillStyle = '#43515c';
     ctx.beginPath();
@@ -122,6 +136,7 @@ export function fruit(
   ctx.restore();
 }
 export function basket(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  if (sprite(ctx, 'basket', x - 57, y - 37, 114, 86)) return;
   ctx.strokeStyle = '#7d4b2e';
   ctx.lineWidth = 6;
   ctx.beginPath();
