@@ -1,4 +1,4 @@
-﻿# BobbyGames implementation and acceptance plan
+# BobbyGames implementation and acceptance plan
 
 Original Cambodian arcade by Say Rithy (Bobby). React + strict TypeScript + Vite, React Router, Tailwind, Zustand, i18next, TanStack Query, optional Supabase. Adapt the generated Sites scaffold to the user's preferred Vite SPA architecture; retain reusable primitives. Native Canvas keeps three games lightweight, isolated and testable.
 

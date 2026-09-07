@@ -1,1 +1,46 @@
-import {describe,it,expect,beforeEach} from 'vitest';import {validName,games} from './catalog';import {usePortal} from './store';import en from '../i18n/en';import km from '../i18n/km';describe('foundation',()=>{beforeEach(()=>usePortal.setState({favorites:[],recent:[],best:{},runs:[]}));it('accepts Khmer names and rejects markup, role impersonation and length violations',()=>{expect(validName('បូប៊ី')).toBe(true);for(const n of ['<script>','ab','admin','a'.repeat(21)])expect(validName(n)).toBe(false)});it('favorites toggle and history de-duplicates',()=>{usePortal.getState().toggleFavorite('mango-catch');expect(usePortal.getState().favorites).toEqual(['mango-catch']);usePortal.getState().toggleFavorite('mango-catch');expect(usePortal.getState().favorites).toEqual([]);usePortal.getState().visit('mango-catch');usePortal.getState().visit('mango-catch');expect(usePortal.getState().recent).toHaveLength(1)});it('keeps best scores monotonic',()=>{for(const score of [30,10,50])usePortal.getState().finish({game:'mango-catch',score,duration:10,date:new Date().toISOString()});expect(usePortal.getState().best['mango-catch']).toBe(50);expect(JSON.parse(localStorage.getItem('bobby-portal')!).state.best['mango-catch']).toBe(50)});it('covers every English key in Khmer',()=>{expect(Object.keys(km).sort()).toEqual(Object.keys(en).sort());for(const g of games)expect(Object.keys(km[g.id])).toEqual(Object.keys(en[g.id]))})});
+import { describe, it, expect, beforeEach } from 'vitest';
+import { validName, games } from './catalog';
+import { usePortal } from './store';
+import en from '../i18n/en';
+import km from '../i18n/km';
+describe('foundation', () => {
+  beforeEach(() =>
+    usePortal.setState({ favorites: [], recent: [], best: {}, runs: [] }),
+  );
+  it('accepts Khmer names and rejects markup, role impersonation and length violations', () => {
+    expect(validName('បូប៊ី')).toBe(true);
+    for (const n of ['<script>', 'ab', 'admin', 'a'.repeat(21)])
+      expect(validName(n)).toBe(false);
+  });
+  it('favorites toggle and history de-duplicates', () => {
+    usePortal.getState().toggleFavorite('mango-catch');
+    expect(usePortal.getState().favorites).toEqual(['mango-catch']);
+    usePortal.getState().toggleFavorite('mango-catch');
+    expect(usePortal.getState().favorites).toEqual([]);
+    usePortal.getState().visit('mango-catch');
+    usePortal.getState().visit('mango-catch');
+    expect(usePortal.getState().recent).toHaveLength(1);
+  });
+  it('keeps best scores monotonic', () => {
+    for (const score of [30, 10, 50])
+      usePortal.getState().finish({
+        game: 'mango-catch',
+        score,
+        duration: 10,
+        date: new Date().toISOString(),
+      });
+    expect(usePortal.getState().best['mango-catch']).toBe(50);
+    expect(
+      JSON.parse(localStorage.getItem('bobby-portal')!).state.best[
+        'mango-catch'
+      ],
+    ).toBe(50);
+  });
+  it('covers every English key in Khmer', () => {
+    expect(km.games).toBe('ហ្គេម');
+    expect(km.heroTitle).not.toContain('Ã');
+    expect(Object.keys(km).sort()).toEqual(Object.keys(en).sort());
+    for (const g of games)
+      expect(Object.keys(km[g.id])).toEqual(Object.keys(en[g.id]));
+  });
+});

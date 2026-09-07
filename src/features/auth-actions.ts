@@ -1,2 +1,37 @@
-import {supabase} from '../lib/supabase';export type AuthMode='login'|'signup'|'reset'|'password';
-export async function authenticate(mode:AuthMode,email:string,password:string){if(!supabase)throw Error('authUnavailable');const redirect=window.location.origin+'/reset-password';if(mode==='login'){const {error}=await supabase.auth.signInWithPassword({email,password});if(error)throw Error('authError');return 'login'}if(mode==='signup'){const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin+'/profile'}});if(error)throw Error('authError');return data.session?'login':'authSuccess'}if(mode==='reset'){const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:redirect});if(error)throw Error('authError');return 'authSuccess'}const {error}=await supabase.auth.updateUser({password});if(error)throw Error('authError');return 'login'}
+import { supabase } from '../lib/supabase';
+export type AuthMode = 'login' | 'signup' | 'reset' | 'password';
+export async function authenticate(
+  mode: AuthMode,
+  email: string,
+  password: string,
+) {
+  if (!supabase) throw Error('authUnavailable');
+  const redirect = window.location.origin + '/reset-password';
+  if (mode === 'login') {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) throw Error('authError');
+    return 'login';
+  }
+  if (mode === 'signup') {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: window.location.origin + '/profile' },
+    });
+    if (error) throw Error('authError');
+    return data.session ? 'login' : 'authSuccess';
+  }
+  if (mode === 'reset') {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: redirect,
+    });
+    if (error) throw Error('authError');
+    return 'authSuccess';
+  }
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) throw Error('authError');
+  return 'login';
+}

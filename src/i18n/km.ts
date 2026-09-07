@@ -1,4 +1,5 @@
 export default {
+  tagline: 'លេងបន្តិច។ ញញឹមឱ្យច្រើន។',
   brand: 'BobbyGames',
   games: 'ហ្គេម',
   allGames: 'ហ្គេមទាំងអស់',

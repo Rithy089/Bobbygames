@@ -1,7 +1,59 @@
 // Khmer drafts require a native-speaker review. Facts verified against the linked primary sources on 2026-09-06.
-export const culture=[
-{id:'angkor',en:{title:'Angkor Wat',description:'Angkor Wat is part of the Angkor archaeological site in Cambodia. The site preserves remarkable examples of Khmer architecture.'},km:{title:'អង្គរវត្ត',description:'អង្គរវត្តជាផ្នែកមួយនៃតំបន់បុរាណវិទ្យាអង្គរនៅកម្ពុជា។ តំបន់នេះរក្សាទុកសំណង់ស្ថាបត្យកម្មខ្មែរដ៏អស្ចារ្យ។'},source:'https://whc.unesco.org/en/list/668/'},
-{id:'tonle-sap',en:{title:'Tonlé Sap',description:'Tonlé Sap’s wetlands support fish, birds and local livelihoods. Its biosphere reserve brings conservation and sustainable development together.'},km:{title:'ទន្លេសាប',description:'តំបន់ដីសើមនៃទន្លេសាបគាំទ្រជីវិតត្រី បក្សី និងជីវភាពសហគមន៍។ ឋបនីយជីវមណ្ឌលនេះភ្ជាប់ការអភិរក្សនិងការអភិវឌ្ឍប្រកបដោយចីរភាព។'},source:'https://www.unesco.org/en/mab/tonle-sap'},
-{id:'dance',en:{title:'Khmer classical dance',description:'The Royal Ballet of Cambodia is known for expressive hand gestures and elaborate costumes. It is a living performing tradition.'},km:{title:'របាំបុរាណខ្មែរ',description:'របាំព្រះរាជទ្រព្យកម្ពុជាល្បីដោយក្បាច់ដៃនិងសម្លៀកបំពាក់ដ៏ប្រណិត។ វាជាប្រពៃណីសិល្បៈសម្តែងដែលនៅរស់រវើក។'},source:'https://ich.unesco.org/en/RL/royal-ballet-of-cambodia-00060'},
-{id:'shadow',en:{title:'Khmer shadow theatre',description:'Sbek Thom uses large leather puppets to tell stories through light and shadow. The tradition retains an important ceremonial dimension.'},km:{title:'ល្ខោនស្បែកធំ',description:'ល្ខោនស្បែកធំប្រើរូបស្បែកធំៗដើម្បីនិទានរឿងតាមរយៈពន្លឺនិងស្រមោល។ ប្រពៃណីនេះរក្សានូវតួនាទីសំខាន់ក្នុងពិធី។'},source:'https://ich.unesco.org/en/RL/sbek-thom-khmer-shadow-theatre-00108'}
+export const culture = [
+  {
+    id: 'angkor',
+    en: {
+      title: 'Angkor Wat',
+      description:
+        'Angkor Wat is part of the Angkor archaeological site in Cambodia. The site preserves remarkable examples of Khmer architecture.',
+    },
+    km: {
+      title: 'អង្គរវត្ត',
+      description:
+        'អង្គរវត្តជាផ្នែកមួយនៃតំបន់បុរាណវិទ្យាអង្គរនៅកម្ពុជា។ តំបន់នេះរក្សាទុកសំណង់ស្ថាបត្យកម្មខ្មែរដ៏អស្ចារ្យ។',
+    },
+    source: 'https://whc.unesco.org/en/list/668/',
+  },
+  {
+    id: 'tonle-sap',
+    en: {
+      title: 'Tonlé Sap',
+      description:
+        'Tonlé Sap’s wetlands support fish, birds and local livelihoods. Its biosphere reserve brings conservation and sustainable development together.',
+    },
+    km: {
+      title: 'ទន្លេសាប',
+      description:
+        'តំបន់ដីសើមនៃទន្លេសាបគាំទ្រជីវិតត្រី បក្សី និងជីវភាពសហគមន៍។ ឋបនីយជីវមណ្ឌលនេះភ្ជាប់ការអភិរក្សនិងការអភិវឌ្ឍប្រកបដោយចីរភាព។',
+    },
+    source: 'https://www.unesco.org/en/mab/tonle-sap',
+  },
+  {
+    id: 'dance',
+    en: {
+      title: 'Khmer classical dance',
+      description:
+        'The Royal Ballet of Cambodia is known for expressive hand gestures and elaborate costumes. It is a living performing tradition.',
+    },
+    km: {
+      title: 'របាំបុរាណខ្មែរ',
+      description:
+        'របាំព្រះរាជទ្រព្យកម្ពុជាល្បីដោយក្បាច់ដៃនិងសម្លៀកបំពាក់ដ៏ប្រណិត។ វាជាប្រពៃណីសិល្បៈសម្តែងដែលនៅរស់រវើក។',
+    },
+    source: 'https://ich.unesco.org/en/RL/royal-ballet-of-cambodia-00060',
+  },
+  {
+    id: 'shadow',
+    en: {
+      title: 'Khmer shadow theatre',
+      description:
+        'Sbek Thom uses large leather puppets to tell stories through light and shadow. The tradition retains an important ceremonial dimension.',
+    },
+    km: {
+      title: 'ល្ខោនស្បែកធំ',
+      description:
+        'ល្ខោនស្បែកធំប្រើរូបស្បែកធំៗដើម្បីនិទានរឿងតាមរយៈពន្លឺនិងស្រមោល។ ប្រពៃណីនេះរក្សានូវតួនាទីសំខាន់ក្នុងពិធី។',
+    },
+    source: 'https://ich.unesco.org/en/RL/sbek-thom-khmer-shadow-theatre-00108',
+  },
 ];

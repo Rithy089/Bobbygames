@@ -1,1 +1,37 @@
-import {useTranslation} from 'react-i18next';import {Switch} from '@/components/ui/switch';import {Slider} from '@/components/ui/slider';import {usePortal} from '../lib/store';export default function AudioSettings(){const {t}=useTranslation();const audio=usePortal(s=>s.audio);const setAudio=usePortal(s=>s.setAudio);return <div className="audio-settings">{(['sound','music','effects'] as const).map(key=><label key={key} className="setting-line"><span>{t(key)}</span><Switch aria-label={t(key)} checked={audio[key]} onCheckedChange={v=>setAudio({[key]:v})}/></label>)}<div className="setting-line"><span id="volume-label">{t('volume')}</span><Slider aria-labelledby="volume-label" className="volume-slider" value={[audio.volume*100]} min={0} max={100} step={5} onValueChange={v=>setAudio({volume:(Array.isArray(v)?v[0]:v)/100})}/></div></div>}
+import { useTranslation } from 'react-i18next';
+import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
+import { usePortal } from '../lib/store';
+export default function AudioSettings() {
+  const { t } = useTranslation();
+  const audio = usePortal((s) => s.audio);
+  const setAudio = usePortal((s) => s.setAudio);
+  return (
+    <div className="audio-settings">
+      {(['sound', 'music', 'effects'] as const).map((key) => (
+        <label key={key} className="setting-line">
+          <span>{t(key)}</span>
+          <Switch
+            aria-label={t(key)}
+            checked={audio[key]}
+            onCheckedChange={(v) => setAudio({ [key]: v })}
+          />
+        </label>
+      ))}
+      <div className="setting-line">
+        <span id="volume-label">{t('volume')}</span>
+        <Slider
+          aria-labelledby="volume-label"
+          className="volume-slider"
+          value={[audio.volume * 100]}
+          min={0}
+          max={100}
+          step={5}
+          onValueChange={(v) =>
+            setAudio({ volume: (Array.isArray(v) ? v[0] : v) / 100 })
+          }
+        />
+      </div>
+    </div>
+  );
+}

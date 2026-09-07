@@ -111,3 +111,30 @@ test('game animation stops after leaving the route', async ({ page }) => {
     .toBe(0);
   await expect(page.locator('canvas')).toHaveCount(0);
 });
+
+test('Temple Tower and Tuk-Tuk Rush reach game-over and save runs', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    Math.random = () => 0.5;
+  });
+  await page.clock.install();
+  await page.goto('/play/temple-tower');
+  await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
+  await page.clock.runFor(1750);
+  await page.getByRole('button', { name: 'Place block', exact: true }).click();
+  await page.clock.runFor(16);
+  await expect(page.getByTestId('score')).toHaveText('1');
+  await page.getByRole('button', { name: 'Place block', exact: true }).click();
+  await page.clock.runFor(16);
+  await expect(page.getByRole('heading', { name: 'Nice run!' })).toBeVisible();
+  await page.goto('/play/tuk-tuk-rush');
+  await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
+  await page.clock.runFor(4500);
+  await expect(page.getByRole('heading', { name: 'Nice run!' })).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => JSON.parse(localStorage.getItem('bobby-portal')!).state.runs.length,
+    ),
+  ).toBe(2);
+});

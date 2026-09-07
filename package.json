@@ -8,14 +8,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build && node scripts/seo.mjs",
-    "start": "wrangler dev --config dist/server/wrangler.json",
+    "start": "vite preview",
     "lint": "eslint .",
     "format": "oxfmt",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "secrets": "node scripts/secret-scan.mjs"
+    "secrets": "node scripts/secret-scan.mjs",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build && npm run secrets"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
@@ -45,6 +46,7 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@electric-sql/pglite": "^0.5.8",
     "@eslint/js": "^9.39.5",
     "@playwright/test": "^1.63.0",

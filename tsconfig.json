@@ -1,11 +1,7 @@
-﻿{
+{
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2022"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
@@ -15,14 +11,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "types": [
-      "vite/client",
-      "node"
-    ],
+    "types": ["vite/client", "node"],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
@@ -35,8 +26,5 @@
     "playwright.config.ts",
     "tests"
   ],
-  "exclude": [
-    "node_modules",
-    "supabase/functions"
-  ]
+  "exclude": ["node_modules", "supabase/functions"]
 }

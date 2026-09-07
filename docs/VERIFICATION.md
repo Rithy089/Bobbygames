@@ -4,7 +4,7 @@
 - Workspace empty; no repository or AGENTS.md found. No user files overwritten.
 - Strict TypeScript passed after aligning Vite 8 output configuration.
 - ESLint passed.
-- Foundation suite: first run found missing Khmer brand key; corrected and rerun required.
+- Foundation suite: first run found missing Khmer brand key; corrected and all four foundation tests passed on rerun.
 - Production build and source secret pattern scan passed.
 - Desktop browser preview handoff unavailable: CUA reports no available browser. Requested Playwright QA remains available via locally installed Chromium.
 - No live Supabase project configured. SQL integration tests planned using PostgreSQL-compatible PGlite; this is not a hosted Supabase/email verification.
@@ -29,3 +29,13 @@
 - TypeScript, lint, 31 unit/component/database tests, production build and secret scan passed before the polish additions.
 - Desktop/mobile Chromium checks passed for all three games, score persistence, pause/restart, route cleanup, search/categories/sorting/favorites, language/theme persistence and mobile navigation.
 - Browser tests found a Khmer encoding defect and an overly broad search locator; corrected both. A later 200% desktop-text overflow is tracked for the final polish phase.
+
+## Phase 5 — September 7, 2026
+- Strict TypeScript, ESLint, all 32 unit/component/database tests, production build and source secret pattern scan passed.
+- Full Playwright Chromium suite: 25 passed, one intentional desktop skip for the mobile-only menu test. Desktop and emulated Pixel 5 cover all three games, game-over persistence, lifecycle cleanup, portal routes and preferences.
+- Automated axe WCAG A/AA checks passed on six portal/player routes in both themes on desktop and mobile. The 200% text overflow was fixed and verified on both viewports.
+- Original game artwork, desktop/mobile gameplay and Khmer/light layouts were visually inspected. Khmer translation key coverage and UTF-8 integrity are tested; linguistic review remains pending.
+- Static game-specific metadata, social images, canonical tags, structured data, sitemap and robots were verified without executing client JavaScript.
+- Homepage checks confirm that game engine modules are not downloaded until a player route opens. Production output contains independently split game engines.
+- Dependency audit reports zero vulnerabilities. This and the source pattern scan are point-in-time checks, not a complete security audit.
+- Live Supabase, real email flows, physical devices and native WebMCP remain outside the verified scope, as detailed in RELEASE.md.

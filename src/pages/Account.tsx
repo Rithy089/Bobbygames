@@ -1,7 +1,426 @@
-import {useState} from 'react';import {Link,useLocation,useNavigate} from 'react-router-dom';import {useTranslation} from 'react-i18next';import {Trophy,UserRound,ArrowRight,LockKeyhole,Check,Gamepad2,Clock3} from 'lucide-react';import {supabase} from '../lib/supabase';import {usePortal,achievementRules,type Theme} from '../lib/store';import {games,validName} from '../lib/catalog';import {useAccount,avatarColors,refreshAccount} from '../features/account';import {authenticate,type AuthMode} from '../features/auth-actions';import {Choice} from '../components/Choice';import AudioSettings from '../components/AudioSettings';
-export default function Account(){const {t}=useTranslation();const account=useAccount();const portal=usePortal();const {pathname}=useLocation();const navigate=useNavigate();const [mode,setMode]=useState<AuthMode>(pathname==='/reset-password'?'password':'login');const [email,setEmail]=useState('');const [password,setPassword]=useState('');const [name,setName]=useState<string|null>(null);const [avatar,setAvatar]=useState<number|null>(null);const [message,setMessage]=useState('');const [busy,setBusy]=useState(false);const isAuth=pathname!=='/profile'&&!account.user||pathname==='/reset-password';const runs=account.user?account.runs:portal.runs;
-async function submit(e:React.FormEvent){e.preventDefault();setMessage('');if(mode!=='password'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){setMessage('emailError');return}if(mode!=='reset'&&password.length<10){setMessage('passwordError');return}setBusy(true);try{const result=await authenticate(mode,email,password);setPassword('');if(result==='login')navigate('/profile');else setMessage(result)}catch(e){setMessage(e instanceof Error?e.message:'authError')}finally{setBusy(false)}}
-async function saveProfile(){if(!supabase||!account.user)return;const displayName=(name??account.profile?.display_name??'').trim();if(!validName(displayName)){setMessage('nameError');return}setBusy(true);try{const {error}=await supabase.from('profiles').update({display_name:displayName,avatar:avatar??account.profile?.avatar??0}).eq('id',account.user.id);if(error)throw error;await refreshAccount(account.user.id);setMessage('saved')}catch{setMessage('syncError')}finally{setBusy(false)}}
-return <>{isAuth?<section className="auth-layout"><div className="auth-story"><span className="eyebrow">BOBBYGAMES / {t('community')}</span><h1>{t('authIntro')}</h1><p>{t('accountNote')}</p><Link className="text-link" to="/games">{t('freePlay')}<ArrowRight size={18}/></Link><div className="auth-art"><Gamepad2 size={75} strokeWidth={1}/><Trophy size={45} strokeWidth={1}/><HeartIcon/></div></div><div className="panel auth-panel"><LockKeyhole className="gold" size={30}/><h2>{t(mode==='login'?'login':mode==='signup'?'signup':mode==='reset'?'reset':'newPassword')}</h2>{!supabase&&<p className="notice">{t('authUnavailable')}</p>}<form onSubmit={e=>void submit(e)}>{mode!=='password'&&<label>{t('email')}<input type="email" autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} required disabled={!supabase}/></label>}{mode!=='reset'&&<label>{t('password')}<input type="password" autoComplete={mode==='login'?'current-password':'new-password'} minLength={10} value={password} onChange={e=>setPassword(e.target.value)} required disabled={!supabase}/></label>}<button className="button primary" disabled={!supabase||busy} type="submit">{t(busy?'saving':mode==='login'?'login':mode==='signup'?'signup':mode==='reset'?'reset':'save')}<ArrowRight size={17}/></button></form><div className="auth-links">{mode!=='login'&&<button onClick={()=>{setMode('login');setMessage('')}}>{t('login')}</button>}{mode==='login'&&<><button onClick={()=>{setMode('signup');setMessage('')}}>{t('signup')}</button><button onClick={()=>{setMode('reset');setMessage('')}}>{t('forgot')}</button></>}</div>{message&&<p role="status" className="notice">{t(message)}</p>}<Link className="text-link" to="/games">{t('back')} →</Link></div></section>:<><div className="page-heading"><span className="eyebrow">{t(account.user?'accountSync':'localOnly')}</span><h1>{account.profile?.display_name||t('guest')}</h1><p>{t('welcome')}</p></div>{!account.user&&<div className="notice">{t('authIntro')} <Link className="text-link" to="/login">{t('signup')} →</Link></div>}{account.syncError&&<div className="notice" role="status">{t('syncError')}<button className="text-link" onClick={()=>{if(account.user)void refreshAccount(account.user.id)}}>{t('tryAgain')}</button></div>}<div className="stats-grid"><div className="panel"><Gamepad2/><strong>{runs.length}</strong><span>{t('runs')}</span></div><div className="panel"><Clock3/><strong>{Math.floor(runs.reduce((n,r)=>n+r.duration,0)/60)}</strong><span>{t('timePlayed')}</span></div><div className="panel"><Trophy/><strong>{account.user?account.achievements.length:achievementRules.filter(a=>a.test(runs)).length} / 5</strong><span>{t('achievements')}</span></div></div><div className="account-columns"><section className="panel"><h2>{t('best')}</h2><div className="personal-scores">{games.map(g=><Link key={g.id} to={'/play/'+g.id}><img src={'/art/'+g.id+'-480.webp'} alt="" width="60" height="44"/><span>{t(g.id+'.title')}</span><strong>{Math.max(0,...runs.filter(r=>r.game===g.id).map(r=>r.score))}</strong></Link>)}</div></section><section className="panel"><h2>{t('preferences')}</h2><div className="preference-row"><span>{t('theme')}</span><Choice label={t('theme')} value={portal.theme} onChange={v=>portal.setTheme(v as Theme)} options={['system','light','dark'].map(v=>({value:v,label:t(v)}))}/></div><div className="preference-row"><span>{t('language')}</span><Choice label={t('language')} value={portal.language} onChange={v=>portal.setLanguage(v as 'en'|'km')} options={[{value:'en',label:'EN'},{value:'km',label:'ខ្មែរ'}]}/></div><AudioSettings/></section></div><section className="section"><div className="section-heading"><h2>{t('achievements')}</h2></div><div className="achievement-grid">{achievementRules.map(a=>{const unlocked=account.user?account.achievements.includes(a.id):a.test(runs);return <article key={a.id} className={'achievement panel '+(unlocked?'unlocked':'')}><span>{unlocked?<Trophy size={28}/>:<LockKeyhole size={25}/>}</span><div><h3>{t(a.id)}</h3><p>{t(a.id+'Desc')}</p><small>{t(unlocked?'unlocked':'locked')}</small></div></article>})}</div></section>{account.user&&<section className="panel profile-edit"><h2><UserRound size={22}/>{t('profile')}</h2><label>{t('displayName')}<input value={name??account.profile?.display_name??''} maxLength={20} onChange={e=>setName(e.target.value)}/></label><fieldset><legend>{t('avatar')}</legend><div className="avatar-options">{avatarColors.map((color,i)=><button key={color} aria-label={t('avatar')+' '+(i+1)} aria-pressed={(avatar??account.profile?.avatar??0)===i} style={{background:color}} onClick={()=>setAvatar(i)}>{(avatar??account.profile?.avatar??0)===i?<Check/>:<UserRound/>}</button>)}</div></fieldset><p className="small">{t('accountNote')}</p><div className="button-row"><button className="button primary" disabled={busy} onClick={()=>void saveProfile()}>{t(busy?'saving':'save')}</button><button className="button secondary" onClick={()=>void supabase?.auth.signOut().then(({error})=>{if(error)setMessage('authError');else navigate('/login')})}>{t('logout')}</button></div>{message&&<p role="status" className="notice">{t(message)}</p>}</section>}</>}</>}
-function HeartIcon(){return <span className="gold" aria-hidden="true">✦</span>}
-
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import {
+  Trophy,
+  UserRound,
+  ArrowRight,
+  LockKeyhole,
+  Check,
+  Gamepad2,
+  Clock3,
+} from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { usePortal, achievementRules, type Theme } from '../lib/store';
+import { games, validName } from '../lib/catalog';
+import { useAccount, avatarColors, refreshAccount } from '../features/account';
+import { authenticate, type AuthMode } from '../features/auth-actions';
+import { Choice } from '../components/Choice';
+import AudioSettings from '../components/AudioSettings';
+export default function Account() {
+  const { t } = useTranslation();
+  const account = useAccount();
+  const portal = usePortal();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const [mode, setMode] = useState<AuthMode>(
+    pathname === '/reset-password' ? 'password' : 'login',
+  );
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState<string | null>(null);
+  const [avatar, setAvatar] = useState<number | null>(null);
+  const [message, setMessage] = useState('');
+  const [busy, setBusy] = useState(false);
+  const isAuth =
+    (pathname !== '/profile' && !account.user) ||
+    pathname === '/reset-password';
+  const runs = account.user ? account.runs : portal.runs;
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setMessage('');
+    if (mode !== 'password' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setMessage('emailError');
+      return;
+    }
+    if (mode !== 'reset' && password.length < 10) {
+      setMessage('passwordError');
+      return;
+    }
+    setBusy(true);
+    try {
+      const result = await authenticate(mode, email, password);
+      setPassword('');
+      if (result === 'login') navigate('/profile');
+      else setMessage(result);
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : 'authError');
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function saveProfile() {
+    if (!supabase || !account.user) return;
+    const displayName = (name ?? account.profile?.display_name ?? '').trim();
+    if (!validName(displayName)) {
+      setMessage('nameError');
+      return;
+    }
+    setBusy(true);
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          display_name: displayName,
+          avatar: avatar ?? account.profile?.avatar ?? 0,
+        })
+        .eq('id', account.user.id);
+      if (error) throw error;
+      await refreshAccount(account.user.id);
+      setMessage('saved');
+    } catch {
+      setMessage('syncError');
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <>
+      {isAuth ? (
+        <section className="auth-layout">
+          <div className="auth-story">
+            <span className="eyebrow">BOBBYGAMES / {t('community')}</span>
+            <h1>{t('authIntro')}</h1>
+            <p>{t('accountNote')}</p>
+            <Link className="text-link" to="/games">
+              {t('freePlay')}
+              <ArrowRight size={18} />
+            </Link>
+            <div className="auth-art">
+              <Gamepad2 size={75} strokeWidth={1} />
+              <Trophy size={45} strokeWidth={1} />
+              <HeartIcon />
+            </div>
+          </div>
+          <div className="panel auth-panel">
+            <LockKeyhole className="gold" size={30} />
+            <h2>
+              {t(
+                mode === 'login'
+                  ? 'login'
+                  : mode === 'signup'
+                    ? 'signup'
+                    : mode === 'reset'
+                      ? 'reset'
+                      : 'newPassword',
+              )}
+            </h2>
+            {!supabase && <p className="notice">{t('authUnavailable')}</p>}
+            <form onSubmit={(e) => void submit(e)}>
+              {mode !== 'password' && (
+                <label>
+                  {t('email')}
+                  <input
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={!supabase}
+                  />
+                </label>
+              )}
+              {mode !== 'reset' && (
+                <label>
+                  {t('password')}
+                  <input
+                    type="password"
+                    autoComplete={
+                      mode === 'login' ? 'current-password' : 'new-password'
+                    }
+                    minLength={10}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    disabled={!supabase}
+                  />
+                </label>
+              )}
+              <button
+                className="button primary"
+                disabled={!supabase || busy}
+                type="submit"
+              >
+                {t(
+                  busy
+                    ? 'saving'
+                    : mode === 'login'
+                      ? 'login'
+                      : mode === 'signup'
+                        ? 'signup'
+                        : mode === 'reset'
+                          ? 'reset'
+                          : 'save',
+                )}
+                <ArrowRight size={17} />
+              </button>
+            </form>
+            <div className="auth-links">
+              {mode !== 'login' && (
+                <button
+                  onClick={() => {
+                    setMode('login');
+                    setMessage('');
+                  }}
+                >
+                  {t('login')}
+                </button>
+              )}
+              {mode === 'login' && (
+                <>
+                  <button
+                    onClick={() => {
+                      setMode('signup');
+                      setMessage('');
+                    }}
+                  >
+                    {t('signup')}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMode('reset');
+                      setMessage('');
+                    }}
+                  >
+                    {t('forgot')}
+                  </button>
+                </>
+              )}
+            </div>
+            {message && (
+              <p role="status" className="notice">
+                {t(message)}
+              </p>
+            )}
+            <Link className="text-link" to="/games">
+              {t('back')} →
+            </Link>
+          </div>
+        </section>
+      ) : (
+        <>
+          <div className="page-heading">
+            <span className="eyebrow">
+              {t(account.user ? 'accountSync' : 'localOnly')}
+            </span>
+            <h1>{account.profile?.display_name || t('guest')}</h1>
+            <p>{t('welcome')}</p>
+          </div>
+          {!account.user && (
+            <div className="notice">
+              {t('authIntro')}{' '}
+              <Link className="text-link" to="/login">
+                {t('signup')} →
+              </Link>
+            </div>
+          )}
+          {account.syncError && (
+            <div className="notice" role="status">
+              {t('syncError')}
+              <button
+                className="text-link"
+                onClick={() => {
+                  if (account.user) void refreshAccount(account.user.id);
+                }}
+              >
+                {t('tryAgain')}
+              </button>
+            </div>
+          )}
+          <div className="stats-grid">
+            <div className="panel">
+              <Gamepad2 />
+              <strong>{runs.length}</strong>
+              <span>{t('runs')}</span>
+            </div>
+            <div className="panel">
+              <Clock3 />
+              <strong>
+                {Math.floor(runs.reduce((n, r) => n + r.duration, 0) / 60)}
+              </strong>
+              <span>{t('timePlayed')}</span>
+            </div>
+            <div className="panel">
+              <Trophy />
+              <strong>
+                {account.user
+                  ? account.achievements.length
+                  : achievementRules.filter((a) => a.test(runs)).length}{' '}
+                / 5
+              </strong>
+              <span>{t('achievements')}</span>
+            </div>
+          </div>
+          <div className="account-columns">
+            <section className="panel">
+              <h2>{t('best')}</h2>
+              <div className="personal-scores">
+                {games.map((g) => (
+                  <Link key={g.id} to={'/play/' + g.id}>
+                    <img
+                      src={'/art/' + g.id + '-480.webp'}
+                      alt=""
+                      width="60"
+                      height="44"
+                    />
+                    <span>{t(g.id + '.title')}</span>
+                    <strong>
+                      {Math.max(
+                        0,
+                        ...runs
+                          .filter((r) => r.game === g.id)
+                          .map((r) => r.score),
+                      )}
+                    </strong>
+                  </Link>
+                ))}
+              </div>
+            </section>
+            <section className="panel">
+              <h2>{t('preferences')}</h2>
+              <div className="preference-row">
+                <span>{t('theme')}</span>
+                <Choice
+                  label={t('theme')}
+                  value={portal.theme}
+                  onChange={(v) => portal.setTheme(v as Theme)}
+                  options={['system', 'light', 'dark'].map((v) => ({
+                    value: v,
+                    label: t(v),
+                  }))}
+                />
+              </div>
+              <div className="preference-row">
+                <span>{t('language')}</span>
+                <Choice
+                  label={t('language')}
+                  value={portal.language}
+                  onChange={(v) => portal.setLanguage(v as 'en' | 'km')}
+                  options={[
+                    { value: 'en', label: 'EN' },
+                    { value: 'km', label: 'ខ្មែរ' },
+                  ]}
+                />
+              </div>
+              <AudioSettings />
+            </section>
+          </div>
+          <section className="section">
+            <div className="section-heading">
+              <h2>{t('achievements')}</h2>
+            </div>
+            <div className="achievement-grid">
+              {achievementRules.map((a) => {
+                const unlocked = account.user
+                  ? account.achievements.includes(a.id)
+                  : a.test(runs);
+                return (
+                  <article
+                    key={a.id}
+                    className={
+                      'achievement panel ' + (unlocked ? 'unlocked' : '')
+                    }
+                  >
+                    <span>
+                      {unlocked ? (
+                        <Trophy size={28} />
+                      ) : (
+                        <LockKeyhole size={25} />
+                      )}
+                    </span>
+                    <div>
+                      <h3>{t(a.id)}</h3>
+                      <p>{t(a.id + 'Desc')}</p>
+                      <small>{t(unlocked ? 'unlocked' : 'locked')}</small>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+          {account.user && (
+            <section className="panel profile-edit">
+              <h2>
+                <UserRound size={22} />
+                {t('profile')}
+              </h2>
+              <label>
+                {t('displayName')}
+                <input
+                  value={name ?? account.profile?.display_name ?? ''}
+                  maxLength={20}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </label>
+              <fieldset>
+                <legend>{t('avatar')}</legend>
+                <div className="avatar-options">
+                  {avatarColors.map((color, i) => (
+                    <button
+                      key={color}
+                      aria-label={t('avatar') + ' ' + (i + 1)}
+                      aria-pressed={
+                        (avatar ?? account.profile?.avatar ?? 0) === i
+                      }
+                      style={{ background: color }}
+                      onClick={() => setAvatar(i)}
+                    >
+                      {(avatar ?? account.profile?.avatar ?? 0) === i ? (
+                        <Check />
+                      ) : (
+                        <UserRound />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+              <p className="small">{t('accountNote')}</p>
+              <div className="button-row">
+                <button
+                  className="button primary"
+                  disabled={busy}
+                  onClick={() => void saveProfile()}
+                >
+                  {t(busy ? 'saving' : 'save')}
+                </button>
+                <button
+                  className="button secondary"
+                  onClick={() =>
+                    void supabase?.auth.signOut().then(({ error }) => {
+                      if (error) setMessage('authError');
+                      else navigate('/login');
+                    })
+                  }
+                >
+                  {t('logout')}
+                </button>
+              </div>
+              {message && (
+                <p role="status" className="notice">
+                  {t(message)}
+                </p>
+              )}
+            </section>
+          )}
+        </>
+      )}
+    </>
+  );
+}
+function HeartIcon() {
+  return (
+    <span className="gold" aria-hidden="true">
+      ✦
+    </span>
+  );
+}

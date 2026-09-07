@@ -1,4 +1,386 @@
-import {lazy,Suspense,useEffect,useState,Component,type ReactNode} from 'react';import {Link,NavLink,Route,Routes,useLocation,useNavigate} from 'react-router-dom';import {Gamepad2,Search,Sun,Moon,Menu,X,ArrowUpRight,Heart,Clock3,Trophy,Compass,Home as HomeIcon,LayoutGrid,Code2,ChevronRight} from 'lucide-react';import {useTranslation} from 'react-i18next';import {usePortal} from '../lib/store';import {portfolio,github,linkedin} from '../lib/catalog';import {AuthBridge,useAccount} from '../features/account';import {Seo} from '../lib/seo';
-const Home=lazy(()=>import('../pages/Home'));const Catalog=lazy(()=>import('../pages/Catalog'));const Details=lazy(()=>import('../pages/Details'));const Discover=lazy(()=>import('../pages/Discover'));const About=lazy(()=>import('../pages/About'));const Legal=lazy(()=>import('../pages/Legal'));const NotFound=lazy(()=>import('../pages/NotFound'));const Player=lazy(()=>import('../pages/Player'));const Account=lazy(()=>import('../pages/Account'));const Leaderboard=lazy(()=>import('../pages/Leaderboard'));
-class Boundary extends Component<{children:ReactNode},{failed:boolean}>{state={failed:false};static getDerivedStateFromError(){return {failed:true}}render(){return this.state.failed?<div className="empty-state"><h1>Something interrupted the fun.</h1><button className="button primary" onClick={()=>window.location.reload()}>Try again / ព្យាយាមម្តងទៀត</button></div>:this.props.children}}
-export default function App(){const {t,i18n}=useTranslation();const user=useAccount(s=>s.user);const theme=usePortal(s=>s.theme);const language=usePortal(s=>s.language);const setLanguage=usePortal(s=>s.setLanguage);const setTheme=usePortal(s=>s.setTheme);const [menu,setMenu]=useState(false);const [search,setSearch]=useState('');const navigate=useNavigate();const {pathname}=useLocation();useEffect(()=>{const media=window.matchMedia('(prefers-color-scheme: dark)');const apply=()=>{document.documentElement.dataset.theme=theme==='system'?(media.matches?'dark':'light'):theme};apply();media.addEventListener('change',apply);return()=>media.removeEventListener('change',apply)},[theme]);useEffect(()=>{void i18n.changeLanguage(language);document.documentElement.lang=language},[language,i18n]);useEffect(()=>{window.scrollTo(0,0)},[pathname]);const nav=[['/','home',HomeIcon],['/games','allGames',Gamepad2],['/games?sort=newest','newGames',LayoutGrid],['/leaderboards','leaderboards',Trophy]] as const;return <Boundary><AuthBridge/><Seo/><a href="#main" className="skip-link">{t('skip')}</a><header className="header"><Link to="/" className="brand"><span className="brand-mark"><Gamepad2 size={25}/></span><span>Bobby<span className="gold">Games</span><small>PLAY A LITTLE. SMILE A LOT.</small></span></Link><nav className="top-nav" aria-label={t('browse')}><NavLink to="/games">{t('games')}</NavLink><NavLink to="/games?category=all">{t('categories')}</NavLink><NavLink to="/leaderboards">{t('leaderboards')}</NavLink><NavLink to="/discover">{t('discover')}</NavLink><NavLink to="/about">{t('about')}</NavLink><a href={portfolio} target="_blank" rel="noopener noreferrer">{t('portfolio')}<ArrowUpRight size={14}/></a></nav><div className="header-actions"><button className="language-button" onClick={()=>setLanguage(language==='en'?'km':'en')} aria-label={t('language')}><span className={language==='en'?'gold':''}>EN</span><span className="muted">/</span><span lang="km" className={language==='km'?'gold':''}>ខ្មែរ</span></button><button className="icon-button" aria-label={t('theme')+': '+t(theme)} title={t(theme)} onClick={()=>setTheme(theme==='system'?'dark':theme==='dark'?'light':'system')}>{theme==='dark'?<Moon size={19}/>:<Sun size={19}/>}</button><Link className="login-button" to={user?'/profile':'/login'}>{t(user?'profile':'login')}<ArrowUpRight size={15}/></Link><button className="icon-button mobile-menu" aria-label={t(menu?'closeMenu':'openMenu')} aria-expanded={menu} onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button></div></header><div className="app-layout"><aside className={'sidebar '+(menu?'open':'')}><div className="sidebar-top"><span className="eyebrow">{t('browse')}</span><nav aria-label={t('browse')} onClick={()=>setMenu(false)}>{nav.map(([path,key,Icon])=><NavLink key={key} to={path} end={path==='/'} className={({isActive})=>'side-link '+(isActive&&(!path.includes('?'))?'active':'')}><Icon size={19}/>{t(key)}</NavLink>)}</nav><span className="eyebrow side-label">{t('community')}</span><nav aria-label={t('community')} onClick={()=>setMenu(false)}><NavLink className="side-link" to="/favorites"><Heart size={19}/>{t('favorites')}</NavLink><NavLink className="side-link" to="/recent"><Clock3 size={19}/>{t('recent')}</NavLink><NavLink className="side-link" to="/profile"><Trophy size={19}/>{t('achievements')}</NavLink></nav><span className="eyebrow side-label">{t('learn')}</span><nav onClick={()=>setMenu(false)}><NavLink className="side-link" to="/discover"><Compass size={19}/>{t('discover')}</NavLink><NavLink className="side-link" to="/about"><Code2 size={19}/>{t('about')}</NavLink></nav></div><a className="sidebar-note" href={portfolio} target="_blank" rel="noopener noreferrer"><span>សួស្តី! <span aria-hidden="true">✦</span></span><p>{t('created')}</p><small>{t('portfolio')} <ArrowUpRight size={13}/></small></a><div className="sidebar-country"><span>🇰🇭</span> PHNOM PENH, CAMBODIA</div></aside>{menu&&<button className="menu-backdrop" aria-label={t('closeMenu')} onClick={()=>setMenu(false)}/>}<div className="main-column"><div className="utility-bar"><span className="small muted">{t('welcome')}</span><form className="search-field header-search" onSubmit={e=>{e.preventDefault();navigate('/games?q='+encodeURIComponent(search))}}><Search size={17}/><input aria-label={t('search')} placeholder={t('search')} value={search} onChange={e=>setSearch(e.target.value)}/><kbd>↵</kbd></form></div><main id="main"><Suspense fallback={<div className="loading" role="status">{t('loading')}</div>}><Routes><Route path="/" element={<Home/>}/><Route path="/games" element={<Catalog/>}/><Route path="/categories" element={<Catalog/>}/><Route path="/games/:id" element={<Details/>}/><Route path="/play/:id" element={<Player/>}/><Route path="/favorites" element={<Catalog mode="favorites"/>}/><Route path="/recent" element={<Catalog mode="recent"/>}/><Route path="/discover" element={<Discover/>}/><Route path="/about" element={<About/>}/><Route path="/developer" element={<About/>}/><Route path="/profile" element={<Account/>}/><Route path="/login" element={<Account/>}/><Route path="/reset-password" element={<Account/>}/><Route path="/leaderboards" element={<Leaderboard/>}/><Route path="/privacy" element={<Legal kind="privacy"/>}/><Route path="/terms" element={<Legal kind="terms"/>}/><Route path="*" element={<NotFound/>}/></Routes></Suspense></main><footer><div className="footer-top"><div><Link to="/" className="brand footer-brand"><Gamepad2 size={24}/>Bobby<span className="gold">Games</span></Link><p>{t('footerText')}</p></div><div className="footer-links"><Link to="/games">{t('games')}</Link><Link to="/discover">{t('discover')}</Link><Link to="/about">{t('about')}</Link><a href={portfolio} target="_blank" rel="noopener noreferrer">{t('portfolio')}<ArrowUpRight size={13}/></a><a href={github} target="_blank" rel="noopener noreferrer">GitHub</a><a href={linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} · {t('created')}</span><span>{t('made')}</span><div><Link to="/privacy">{t('privacy')}</Link><span>·</span><Link to="/terms">{t('terms')}</Link><a href={portfolio} target="_blank" rel="noopener noreferrer" aria-label={t('contact')}><ChevronRight size={16}/></a></div></div></footer></div></div></Boundary>}
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+  Component,
+  type ReactNode,
+} from 'react';
+import {
+  Link,
+  NavLink,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+import {
+  Gamepad2,
+  Search,
+  Sun,
+  Moon,
+  Menu,
+  X,
+  ArrowUpRight,
+  Heart,
+  Clock3,
+  Trophy,
+  Compass,
+  Home as HomeIcon,
+  LayoutGrid,
+  Code2,
+  ChevronRight,
+} from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { usePortal } from '../lib/store';
+import { portfolio, github, linkedin } from '../lib/catalog';
+import { AuthBridge, useAccount } from '../features/account';
+import WebTools from '../features/WebTools';
+import { Seo } from '../lib/seo';
+const Home = lazy(() => import('../pages/Home'));
+const Catalog = lazy(() => import('../pages/Catalog'));
+const Details = lazy(() => import('../pages/Details'));
+const Discover = lazy(() => import('../pages/Discover'));
+const About = lazy(() => import('../pages/About'));
+const Legal = lazy(() => import('../pages/Legal'));
+const NotFound = lazy(() => import('../pages/NotFound'));
+const Player = lazy(() => import('../pages/Player'));
+const Account = lazy(() => import('../pages/Account'));
+const Leaderboard = lazy(() => import('../pages/Leaderboard'));
+class Boundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? (
+      <div className="empty-state">
+        <h1>Something interrupted the fun.</h1>
+        <button
+          className="button primary"
+          onClick={() => window.location.reload()}
+        >
+          Try again / ព្យាយាមម្តងទៀត
+        </button>
+      </div>
+    ) : (
+      this.props.children
+    );
+  }
+}
+export default function App() {
+  const { t, i18n } = useTranslation();
+  const user = useAccount((s) => s.user);
+  const theme = usePortal((s) => s.theme);
+  const language = usePortal((s) => s.language);
+  const setLanguage = usePortal((s) => s.setLanguage);
+  const setTheme = usePortal((s) => s.setTheme);
+  const [menu, setMenu] = useState(false);
+  const [search, setSearch] = useState('');
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const header = document.querySelector('header');
+    if (!header) return;
+    const observer = new ResizeObserver(() =>
+      document.documentElement.style.setProperty(
+        '--header-height',
+        header.getBoundingClientRect().height + 'px',
+      ),
+    );
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!menu) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('.sidebar a'),
+    );
+    links[0]?.focus();
+    const keydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenu(false);
+      if (event.key === 'Tab' && links.length) {
+        if (event.shiftKey && document.activeElement === links[0]) {
+          event.preventDefault();
+          links.at(-1)?.focus();
+        } else if (!event.shiftKey && document.activeElement === links.at(-1)) {
+          event.preventDefault();
+          links[0].focus();
+        }
+      }
+    };
+    document.addEventListener('keydown', keydown);
+    return () => {
+      document.removeEventListener('keydown', keydown);
+      previous?.focus();
+    };
+  }, [menu]);
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => {
+      document.documentElement.dataset.theme =
+        theme === 'system' ? (media.matches ? 'dark' : 'light') : theme;
+    };
+    apply();
+    media.addEventListener('change', apply);
+    return () => media.removeEventListener('change', apply);
+  }, [theme]);
+  useEffect(() => {
+    void i18n.changeLanguage(language);
+    document.documentElement.lang = language;
+  }, [language, i18n]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  const nav = [
+    ['/', 'home', HomeIcon],
+    ['/games', 'allGames', Gamepad2],
+    ['/games?sort=newest', 'newGames', LayoutGrid],
+    ['/leaderboards', 'leaderboards', Trophy],
+  ] as const;
+  return (
+    <Boundary>
+      <AuthBridge />
+      <Seo />
+      <WebTools />
+      <a href="#main" className="skip-link">
+        {t('skip')}
+      </a>
+      <header className="header">
+        <Link to="/" className="brand">
+          <span className="brand-mark">
+            <Gamepad2 size={25} />
+          </span>
+          <span>
+            Bobby<span className="gold">Games</span>
+            <small>{t('tagline')}</small>
+          </span>
+        </Link>
+        <nav className="top-nav" aria-label={t('browse')}>
+          <NavLink to="/games">{t('games')}</NavLink>
+          <NavLink to="/games?category=all">{t('categories')}</NavLink>
+          <NavLink to="/leaderboards">{t('leaderboards')}</NavLink>
+          <NavLink to="/discover">{t('discover')}</NavLink>
+          <NavLink to="/about">{t('about')}</NavLink>
+          <a href={portfolio} target="_blank" rel="noopener noreferrer">
+            {t('portfolio')}
+            <ArrowUpRight size={14} />
+          </a>
+        </nav>
+        <div className="header-actions">
+          <button
+            className="language-button"
+            onClick={() => setLanguage(language === 'en' ? 'km' : 'en')}
+            aria-label={t('language')}
+          >
+            <span className={language === 'en' ? 'gold' : ''}>EN</span>
+            <span className="muted">/</span>
+            <span lang="km" className={language === 'km' ? 'gold' : ''}>
+              ខ្មែរ
+            </span>
+          </button>
+          <button
+            className="icon-button"
+            aria-label={t('theme') + ': ' + t(theme)}
+            title={t(theme)}
+            onClick={() =>
+              setTheme(
+                theme === 'system'
+                  ? 'dark'
+                  : theme === 'dark'
+                    ? 'light'
+                    : 'system',
+              )
+            }
+          >
+            {theme === 'dark' ? <Moon size={19} /> : <Sun size={19} />}
+          </button>
+          <Link className="login-button" to={user ? '/profile' : '/login'}>
+            {t(user ? 'profile' : 'login')}
+            <ArrowUpRight size={15} />
+          </Link>
+          <button
+            className="icon-button mobile-menu"
+            aria-label={t(menu ? 'closeMenu' : 'openMenu')}
+            aria-expanded={menu}
+            onClick={() => setMenu(!menu)}
+          >
+            {menu ? <X /> : <Menu />}
+          </button>
+        </div>
+      </header>
+      <div className="app-layout">
+        <aside className={'sidebar ' + (menu ? 'open' : '')}>
+          <div className="sidebar-top">
+            <span className="eyebrow">{t('browse')}</span>
+            <nav aria-label={t('browse')} onClick={() => setMenu(false)}>
+              {nav.map(([path, key, Icon]) => (
+                <NavLink
+                  key={key}
+                  to={path}
+                  end={path === '/'}
+                  className={({ isActive }) =>
+                    'side-link ' +
+                    (isActive && !path.includes('?') ? 'active' : '')
+                  }
+                >
+                  <Icon size={19} />
+                  {t(key)}
+                </NavLink>
+              ))}
+            </nav>
+            <span className="eyebrow side-label">{t('community')}</span>
+            <nav aria-label={t('community')} onClick={() => setMenu(false)}>
+              <NavLink className="side-link" to="/favorites">
+                <Heart size={19} />
+                {t('favorites')}
+              </NavLink>
+              <NavLink className="side-link" to="/recent">
+                <Clock3 size={19} />
+                {t('recent')}
+              </NavLink>
+              <NavLink className="side-link" to="/profile">
+                <Trophy size={19} />
+                {t('achievements')}
+              </NavLink>
+            </nav>
+            <span className="eyebrow side-label">{t('learn')}</span>
+            <nav onClick={() => setMenu(false)}>
+              <NavLink className="side-link" to="/discover">
+                <Compass size={19} />
+                {t('discover')}
+              </NavLink>
+              <NavLink className="side-link" to="/about">
+                <Code2 size={19} />
+                {t('about')}
+              </NavLink>
+            </nav>
+          </div>
+          <a
+            className="sidebar-note"
+            href={portfolio}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>
+              សួស្តី! <span aria-hidden="true">✦</span>
+            </span>
+            <p>{t('created')}</p>
+            <small>
+              {t('portfolio')} <ArrowUpRight size={13} />
+            </small>
+          </a>
+          <div className="sidebar-country">
+            <span>🇰🇭</span> PHNOM PENH, CAMBODIA
+          </div>
+        </aside>
+        {menu && (
+          <button
+            className="menu-backdrop"
+            aria-label={t('closeMenu')}
+            onClick={() => setMenu(false)}
+          />
+        )}
+        <div className="main-column">
+          <div className="utility-bar">
+            <span className="small muted">{t('welcome')}</span>
+            <form
+              className="search-field header-search"
+              onSubmit={(e) => {
+                e.preventDefault();
+                navigate('/games?q=' + encodeURIComponent(search));
+              }}
+            >
+              <Search size={17} />
+              <input
+                aria-label={t('search')}
+                placeholder={t('search')}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <kbd>↵</kbd>
+            </form>
+          </div>
+          <main id="main">
+            <Suspense
+              fallback={
+                <div className="loading" role="status">
+                  {t('loading')}
+                </div>
+              }
+            >
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/games" element={<Catalog />} />
+                <Route path="/categories" element={<Catalog />} />
+                <Route path="/games/:id" element={<Details />} />
+                <Route path="/play/:id" element={<Player />} />
+                <Route
+                  path="/favorites"
+                  element={<Catalog mode="favorites" />}
+                />
+                <Route path="/recent" element={<Catalog mode="recent" />} />
+                <Route path="/discover" element={<Discover />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/developer" element={<About />} />
+                <Route path="/profile" element={<Account />} />
+                <Route path="/login" element={<Account />} />
+                <Route path="/reset-password" element={<Account />} />
+                <Route path="/leaderboards" element={<Leaderboard />} />
+                <Route path="/privacy" element={<Legal kind="privacy" />} />
+                <Route path="/terms" element={<Legal kind="terms" />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </main>
+          <footer>
+            <div className="footer-top">
+              <div>
+                <Link to="/" className="brand footer-brand">
+                  <Gamepad2 size={24} />
+                  Bobby<span className="gold">Games</span>
+                </Link>
+                <p>{t('footerText')}</p>
+              </div>
+              <div className="footer-links">
+                <Link to="/games">{t('games')}</Link>
+                <Link to="/discover">{t('discover')}</Link>
+                <Link to="/about">{t('about')}</Link>
+                <a href={portfolio} target="_blank" rel="noopener noreferrer">
+                  {t('portfolio')}
+                  <ArrowUpRight size={13} />
+                </a>
+                <a href={github} target="_blank" rel="noopener noreferrer">
+                  GitHub
+                </a>
+                <a href={linkedin} target="_blank" rel="noopener noreferrer">
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+            <div className="footer-bottom">
+              <span>
+                © {new Date().getFullYear()} · {t('created')}
+              </span>
+              <span>{t('made')}</span>
+              <div>
+                <Link to="/privacy">{t('privacy')}</Link>
+                <span>·</span>
+                <Link to="/terms">{t('terms')}</Link>
+                <a
+                  href={portfolio}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={t('contact')}
+                >
+                  <ChevronRight size={16} />
+                </a>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </Boundary>
+  );
+}

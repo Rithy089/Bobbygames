@@ -14,3 +14,5 @@ Gameplay: original programmatic Canvas sprites, geometry and synthesized Web Aud
 
 Culture facts (reviewed 2026-09-06): UNESCO World Heritage Angkor (https://whc.unesco.org/en/list/668/), UNESCO Tonlé Sap Biosphere Reserve (https://www.unesco.org/en/mab/tonle-sap), Royal Ballet (https://ich.unesco.org/en/RL/royal-ballet-of-cambodia-00060), Sbek Thom (https://ich.unesco.org/en/RL/sbek-thom-khmer-shadow-theatre-00108). Facts and Khmer drafts are structured in src/lib/culture.ts. Illustrations are decorative rather than historical reconstructions.
 
+
+Social preview: public/og.png, generated with the built-in image tool specifically for this project. Prompt: navy #101725 landscape card, exact gold title “BobbyGames”, exact supporting copy “Original mini-games. Made in Cambodia.”, polished low-poly mango basket, fictional sandstone tower and turquoise tuk-tuk on the right; no flags, historical reconstruction, sacred icons or third-party logos. Text visually inspected. Detail-page previews reuse the corresponding game cover.
