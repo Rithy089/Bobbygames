@@ -95,7 +95,7 @@ function PlayerGame() {
           game.id === 'mango-catch'
             ? ['mango', 'dragon', 'basket', 'countryside']
             : game.id === 'tuk-tuk-rush'
-              ? ['mango', 'bananas', 'basket', 'street-bg']
+              ? []
               : ['tower-bg'],
         );
         if (disposed || !canvas.current) return;

@@ -272,7 +272,7 @@ export default {
     description:
       'Your tuk-tuk, the open street, and a whole lot of “watch out!” How far can you go?',
     instructions:
-      'Use ← → or A/D to change lanes, or tap the mobile arrow buttons. Avoid cars and cones. Collect gold tokens for 25 bonus points. Distance adds points and the street gets faster. One collision ends the run.',
+      'Use ← → or A/D to change lanes, tap a lane on the road, or use the arrow buttons. Avoid cars and cones. Collect gold tokens for 25 bonus points. Distance adds points and the street gets faster. One collision ends the run.',
     hint: 'Dodge the traffic. Enjoy the ride.',
   },
 };

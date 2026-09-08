@@ -1,5 +1,13 @@
 # Verification log
 
+## Tuk-Tuk Rush perspective update
+
+- Replaced static overhead gameplay with a consistent perspective projection for road, vehicles and obstacles; kept scoring, difficulty caps, collision space and guest best-score keys. Steering now uses frame-rate-independent exponential easing. Direct road taps select lanes; keyboard and arrow controls remain available.
+- TypeScript, ESLint, 45 unit/component/database tests, production build and secret scan passed. New unit tests cover steering across frame rates and projection consistency.
+- Ten existing desktop/mobile arcade browser tests passed. Two new direct-road-tap tests initially failed because the test selected both Resume controls; the selector was corrected and both tests passed. They verify actual mobile taps, collision avoidance, keyboard return to traffic, pause, restart and best persistence.
+- Reviewed desktop and emulated Pixel 5 screenshots of the new scene. Fixed an encoding issue in the procedural shop signs before the final build. Reduced motion disables decorative roadside movement, steering lean and floating score movement while retaining essential traffic/road motion.
+- No new online features. Physical device performance and other browser engines remain unverified. Updated Khmer lane-tap instruction requires Bobby's review.
+
 ## September 8 scoped update
 - Private Sites version 2 deployment succeeded for application commit `49cc80d`. Vercel rejected the new production deployment because the commit author lacks project deployment permission; the new public release and its live smoke tests remain blocked. See RELEASE.md for the exact deployment and API reason.
 - Began from a clean working tree and preserved the existing app and guest storage keys. GitHub API and HTTP checks confirmed the project URL separately from the personal profile; the repository itself is currently empty.

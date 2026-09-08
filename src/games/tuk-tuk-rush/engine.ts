@@ -6,9 +6,9 @@ import {
   W,
   H,
 } from '../shared/types';
-import { rounded, palm } from '../shared/draw';
+import { street, vehicle, object, project } from './render';
 import { difficulty, changeLane, collidesAt, scoreFor, config } from './rules';
-import { sprite } from '../shared/sprites';
+import { steer } from './rules';
 export default function createGame(options: GameOptions) {
   const snapshot = freshSnapshot();
   let lane = 1,
@@ -16,8 +16,14 @@ export default function createGame(options: GameOptions) {
     spawn = 0.7,
     scroll = 0,
     coins = 0,
-    tokenGlow = 0;
-  let items: { lane: number; y: number; type: 'coin' | 'car' | 'cone' }[] = [];
+    tokenGlow = 0,
+    lean = 0;
+  let items: {
+    lane: number;
+    y: number;
+    type: 'coin' | 'car' | 'cone';
+    variant: number;
+  }[] = [];
   const scene: Scene = {
     snapshot,
     reset() {
@@ -28,12 +34,31 @@ export default function createGame(options: GameOptions) {
       scroll = 0;
       coins = 0;
       tokenGlow = 0;
+      lean = 0;
       items = [];
     },
     update(dt, input) {
       const d = difficulty(snapshot.elapsed);
       if (input.direction) lane = changeLane(lane, input.direction);
-      visualX += (config.lanes[lane] - visualX) * Math.min(1, dt * 20);
+      if (input.action && input.pointer !== null) {
+        const p = project(400, config.playerY);
+        const worldX = 400 + (input.pointer - 400) / p.scale;
+        lane = Math.max(
+          0,
+          Math.min(2, Math.round((worldX - config.lanes[0]) / 120)),
+        );
+      }
+      const previousX = visualX;
+      visualX = steer(visualX, config.lanes[lane], dt);
+      lean = options.reducedMotion?.()
+        ? 0
+        : Math.max(
+            -0.065,
+            Math.min(
+              0.065,
+              ((visualX - previousX) / Math.max(dt, 0.001)) * 0.00007,
+            ),
+          );
       snapshot.distance += d.distanceRate * dt;
       scroll += d.speed * dt;
       tokenGlow = Math.max(0, tokenGlow - dt);
@@ -44,6 +69,7 @@ export default function createGame(options: GameOptions) {
         items.push({
           lane: target,
           y: -70,
+          variant: Math.floor(snapshot.elapsed) % 4,
           type:
             Math.random() < 0.28
               ? 'coin'
@@ -75,130 +101,44 @@ export default function createGame(options: GameOptions) {
       if (snapshot.elapsed >= config.maxSeconds) snapshot.phase = 'over';
     },
     draw(ctx) {
-      ctx.fillStyle = '#dbbf8d';
-      ctx.fillRect(0, 0, W, H);
-      const paintedStreet = sprite(ctx, 'street-bg', 0, 0, W, H);
-      ctx.fillStyle = '#4a5360';
-      ctx.fillRect(205, 0, 390, H);
-      ctx.fillStyle = '#f5d28c';
-      ctx.fillRect(201, 0, 5, H);
-      ctx.fillRect(595, 0, 5, H);
-      ctx.strokeStyle = '#e1d9bc';
-      ctx.lineWidth = 4;
-      ctx.setLineDash([42, 40]);
-      ctx.lineDashOffset = -(scroll % 82);
-      for (const x of [340, 460]) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, H);
-        ctx.stroke();
-      }
-      ctx.setLineDash([]);
-      for (let i = -1; i < 4; i++) {
-        if (paintedStreet) break;
-        const y = i * 220 + (options.reducedMotion?.() ? 0 : scroll % 220);
-        for (const [x, color] of [
-          [20, '#bb7860'],
-          [620, '#68928b'],
-        ] as const) {
-          rounded(ctx, x, y, 150, 145, 6, color);
-          rounded(ctx, x + 12, y + 14, 126, 28, 3, '#f6dba6');
-          ctx.fillStyle = '#45645d';
-          ctx.font = 'bold 15px Inter, Noto Sans Khmer, sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText(x === 20 ? 'ផ្សារ' : 'សួស្តី', x + 75, y + 34);
-          rounded(ctx, x + 17, y + 62, 43, 67, 2, '#42535a');
-          rounded(ctx, x + 80, y + 65, 52, 38, 2, '#ecd0a0');
-          sprite(ctx, 'basket', x + 73, y + 97, 62, 43);
-          sprite(ctx, x === 20 ? 'mango' : 'bananas', x + 85, y + 88, 40, 35);
-          for (let k = 0; k < 6; k++)
-            rounded(
-              ctx,
-              x + k * 25,
-              y + 46,
-              25,
-              16,
-              2,
-              k % 2 ? '#ebcba1' : '#c96556',
-            );
+      const reduced = options.reducedMotion?.() ?? false;
+      street(ctx, scroll, reduced);
+      const drawPlayer = () =>
+        vehicle(
+          ctx,
+          visualX,
+          config.playerY,
+          'tuk',
+          0,
+          lean,
+          snapshot.phase === 'over',
+        );
+      let playerDrawn = false;
+      for (const item of [...items].sort((a, b) => a.y - b.y)) {
+        if (!playerDrawn && item.y > config.playerY) {
+          drawPlayer();
+          playerDrawn = true;
         }
-        palm(ctx, 173, y + 175, 0.45);
-        palm(ctx, 615, y + 135, 0.4);
-      }
-      if (paintedStreet) {
-        ctx.font = 'bold 17px Inter, Noto Sans Khmer, sans-serif';
-        ctx.textAlign = 'center';
-        for (const y of [110, 325, 535]) {
-          rounded(ctx, 42, y, 117, 29, 4, '#fff0cb');
-          ctx.fillStyle = '#315443';
-          ctx.fillText('ផ្សារ', 100, y + 21);
-          rounded(ctx, 646, y - 40, 110, 29, 4, '#fff0cb');
-          ctx.fillStyle = '#315443';
-          ctx.fillText('សួស្តី', 700, y - 19);
-        }
-      }
-      for (const item of items) {
         const x = config.lanes[item.lane];
-        if (item.type === 'coin') {
-          ctx.fillStyle = '#ffcf58';
-          ctx.beginPath();
-          ctx.arc(x, item.y, 19, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#bf8429';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(x, item.y, 12, 0, Math.PI * 2);
-          ctx.stroke();
-        } else if (item.type === 'cone') {
-          ctx.fillStyle = '#f68b55';
-          ctx.beginPath();
-          ctx.moveTo(x, item.y - 25);
-          ctx.lineTo(x + 24, item.y + 22);
-          ctx.lineTo(x - 24, item.y + 22);
-          ctx.closePath();
-          ctx.fill();
-          rounded(ctx, x - 13, item.y + 3, 26, 8, 1, '#f7dfb1');
-          rounded(ctx, x - 28, item.y + 20, 56, 7, 2, '#41484c');
-        } else {
-          rounded(ctx, x - 35, item.y - 47, 70, 94, 12, '#c47065');
-          rounded(ctx, x - 27, item.y - 24, 54, 39, 6, '#526b75');
-          rounded(ctx, x - 25, item.y + 25, 50, 12, 4, '#e2997e');
-          rounded(ctx, x - 28, item.y - 40, 14, 8, 2, '#ffe4a2');
-          rounded(ctx, x + 14, item.y - 40, 14, 8, 2, '#ffe4a2');
-        }
+        if (item.type === 'car') vehicle(ctx, x, item.y, 'car', item.variant);
+        else object(ctx, x, item.y, item.type);
       }
-      const x = visualX,
-        y = config.playerY;
-      ctx.fillStyle = '#0003';
-      ctx.beginPath();
-      ctx.ellipse(x, y + 42, 48, 17, 0, 0, Math.PI * 2);
-      ctx.fill();
-      rounded(ctx, x - 45, y + 7, 12, 36, 5, '#263c43');
-      rounded(ctx, x + 33, y + 7, 12, 36, 5, '#263c43');
-      rounded(ctx, x - 7, y - 60, 14, 28, 5, '#263c43');
-      rounded(ctx, x - 36, y - 36, 72, 80, 11, '#43b6ac');
-      rounded(ctx, x - 31, y - 32, 62, 24, 6, '#f4c766');
-      rounded(ctx, x - 29, y - 4, 58, 33, 5, '#345e67');
-      rounded(ctx, x - 33, y + 33, 66, 9, 4, '#f4c766');
-      // Original open passenger cabin, red canopy trim and blue chassis.
-      rounded(ctx, x - 37, y - 39, 74, 8, 3, '#b74443');
-      rounded(ctx, x - 25, y + 1, 50, 20, 4, '#e4a663');
-      rounded(ctx, x - 30, y + 24, 60, 8, 3, '#275a91');
-      rounded(ctx, x - 31, y - 6, 4, 39, 1, '#e8d6a3');
-      rounded(ctx, x + 27, y - 6, 4, 39, 1, '#e8d6a3');
-      rounded(ctx, x - 45, y - 22, 12, 5, 2, '#e8d6a3');
-      rounded(ctx, x + 33, y - 22, 12, 5, 2, '#e8d6a3');
-      ctx.fillStyle = '#ffe9a6';
-      ctx.beginPath();
-      ctx.arc(x - 20, y - 20, 6, 0, Math.PI * 2);
-      ctx.arc(x + 20, y - 20, 6, 0, Math.PI * 2);
-      ctx.fill();
-      if (tokenGlow > 0 && !options.reducedMotion?.()) {
-        ctx.strokeStyle = '#ffd563';
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.arc(x, y, 63, 0, Math.PI * 2);
-        ctx.stroke();
+      if (!playerDrawn) drawPlayer();
+      if (tokenGlow > 0) {
+        const p = project(visualX, config.playerY);
+        ctx.fillStyle = '#fff0b9';
+        ctx.strokeStyle = '#514631';
+        ctx.lineWidth = 3;
+        ctx.font = 'bold 22px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        const y = p.y - 95 - (reduced ? 0 : (0.25 - tokenGlow) * 35);
+        ctx.strokeText('+25', p.x, y);
+        ctx.fillText('+25', p.x, y);
+      }
+      if (snapshot.phase === 'over') {
+        ctx.strokeStyle = '#c9634d';
+        ctx.lineWidth = 8;
+        ctx.strokeRect(4, 4, W - 8, H - 8);
       }
     },
   };

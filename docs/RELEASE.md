@@ -1,5 +1,11 @@
 # Release status and remaining configuration
 
+## Subsequent Tuk-Tuk Rush update
+
+Rush now uses a rear-view perspective road, original procedural street scenery and vehicles, smooth steering and direct lane taps. Scoring and local data are preserved. The source repository was populated on Bobby's request after the September update: https://github.com/Rithy089/Bobbygames. Earlier statements below about it being empty describe the checks before that push.
+
+The known Vercel commit-author access restriction has not been resolved or bypassed. This update uses the existing owner-private Sites publishing workflow; it does not claim an updated public Vercel deployment.
+
 ## September 8, 2026 update
 
 - Updated application source: `49cc80d0044231b4cc9beace2321ec8c108e11db`.

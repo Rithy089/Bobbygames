@@ -32,3 +32,7 @@ export const collidesAt = (
     item.y > config.playerY - halfY
   );
 };
+
+// Exponential steering has the same response at 30, 60 and 120 Hz.
+export const steer = (current: number, target: number, dt: number) =>
+  current + (target - current) * (1 - Math.exp(-18 * Math.max(0, dt)));
