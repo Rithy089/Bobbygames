@@ -160,6 +160,20 @@ export default function createGame(options: GameOptions) {
       for (const f of options.reducedMotion?.() ? [] : fragments)
         rounded(ctx, f.x, f.y, f.width, 28, 3, '#b48e73');
       if (pulse > 0) {
+        const placed = blocks[blocks.length - 1];
+        const py = 490 - Math.min(blocks.length - 1, 12) * config.blockHeight;
+        ctx.save();
+        ctx.strokeStyle = '#fff1bd';
+        ctx.lineWidth = 3;
+        const spread = options.reducedMotion?.() ? 3 : 3 + (1.1 - pulse) * 8;
+        ctx.globalAlpha = Math.min(1, pulse * 2);
+        ctx.strokeRect(
+          placed.x - spread,
+          py - spread,
+          placed.width + spread * 2,
+          config.blockHeight + spread * 2,
+        );
+        ctx.restore();
         ctx.fillStyle = '#ffe7b6';
         ctx.font = 'bold 25px Inter, Noto Sans Khmer, sans-serif';
         ctx.textAlign = 'center';

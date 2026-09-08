@@ -28,7 +28,7 @@ The September update contains four locally playable games, both languages, theme
 
 **Online accounts and global rankings are deliberately deferred at Bobby’s request.** No Supabase URL/key is configured. Production signup, confirmation email, login, recovery, cross-device sync and actual live global rankings must be smoke-tested when that phase resumes. The current release displays this state honestly and permits guest play. No fake global scores are shown. Market Match currently saves only local results and never submits its results to the arcade score RPC; any future online memory ranking needs a dedicated validated result contract and database catalog entry.
 
-Khmer copy remains a draft pending Bobby’s review. See KHMER-REVIEW.md. The original artwork and factual sources are listed in ASSETS.md and UPDATE-ASSETS.md. No flag imagery is used in gameplay.
+Bobby approved the existing Khmer copy on September 9. Seven new audio controls/messages await review; see KHMER-REVIEW.md. Original artwork and factual sources are listed in ASSETS.md and UPDATE-ASSETS.md; procedural music is documented in AUDIO.md. No flag imagery is used in gameplay.
 
 Privacy and Terms describe this actual portfolio application; review them against the eventual hosting/account configuration before a larger public launch. Account deletion requests currently go through Bobby’s portfolio contact links. Guest progress can be removed by clearing this site’s browser data. Personal statistics show up to the 300 most recent finished runs; best scores are retained separately.
 

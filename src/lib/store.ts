@@ -7,6 +7,8 @@ export type AudioSettings = {
   music: boolean;
   effects: boolean;
   volume: number;
+  musicVolume: number;
+  effectsVolume: number;
 };
 export type Run = {
   game: GameId;
@@ -34,7 +36,14 @@ export const usePortal = create<Portal>()(
     (set) => ({
       language: document.documentElement.lang === 'km' ? 'km' : 'en',
       theme: 'system',
-      audio: { sound: true, music: false, effects: true, volume: 0.35 },
+      audio: {
+        sound: true,
+        music: true,
+        effects: true,
+        volume: 0.35,
+        musicVolume: 0.6,
+        effectsVolume: 0.9,
+      },
       favorites: [],
       recent: [],
       best: {},
@@ -108,7 +117,16 @@ export const usePortal = create<Portal>()(
               typeof saved.audio?.sound === 'boolean'
                 ? saved.audio.sound
                 : true,
-            music: saved.audio?.music === true,
+            music:
+              typeof saved.audio?.music === 'boolean'
+                ? saved.audio.music
+                : true,
+            musicVolume: Number.isFinite(saved.audio?.musicVolume)
+              ? Math.max(0, Math.min(1, saved.audio!.musicVolume))
+              : 0.6,
+            effectsVolume: Number.isFinite(saved.audio?.effectsVolume)
+              ? Math.max(0, Math.min(1, saved.audio!.effectsVolume))
+              : 0.9,
             effects: saved.audio?.effects !== false,
             volume: Number.isFinite(saved.audio?.volume)
               ? Math.min(1, Math.max(0, saved.audio!.volume))

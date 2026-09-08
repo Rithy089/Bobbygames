@@ -1,5 +1,12 @@
 # Verification log
 
+## September 9 audio and feedback update
+
+- Fresh-browser diagnosis confirmed music=false with a running AudioContext; old enabled music was a single low sine tone, not a composed track. No missing music assets existed. Added four original procedural arrangements, separate gains, preserved legacy mutes, recovery diagnostics and bounded effects; see AUDIO.md for details.
+- TypeScript, ESLint, 48 unit/component/database tests, build and secret scan passed. Full Chromium suite: 49 passed, one intentional desktop skip. An expanded saved-mute test covering all games and a new effects-only real-signal test then passed in four desktop/mobile checks (51 distinct passing browser cases overall).
+- Real Web Audio analyser signal, pause/resume, repeated restarts, tab-visibility simulation, navigation cleanup, independent volumes, preference persistence, blocked-resume retry and preparation failure were verified. Screenshots reviewed for game frames on desktop/mobile. No actual speaker/headphone listening or physical-phone testing is claimed. Manual listening checklist: AUDIO.md.
+- Existing gameplay, Khmer copy, guest storage and developer links preserved. Supabase/account/global-ranking configuration remains deliberately deferred.
+
 ## Overhead Rush and Market Match table
 
 - Restored the original straight overhead road and constant object scale, retaining detailed vehicle artwork. Five storefront designs scroll at 14% of traffic speed, without tilt or zoom. Reduced-motion mode freezes decorative movement. Existing scoring, collision bounds and guest data remain unchanged.

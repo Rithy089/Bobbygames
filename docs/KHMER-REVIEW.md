@@ -1,6 +1,8 @@
 # Khmer and cultural review
 
-Khmer in src/i18n/km.ts and src/lib/culture.ts is a draft for Bobby or another fluent Khmer reviewer. It is not labeled professionally reviewed. The Discover page states this limitation. English fallback is configured with i18next.
+Bobby approved the existing Khmer copy on September 9, 2026. Preserve that copy. The older review notes below are historical; English fallback remains configured with i18next.
+
+New audio strings awaiting review: `musicVolume`, `effectsVolume`, `enableSound`, `musicOffNotice`, `audioStatus_blocked`, `audioStatus_unavailable`, `audioStatus_failed` in `src/i18n/km.ts`. All existing Khmer strings are unchanged in the audio update.
 
 Review navigation tone, auth/recovery messages, gameplay instructions, the term for combo, and the biosphere-reserve translation. Check line breaks and font readability on a physical Android/iOS device. The main interface intentionally keeps EN and ខ្មែរ available. Fonts are locally hosted Noto Sans Khmer and Inter.
 

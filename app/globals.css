@@ -2386,3 +2386,13 @@ td:nth-child(2) {
 @media(prefers-reduced-motion:reduce) { .match-card { transition:none; } .match-card:not([aria-disabled="true"]):hover { transform:none; } }
 .made-country { display:inline-flex; align-items:center; gap:6px; } .sidebar-country img,.made-country img { object-fit:contain; flex-shrink:0; }
 @media (prefers-reduced-motion:reduce) { .match-card { transition:none !important; } }
+
+/* Brief, single-play feedback; no continuous motion or flashing. */
+.match-card.face-up { animation: market-reveal .22s ease-out; transform-origin:center; }
+.match-card.matched { animation: market-pair .34s ease-out; }
+.phase-complete .overlay-symbol { animation: market-celebrate .65s ease-out; }
+.phase-complete .overlay-symbol::after { content:'✦'; position:absolute; margin-left:70px; color:#b78632; font-size:24px; }
+@keyframes market-reveal { from { transform:rotateY(65deg); } to { transform:rotateY(0); } }
+@keyframes market-pair { 50% { transform:translateY(-3px); box-shadow:0 0 0 3px #b8d890; } }
+@keyframes market-celebrate { from { transform:translateY(7px) scale(.9); } to { transform:translateY(0) scale(1); } }
+@media(prefers-reduced-motion:reduce) { .match-card.face-up,.match-card.matched,.phase-complete .overlay-symbol { animation:none; } }

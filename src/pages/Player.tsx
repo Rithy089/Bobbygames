@@ -77,7 +77,7 @@ function PlayerGame() {
     const invalidate = () => {
       generation.current++;
     };
-    const sound = createAudio();
+    const sound = createAudio(game.id);
     audioRef.current = sound;
     setLoaded(false);
     setError(false);
@@ -158,7 +158,8 @@ function PlayerGame() {
     };
   }, [game, queryClient]);
   useEffect(() => {
-    audioRef.current?.sync(snapshot.phase === 'running');
+    if (snapshot.phase === 'over') audioRef.current?.finish();
+    else audioRef.current?.sync(snapshot.phase === 'running');
   }, [snapshot.phase, audio]);
   if (!game) return <NotFound />;
   const begin = async (restart = false) => {

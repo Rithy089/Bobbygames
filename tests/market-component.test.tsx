@@ -14,6 +14,7 @@ const audio = vi.hoisted(() => ({
   sync: vi.fn(),
   effect: vi.fn(),
   destroy: vi.fn(),
+  finish: vi.fn(),
 }));
 vi.mock('../src/games/shared/audio', () => ({ createAudio: () => audio }));
 vi.mock('../src/games/shared/sprites', () => ({

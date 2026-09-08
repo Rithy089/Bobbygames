@@ -47,7 +47,7 @@ export default function MarketMatch() {
   }, [state.phase, state.round]);
   useEffect(() => {
     let disposed = false;
-    const instance = createAudio();
+    const instance = createAudio('khmer-market-match');
     audio.current = instance;
     usePortal.getState().visit('khmer-market-match');
     void import('../shared/sprites')
@@ -97,7 +97,8 @@ export default function MarketMatch() {
     return () => window.clearInterval(timer);
   }, [state.phase, state.round]);
   useEffect(() => {
-    audio.current?.sync(state.phase === 'running');
+    if (state.phase !== 'complete')
+      audio.current?.sync(state.phase === 'running');
   }, [state.phase, sound]);
   useEffect(() => {
     const key = state.round + ':' + state.moves;
@@ -110,20 +111,19 @@ export default function MarketMatch() {
     if (state.phase !== 'complete' || savedRound.current === state.round)
       return;
     savedRound.current = state.round;
+    audio.current?.finish('complete');
     const result = {
       moves: state.moves,
       elapsedMs: state.elapsedMs,
       date: new Date().toISOString(),
     };
     useMatchResults.getState().save(state.difficulty, result);
-    usePortal
-      .getState()
-      .finish({
-        game: 'khmer-market-match',
-        score: 0,
-        duration: state.elapsedMs / 1000,
-        date: result.date,
-      });
+    usePortal.getState().finish({
+      game: 'khmer-market-match',
+      score: 0,
+      duration: state.elapsedMs / 1000,
+      date: result.date,
+    });
     resultHeading.current?.focus({ preventScroll: true });
   }, [
     state.phase,
@@ -206,7 +206,7 @@ export default function MarketMatch() {
             </b>
           </div>
         </div>
-        <div className="match-stage">
+        <div className={'match-stage phase-' + state.phase}>
           <div
             className={'match-board size-' + state.difficulty}
             ref={board}
@@ -278,8 +278,10 @@ export default function MarketMatch() {
                   aria-disabled={blocked}
                   tabIndex={state.phase === 'running' ? 0 : -1}
                   onClick={() => {
-                    if (!blocked)
+                    if (!blocked) {
+                      audio.current?.effect('flip');
                       dispatch({ type: 'flip', index, now: performance.now() });
+                    }
                   }}
                 >
                   {face ? (

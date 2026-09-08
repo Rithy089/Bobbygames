@@ -87,7 +87,13 @@ export default function createGame(options: GameOptions) {
             life: 0.8,
             good: item.type !== 'stone',
           });
-          options.audio(item.type === 'stone' ? 'miss' : 'catch');
+          options.audio(
+            item.type === 'stone'
+              ? 'miss'
+              : state.combo > 1
+                ? 'perfect'
+                : 'catch',
+          );
           if (item.type === 'stone') flash = 0.2;
           item.y = 1000;
         } else if (item.y > 570 && item.y < 900) {
@@ -133,6 +139,25 @@ export default function createGame(options: GameOptions) {
         ctx.fillText('×' + state.combo, x, config.catchY - 52);
       }
       for (const f of feedback) {
+        if (f.good && !options.reducedMotion?.()) {
+          const age = 0.8 - f.life;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, 1 - age / 0.65);
+          ctx.fillStyle = '#f6d66f';
+          for (let i = 0; i < 6; i++) {
+            const angle = (i * Math.PI) / 3;
+            ctx.beginPath();
+            ctx.arc(
+              f.x + Math.cos(angle) * (10 + age * 30),
+              f.y + 25 + Math.sin(angle) * (10 + age * 22),
+              3,
+              0,
+              Math.PI * 2,
+            );
+            ctx.fill();
+          }
+          ctx.restore();
+        }
         ctx.font = 'bold 18px Inter, Noto Sans Khmer, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillStyle = f.good ? '#fff6b7' : '#fff';

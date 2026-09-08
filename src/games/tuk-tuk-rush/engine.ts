@@ -114,6 +114,24 @@ export default function createGame(options: GameOptions) {
       if (!playerDrawn) drawPlayer();
       if (tokenGlow > 0) {
         const p = project(visualX, config.playerY);
+        if (!reduced) {
+          ctx.save();
+          ctx.strokeStyle = '#eac565';
+          ctx.lineWidth = 2;
+          ctx.globalAlpha = tokenGlow / 0.25;
+          ctx.beginPath();
+          ctx.ellipse(
+            p.x,
+            p.y + 18,
+            46 + (0.25 - tokenGlow) * 40,
+            17,
+            0,
+            0,
+            Math.PI * 2,
+          );
+          ctx.stroke();
+          ctx.restore();
+        }
         ctx.fillStyle = '#fff0b9';
         ctx.strokeStyle = '#514631';
         ctx.lineWidth = 3;
