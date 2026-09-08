@@ -1,5 +1,12 @@
 # Verification log
 
+## Rush visual-comfort follow-up
+
+- Responded to Bobby's report of distracting, headache-like motion by fixing all roadside scenery in place, removing vehicle tilt and floating reward movement, slowing lane-marker motion to 25%, lowering marker contrast and removing the alternating curb stripes. Reduced-motion mode also freezes lane markings. Traffic speed, steering, collisions and local scoring remain unchanged.
+- Five original, distinct storefronts: fruit stall, food kiosk, textile shophouse, repair garage and plant shop. Fewer roadside objects, fully visible shop silhouettes and two small palms keep the road clear. Existing Khmer decorative words are reused; no new translation strings.
+- TypeScript, lint, 45 automated tests, production build and secret scan passed. Two desktop/mobile browser tests passed with a new pixel comparison proving the roadside does not move during play, plus lane taps, keyboard return, collision, pause, restart and best persistence. Reviewed updated desktop/mobile screenshots.
+- This verifies reduced visual motion, not a guarantee that every player will find the game comfortable. Bobby's own comfort review and physical-device checks remain outstanding.
+
 ## Tuk-Tuk Rush perspective update
 
 - Replaced static overhead gameplay with a consistent perspective projection for road, vehicles and obstacles; kept scoring, difficulty caps, collision space and guest best-score keys. Steering now uses frame-rate-independent exponential easing. Direct road taps select lanes; keyboard and arrow controls remain available.

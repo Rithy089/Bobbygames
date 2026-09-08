@@ -11,12 +11,19 @@ test('Rush road taps dodge traffic, keyboard returns, pause and best persist', a
   await page.goto('/play/tuk-tuk-rush');
   await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
   const canvas = page.locator('canvas');
+  const roadsidePixels = () =>
+    canvas.evaluate((el) => {
+      const ctx = (el as HTMLCanvasElement).getContext('2d')!;
+      return Array.from(ctx.getImageData(0, 140, 130, 450).data);
+    });
+  const roadside = await roadsidePixels();
   const box = (await canvas.boundingBox())!;
   // Select left lane in projected road coordinates, using a real touch on mobile.
   const position = { x: box.width * 0.355, y: box.height * 0.8 };
   if (isMobile) await canvas.tap({ position });
   else await canvas.click({ position });
   await page.clock.runFor(4700);
+  expect(await roadsidePixels()).toEqual(roadside);
   await expect(page.getByRole('heading', { name: 'Nice run!' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
   const score = await page.getByTestId('score').textContent();

@@ -16,8 +16,7 @@ export default function createGame(options: GameOptions) {
     spawn = 0.7,
     scroll = 0,
     coins = 0,
-    tokenGlow = 0,
-    lean = 0;
+    tokenGlow = 0;
   let items: {
     lane: number;
     y: number;
@@ -34,7 +33,6 @@ export default function createGame(options: GameOptions) {
       scroll = 0;
       coins = 0;
       tokenGlow = 0;
-      lean = 0;
       items = [];
     },
     update(dt, input) {
@@ -48,17 +46,7 @@ export default function createGame(options: GameOptions) {
           Math.min(2, Math.round((worldX - config.lanes[0]) / 120)),
         );
       }
-      const previousX = visualX;
       visualX = steer(visualX, config.lanes[lane], dt);
-      lean = options.reducedMotion?.()
-        ? 0
-        : Math.max(
-            -0.065,
-            Math.min(
-              0.065,
-              ((visualX - previousX) / Math.max(dt, 0.001)) * 0.00007,
-            ),
-          );
       snapshot.distance += d.distanceRate * dt;
       scroll += d.speed * dt;
       tokenGlow = Math.max(0, tokenGlow - dt);
@@ -110,7 +98,7 @@ export default function createGame(options: GameOptions) {
           config.playerY,
           'tuk',
           0,
-          lean,
+          0,
           snapshot.phase === 'over',
         );
       let playerDrawn = false;
@@ -131,7 +119,7 @@ export default function createGame(options: GameOptions) {
         ctx.lineWidth = 3;
         ctx.font = 'bold 22px Inter, sans-serif';
         ctx.textAlign = 'center';
-        const y = p.y - 95 - (reduced ? 0 : (0.25 - tokenGlow) * 35);
+        const y = p.y - 95;
         ctx.strokeText('+25', p.x, y);
         ctx.fillText('+25', p.x, y);
       }

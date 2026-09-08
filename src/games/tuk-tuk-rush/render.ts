@@ -52,62 +52,99 @@ function roadBand(
   );
 }
 function shop(ctx: Ctx, side: number, y: number, index: number) {
-  const p = project(400 + side * 340, y);
+  const p = project(400 + side * 300, y);
   ctx.save();
   ctx.translate(p.x, p.y);
   ctx.scale(p.scale, p.scale);
-  const color = ['#e8b87f', '#83aa9c', '#d58d73', '#ced3ae'][index % 4];
-  ellipse(ctx, 5, 0, 94, 15, '#344b4129');
-  rounded(ctx, -87, -188, 174, 180, 2, color);
-  poly(
-    ctx,
-    [
-      [-87, -188],
-      [87, -188],
-      [102, -205],
-      [-72, -205],
-    ],
-    '#f3d7a1',
-  );
-  poly(
-    ctx,
-    [
-      [87, -188],
-      [102, -205],
-      [102, -25],
-      [87, -8],
-    ],
-    '#8c7961',
-  );
-  rounded(ctx, -77, -170, 154, 11, 1, '#f6dfb4');
-  for (const x of [-61, 8]) {
-    rounded(ctx, x, -144, 47, 44, 1, '#42636a');
-    rounded(ctx, x + 4, -140, 15, 34, 1, '#93bdb4');
-    rounded(ctx, x - 4, -100, 55, 5, 0, '#fae2ae');
-  }
-  rounded(ctx, -74, -84, 148, 27, 2, '#fff0c9');
-  ctx.fillStyle = '#314e45';
-  ctx.font = 'bold 17px Inter, Noto Sans Khmer, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(index % 2 ? 'សួស្តី' : 'ផ្សារ', 0, -64);
-  rounded(ctx, -72, -52, 144, 45, 1, '#3e5250');
-  for (let k = 0; k < 8; k++) {
-    const x = -90 + k * 22.5;
+  // Five original storefront silhouettes, fixed in place for visual comfort.
+  const colors = ['#dcae72', '#b8795e', '#91aaa0', '#c6bba3', '#8a9e71'];
+  const heights = [118, 108, 182, 126, 96];
+  const height = heights[index];
+  ellipse(ctx, 0, 0, 82, 10, '#344b411c');
+  rounded(ctx, -72, -height, 144, height - 5, 3, colors[index]);
+  if (index === 1 || index === 4) {
     poly(
       ctx,
       [
-        [x, -57],
-        [x + 22.5, -57],
-        [x + 26, -36],
-        [x - 3, -36],
+        [-82, -height],
+        [0, -height - 40],
+        [82, -height],
       ],
-      k % 2 ? '#f6deb0' : '#bb5d4a',
+      index === 1 ? '#a04d3b' : '#6d7955',
     );
-    rounded(ctx, x - 3, -36, 29, 8, 3, k % 2 ? '#e9c998' : '#9e483b');
+  } else
+    rounded(
+      ctx,
+      -79,
+      -height - 8,
+      158,
+      12,
+      2,
+      index === 2 ? '#e5d5ac' : '#ead2a5',
+    );
+  rounded(ctx, -59, -66, 118, 57, 2, '#3f5552');
+  ctx.fillStyle = '#304e43';
+  ctx.font = 'bold 16px Inter, Noto Sans Khmer, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(index % 2 ? 'សួស្តី' : 'ផ្សារ', 0, index === 2 ? -83 : -height + 22);
+  if (index === 0) {
+    // Fruit stall: broad striped canopy and wooden produce crates.
+    for (let i = 0; i < 6; i++)
+      rounded(ctx, -81 + i * 27, -86, 27, 24, 2, i % 2 ? '#f2dbaf' : '#c58943');
+    for (let i = 0; i < 3; i++) {
+      rounded(ctx, -60 + i * 42, -30, 36, 23, 1, '#ab774b');
+      for (let j = 0; j < 3; j++)
+        ellipse(
+          ctx,
+          -53 + i * 42 + j * 10,
+          -34,
+          6,
+          7,
+          i % 2 ? '#98ad50' : '#efbd57',
+        );
+    }
+  } else if (index === 1) {
+    // Food kiosk: tiled roof, open serving counter and bowls.
+    rounded(ctx, -63, -18, 126, 11, 2, '#e0b980');
+    for (const x of [-37, 0, 37]) {
+      ellipse(ctx, x, -24, 13, 5, '#f3e2bc');
+      rounded(ctx, x - 9, -25, 18, 5, 2, '#69806c');
+    }
+    rounded(ctx, -64, -82, 128, 14, 2, '#f1d6a1');
+  } else if (index === 2) {
+    // Textile shophouse: upstairs shutters and hanging patterned cloth.
+    for (const x of [-51, 12]) {
+      rounded(ctx, x, -160, 39, 49, 2, '#456c68');
+      for (let k = 0; k < 4; k++)
+        rounded(ctx, x + 4, -151 + k * 9, 31, 3, 0, '#9cb7a4');
+    }
+    for (let k = 0; k < 4; k++) {
+      const x = -51 + k * 28;
+      rounded(ctx, x, -65, 22, 49, 1, k % 2 ? '#bf7866' : '#d5bd8d');
+      for (let row = 0; row < 4; row++)
+        rounded(ctx, x, -59 + row * 11, 22, 2, 0, '#efe0bb');
+    }
+  } else if (index === 3) {
+    // Repair shop: wide roller door, tyres and tool board.
+    rounded(ctx, -59, -100, 118, 26, 1, '#7e8b83');
+    for (let k = 0; k < 4; k++)
+      rounded(ctx, -57, -97 + k * 6, 114, 2, 0, '#b8bca9');
+    for (const x of [-36, 0]) {
+      ellipse(ctx, x, -25, 15, 19, '#344443');
+      ellipse(ctx, x, -25, 7, 10, '#b1b8a3');
+    }
+    rounded(ctx, 25, -58, 25, 44, 2, '#b79b72');
+    for (const x of [30, 40]) rounded(ctx, x, -52, 4, 29, 1, '#d5d7bd');
+  } else {
+    // Plant shop: timber slats, pitched green roof and potted foliage.
+    for (let k = 0; k < 6; k++)
+      rounded(ctx, -69 + k * 25, -height + 4, 3, height - 9, 0, '#687d58');
+    for (const x of [-47, -14, 24, 51]) {
+      rounded(ctx, x - 9, -20, 18, 19, 3, '#ba8059');
+      ellipse(ctx, x, -34, 12, 18, '#416f51');
+      ellipse(ctx, x + 8, -28, 9, 12, '#669456');
+    }
   }
-  rounded(ctx, -66, -15, 132, 10, 1, '#b48151');
-  for (let k = 0; k < 7; k++)
-    ellipse(ctx, -53 + k * 17, -19, 7, 6, k % 2 ? '#dda539' : '#8fa74a');
   ctx.restore();
 }
 export function street(ctx: Ctx, scroll: number, reduced: boolean) {
@@ -140,34 +177,26 @@ export function street(ctx: Ctx, scroll: number, reduced: boolean) {
   roadBand(ctx, 192, 608, -70, 650, '#f6e4bd');
   roadBand(ctx, 205, 595, -70, 650, '#535e62');
   roadBand(ctx, 211, 589, -70, 650, '#5c6668');
-  // Projected dashed markings and curb tiles supply speed cues without streaks.
-  for (let y = -150; y < 700; y += 86) {
-    const offset = y + (scroll % 86);
+  // Only restrained lane markings move. Curbs and scenery stay anchored.
+  for (let y = -150; y < 700; y += 130) {
+    const offset = y + (reduced ? 0 : (scroll * 0.25) % 130);
     for (const x of [340, 460])
-      roadBand(ctx, x - 2, x + 2, offset, offset + 39, '#eadfbf');
-    for (const x of [194, 595])
-      roadBand(ctx, x, x + 11, offset, offset + 43, '#b8624d');
+      roadBand(ctx, x - 1.5, x + 1.5, offset, offset + 54, '#bfc3b1');
   }
-  const sceneryScroll = reduced ? 0 : scroll * 0.72;
-  const rows = Array.from({ length: 5 }, (_, i) => ({
-    y: -100 + i * 200 + (sceneryScroll % 200),
-    i: (((i - Math.floor(sceneryScroll / 200)) % 4) + 4) % 4,
-  }));
-  for (const { y, i } of rows) {
-    shop(ctx, -1, y, i);
-    shop(ctx, 1, y + 70, i + 1);
-    for (const side of [-1, 1]) {
-      const p = project(400 + side * 234, y + 88);
-      palm(ctx, p.x, p.y, p.scale * 0.63);
-      const light = project(400 + side * 210, y + 8);
-      ctx.save();
-      ctx.translate(light.x, light.y);
-      ctx.scale(light.scale, light.scale);
-      rounded(ctx, -2, -135, 4, 135, 1, '#596a64');
-      rounded(ctx, side < 0 ? 0 : -29, -137, 29, 4, 1, '#596a64');
-      rounded(ctx, side < 0 ? 19 : -31, -138, 14, 7, 3, '#fff0ba');
-      ctx.restore();
-    }
+  const stores = [
+    { side: -1, y: 120, style: 0 },
+    { side: 1, y: 45, style: 2 },
+    { side: 1, y: 285, style: 1 },
+    { side: -1, y: 445, style: 3 },
+    { side: 1, y: 570, style: 4 },
+  ];
+  for (const { side, y, style } of stores) shop(ctx, side, y, style);
+  for (const [side, y] of [
+    [-1, 280],
+    [1, 420],
+  ]) {
+    const p = project(400 + side * 246, y);
+    palm(ctx, p.x, p.y, p.scale * 0.48);
   }
 }
 export function vehicle(
