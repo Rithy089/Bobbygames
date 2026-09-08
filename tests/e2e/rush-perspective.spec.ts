@@ -1,5 +1,27 @@
 import { test, expect } from '@playwright/test';
 
+test('overhead roadside moves gently in normal motion mode', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.clock.install();
+  await page.goto('/play/tuk-tuk-rush');
+  await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
+  const pixels = () =>
+    page
+      .locator('canvas')
+      .evaluate((el) =>
+        Array.from(
+          (el as HTMLCanvasElement)
+            .getContext('2d')!
+            .getImageData(10, 140, 130, 300).data,
+        ),
+      );
+  const before = await pixels();
+  await page.clock.runFor(1000);
+  expect(await pixels()).not.toEqual(before);
+});
+
 test('Rush road taps dodge traffic, keyboard returns, pause and best persist', async ({
   page,
   isMobile,
@@ -7,6 +29,7 @@ test('Rush road taps dodge traffic, keyboard returns, pause and best persist', a
   await page.addInitScript(() => {
     Math.random = () => 0.5;
   });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.clock.install();
   await page.goto('/play/tuk-tuk-rush');
   await page.getByRole('button', { name: 'Let’s play', exact: true }).click();

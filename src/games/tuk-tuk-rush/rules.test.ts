@@ -19,10 +19,12 @@ describe('Tuk-Tuk Rush', () => {
     expect(simulate(60)).toBeLessThanOrEqual(520);
     expect(steer(400, 280, 0)).toBe(400);
   });
-  it('projects lanes consistently and keeps foreground hazards readable', () => {
+  it('keeps the overhead camera and object sizes stable at every distance', () => {
     const far = project(520, -70),
       near = project(520, config.playerY);
-    expect(near.scale).toBeGreaterThan(far.scale);
+    expect(near.scale).toBe(far.scale);
+    expect(near.scale).toBe(1);
+    expect(near.x).toBe(520);
     expect(near.y).toBeGreaterThan(far.y);
     expect(project(280, config.playerY).x + near.x).toBeCloseTo(800);
     expect(project(400, config.playerY).x).toBe(400);

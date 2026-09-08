@@ -1,12 +1,7 @@
 import { rounded, palm } from '../shared/draw';
 
-// Logical collision space stays fixed; the renderer projects everything through
-// the same camera. No camera shake or field-of-view changes during driving.
-export const project = (x: number, y: number) => {
-  const depth = Math.max(0, (y + 70) / 670);
-  const scale = 0.22 + depth * 0.88;
-  return { x: 400 + (x - 400) * scale, y: 126 + depth * 474, scale };
-};
+// Fixed overhead camera: no perspective zoom or changes in object size.
+export const project = (x: number, y: number) => ({ x, y, scale: 1 });
 type Ctx = CanvasRenderingContext2D;
 function poly(ctx: Ctx, points: number[][], fill: string) {
   ctx.fillStyle = fill;
@@ -55,8 +50,8 @@ function shop(ctx: Ctx, side: number, y: number, index: number) {
   const p = project(400 + side * 300, y);
   ctx.save();
   ctx.translate(p.x, p.y);
-  ctx.scale(p.scale, p.scale);
-  // Five original storefront silhouettes, fixed in place for visual comfort.
+  ctx.scale(0.78, 0.78);
+  // Five original storefront silhouettes, moving gently at a constant size.
   const colors = ['#dcae72', '#b8795e', '#91aaa0', '#c6bba3', '#8a9e71'];
   const heights = [118, 108, 182, 126, 96];
   const height = heights[index];
@@ -148,55 +143,29 @@ function shop(ctx: Ctx, side: number, y: number, index: number) {
   ctx.restore();
 }
 export function street(ctx: Ctx, scroll: number, reduced: boolean) {
-  const sky = ctx.createLinearGradient(0, 0, 0, 180);
-  sky.addColorStop(0, '#81b9ca');
-  sky.addColorStop(1, '#fbe3ad');
-  ctx.fillStyle = sky;
+  ctx.fillStyle = '#bac8a1';
   ctx.fillRect(0, 0, 800, 600);
-  ellipse(ctx, 615, 54, 27, 27, '#fff2c4');
-  // Fictional Phnom Penh-inspired shophouses, no real businesses or monuments.
-  for (let i = 0; i < 15; i++) {
-    const x = i * 59 - 14,
-      h = 24 + ((i * 17) % 39);
-    rounded(ctx, x, 130 - h, 48, h + 20, 1, i % 2 ? '#a8b1a0' : '#bdba9e');
-    for (let floor = 0; floor < 3; floor++)
-      for (let col = 0; col < 4; col++)
-        rounded(
-          ctx,
-          x + 6 + col * 10,
-          135 - h + floor * 12,
-          4,
-          6,
-          0,
-          '#82998f55',
-        );
-  }
-  ctx.fillStyle = '#becc9c';
-  ctx.fillRect(0, 136, 800, 464);
-  roadBand(ctx, 120, 680, -70, 650, '#d9c5a2');
-  roadBand(ctx, 192, 608, -70, 650, '#f6e4bd');
-  roadBand(ctx, 205, 595, -70, 650, '#535e62');
-  roadBand(ctx, 211, 589, -70, 650, '#5c6668');
-  // Only restrained lane markings move. Curbs and scenery stay anchored.
-  for (let y = -150; y < 700; y += 130) {
+  ctx.fillStyle = '#d8c6a4';
+  ctx.fillRect(164, 0, 472, 600);
+  ctx.fillStyle = '#eee0bf';
+  ctx.fillRect(198, 0, 404, 600);
+  ctx.fillStyle = '#535e62';
+  ctx.fillRect(205, 0, 390, 600);
+  // Soft lane markings and slow roadside travel; no scaling or rapid wrapping.
+  for (let y = -130; y < 650; y += 130) {
     const offset = y + (reduced ? 0 : (scroll * 0.25) % 130);
     for (const x of [340, 460])
       roadBand(ctx, x - 1.5, x + 1.5, offset, offset + 54, '#bfc3b1');
   }
-  const stores = [
-    { side: -1, y: 120, style: 0 },
-    { side: 1, y: 45, style: 2 },
-    { side: 1, y: 285, style: 1 },
-    { side: -1, y: 445, style: 3 },
-    { side: 1, y: 570, style: 4 },
-  ];
-  for (const { side, y, style } of stores) shop(ctx, side, y, style);
-  for (const [side, y] of [
-    [-1, 280],
-    [1, 420],
-  ]) {
-    const p = project(400 + side * 246, y);
-    palm(ctx, p.x, p.y, p.scale * 0.48);
+  const travel = reduced ? 0 : scroll * 0.14;
+  const passed = Math.floor(travel / 230);
+  for (let i = -1; i < 4; i++) {
+    const y = i * 230 + (travel % 230);
+    const style = (((i - passed) % 5) + 5) % 5;
+    shop(ctx, -1, y + 125, style);
+    shop(ctx, 1, y + 215, (style + 2) % 5);
+    palm(ctx, 175, y + 185, 0.35);
+    palm(ctx, 625, y + 60, 0.32);
   }
 }
 export function vehicle(

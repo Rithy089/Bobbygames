@@ -1,5 +1,11 @@
 # Verification log
 
+## Overhead Rush and Market Match table
+
+- Restored the original straight overhead road and constant object scale, retaining detailed vehicle artwork. Five storefront designs scroll at 14% of traffic speed, without tilt or zoom. Reduced-motion mode freezes decorative movement. Existing scoring, collision bounds and guest data remain unchanged.
+- Added a decorative wooden table and woven mat behind Market Match cards using CSS; overlays and keyboard focus remain above the decoration. No new Khmer strings.
+- TypeScript, lint, 45 automated tests, production build and secret scan passed. Twelve desktop/mobile gameplay checks passed for all Market Match difficulties, accessibility, language/reduced-motion, pause/restart, local results and Rush controls. Desktop/mobile screenshots reviewed for both games. Physical-device comfort remains for Bobby to review.
+
 ## Rush visual-comfort follow-up
 
 - Responded to Bobby's report of distracting, headache-like motion by fixing all roadside scenery in place, removing vehicle tilt and floating reward movement, slowing lane-marker motion to 25%, lowering marker contrast and removing the alternating curb stripes. Reduced-motion mode also freezes lane markings. Traffic speed, steering, collisions and local scoring remain unchanged.
