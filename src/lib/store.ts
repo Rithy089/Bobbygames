@@ -54,10 +54,13 @@ export const usePortal = create<Portal>()(
         })),
       finish: (run) =>
         set((s) => ({
-          best: {
-            ...s.best,
-            [run.game]: Math.max(s.best[run.game] || 0, run.score),
-          },
+          best:
+            run.game === 'khmer-market-match'
+              ? s.best
+              : {
+                  ...s.best,
+                  [run.game]: Math.max(s.best[run.game] || 0, run.score),
+                },
           runs: [run, ...s.runs].slice(0, 300),
         })),
     }),
@@ -120,7 +123,7 @@ export const achievementRules = [
   { id: 'firstPlay', test: (runs: Run[]) => runs.length > 0 },
   {
     id: 'explorer',
-    test: (runs: Run[]) => new Set(runs.map((r) => r.game)).size === 3,
+    test: (runs: Run[]) => new Set(runs.map((r) => r.game)).size >= 3,
   },
   {
     id: 'mangoMaster',

@@ -31,6 +31,7 @@ const titles = {
   '/reset-password': 'Reset password — BobbyGames',
 };
 const gameData = [
+  ['khmer-market-match','Khmer Market Match','Find matching market objects in an original Cambodian memory game. Three board sizes, keyboard and touch controls, and local best results.'],
   [
     'mango-catch',
     'Mango Catch',

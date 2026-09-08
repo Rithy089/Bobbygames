@@ -26,7 +26,7 @@ export default function WebTools() {
     const lifecycle = new AbortController();
     const list: Tool = {
       name: 'list_bobby_games',
-      description: 'List the three original playable games and their controls.',
+      description: 'List the original playable games and their controls.',
       inputSchema: {
         type: 'object',
         properties: {},

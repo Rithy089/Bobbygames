@@ -41,7 +41,7 @@ it('registers game tools, rejects unknown games and uses the visible router (emu
     'list_bobby_games',
     'open_bobby_game',
   ]);
-  expect(tools[0].execute({})).toHaveLength(3);
+  expect(tools[0].execute({})).toHaveLength(4);
   await expect(tools[1].execute({ gameId: 'missing' })).rejects.toThrow(
     'Unknown game',
   );

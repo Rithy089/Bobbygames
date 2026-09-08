@@ -6,9 +6,11 @@ export async function loadSprites(ids: string[]) {
       if (images.has(id)) return;
       const img = new Image();
       img.src =
-        id === 'countryside'
-          ? '/discover/countryside-960.webp'
-          : `/sprites/${id}.webp`;
+        id === 'tower-bg' || id === 'street-bg'
+          ? `/scenes/${id}.webp`
+          : id === 'countryside'
+            ? '/discover/countryside-960.webp'
+            : `/sprites/${id}.webp`;
       await img.decode();
       images.set(id, img);
     }),

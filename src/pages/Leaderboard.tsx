@@ -8,6 +8,12 @@ import { games, isGameId } from '../lib/catalog';
 import { usePortal } from '../lib/store';
 import { useAccount, avatarColors } from '../features/account';
 import { Choice } from '../components/Choice';
+import { useMatchResults } from '../games/khmer-market-match/results';
+import {
+  difficulties,
+  formatTime,
+  type Difficulty,
+} from '../games/khmer-market-match/rules';
 type Row = {
   display_name: string;
   avatar: number;
@@ -17,6 +23,7 @@ type Row = {
 };
 export default function Leaderboard() {
   const { t } = useTranslation();
+  const marketBest = useMatchResults((s) => s.best);
   const [params, setParams] = useSearchParams();
   const game = isGameId(params.get('game'))
     ? params.get('game')!
@@ -34,7 +41,7 @@ export default function Leaderboard() {
       if (error) throw error;
       return data as Row[];
     },
-    enabled: scope === 'global' && !!supabase,
+    enabled: scope === 'global' && !!supabase && game !== 'khmer-market-match',
   });
   const rows: Row[] =
     scope === 'global'
@@ -50,6 +57,37 @@ export default function Leaderboard() {
             game_id: r.game,
             created_at: r.date,
           }));
+  if (game === 'khmer-market-match')
+    return (
+      <>
+        <div className="page-heading">
+          <span className="eyebrow">{t('khmer-market-match.title')}</span>
+          <h1>{t('match.personalBests')}</h1>
+          <p>{t('match.ranking')}</p>
+        </div>
+        <p className="notice">{t('match.localNotice')}</p>
+        <div className="match-bests panel">
+          {(Object.keys(difficulties) as Difficulty[]).map((d) => (
+            <div key={d}>
+              <h2>{t(d)}</h2>
+              <p>
+                {marketBest[d]
+                  ? `${marketBest[d]!.moves} ${t('match.moves')} · ${formatTime(marketBest[d]!.elapsedMs)}`
+                  : t('match.noResult')}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className="button-row section">
+          <Link className="button primary" to="/play/khmer-market-match">
+            {t('play')}
+          </Link>
+          <Link className="button secondary" to="/leaderboards">
+            {t('leaderboards')}
+          </Link>
+        </div>
+      </>
+    );
   return (
     <>
       <div className="page-heading">

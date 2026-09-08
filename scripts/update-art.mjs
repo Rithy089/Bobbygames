@@ -17,7 +17,11 @@ for (const [i, id] of ids.entries()) {
   for (const size of [480, 960])
     await sharp(file)
       .extract({ left, top, width, height })
-      .resize(size, (640 * size) / 960, { fit: 'cover', position: 'centre' })
+      .resize(size, (640 * size) / 960, {
+        fit: id === 'dance' ? 'contain' : 'cover',
+        position: 'centre',
+        background: '#d6ae69',
+      })
       .webp({ quality: 84 })
       .toFile(`public/discover/${id}-${size}.webp`);
 }

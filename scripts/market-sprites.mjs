@@ -27,7 +27,11 @@ for (const [i, id] of ids.entries()) {
       left,
       top,
       width: Math.round((((i % 4) + 1) * width) / 4) - left,
-      height: Math.round(((Math.floor(i / 4) + 1) * height) / 3) - top,
+      // The generated middle row has a small overlap from the next row at its bottom edge.
+      height:
+        Math.round(((Math.floor(i / 4) + 1) * height) / 3) -
+        top -
+        (i >= 4 && i <= 7 ? Math.round(height * 0.02) : 0),
     })
     .toBuffer();
   await sharp(crop)

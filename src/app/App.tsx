@@ -272,7 +272,7 @@ export default function App() {
             </small>
           </a>
           <div className="sidebar-country">
-            <span>🇰🇭</span> PHNOM PENH, CAMBODIA
+            <img src="/cambodia-flag.svg" width="30" height="19.2" alt={t('cambodiaFlag')} /> PHNOM PENH, CAMBODIA
           </div>
         </aside>
         {menu && (
@@ -366,7 +366,7 @@ export default function App() {
               <span>
                 © {new Date().getFullYear()} · {t('created')}
               </span>
-              <span>{t('made')}</span>
+              <span className="made-country">{t('made').replace('🇰🇭','')} <img src="/cambodia-flag.svg" width="25" height="16" alt={t('cambodiaFlag')} /></span>
               <div>
                 <Link to="/privacy">{t('privacy')}</Link>
                 <span>·</span>

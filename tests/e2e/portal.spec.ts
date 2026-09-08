@@ -10,9 +10,9 @@ test('home has original games and no game engines downloaded', async ({
   await expect(
     page.getByRole('heading', { name: 'A little play. A lot of Cambodia.' }),
   ).toBeVisible();
-  await expect(page.locator('.game-card')).toHaveCount(3);
+  await expect(page.locator('.game-card')).toHaveCount(4);
   await expect(page.locator('.cover img').first()).toBeVisible();
-  expect(requested.some((u) => /engine-/.test(u))).toBe(false);
+  expect(requested.some((u) => /engine-|MarketMatch-|\/sprites\/|\/scenes\//.test(u))).toBe(false);
   expect(errors).toEqual([]);
   expect(
     await page.evaluate(
@@ -41,7 +41,7 @@ test('search, categories, sorting and favorites persist', async ({ page }) => {
   await page.getByRole('combobox', { name: 'Sort games' }).click();
   await page.getByRole('option', { name: 'Newest', exact: true }).click();
   await expect(page.locator('.game-card h3').first()).toHaveText(
-    'Tuk-Tuk Rush',
+    'Khmer Market Match',
   );
 });
 test('Khmer and theme survive reload', async ({ page }) => {

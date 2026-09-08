@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useMatchResults } from '../games/khmer-market-match/results';
 import { useTranslation } from 'react-i18next';
 import {
   Trophy,
@@ -19,6 +20,7 @@ import { Choice } from '../components/Choice';
 import AudioSettings from '../components/AudioSettings';
 export default function Account() {
   const { t } = useTranslation();
+  const matchBest = useMatchResults((s) => s.best.easy);
   const account = useAccount();
   const portal = usePortal();
   const { pathname } = useLocation();
@@ -275,12 +277,16 @@ export default function Account() {
                     />
                     <span>{t(g.id + '.title')}</span>
                     <strong>
-                      {Math.max(
-                        0,
-                        ...runs
-                          .filter((r) => r.game === g.id)
-                          .map((r) => r.score),
-                      )}
+                      {g.id === 'khmer-market-match'
+                        ? matchBest
+                          ? `${matchBest.moves} ${t('match.moves')} (${t('easy')})`
+                          : '—'
+                        : Math.max(
+                            0,
+                            ...runs
+                              .filter((r) => r.game === g.id)
+                              .map((r) => r.score),
+                          )}
                     </strong>
                   </Link>
                 ))}

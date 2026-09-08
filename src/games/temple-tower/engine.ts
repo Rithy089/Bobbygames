@@ -7,6 +7,7 @@ import {
   H,
 } from '../shared/types';
 import { rounded, palm } from '../shared/draw';
+import { sprite } from '../shared/sprites';
 import { place, difficulty, config, award, type Block } from './rules';
 export default function createGame(options: GameOptions) {
   const snapshot = freshSnapshot();
@@ -102,10 +103,19 @@ export default function createGame(options: GameOptions) {
       rounded(ctx, 195, 521, 410, 34, 9, '#544252');
       palm(ctx, 95, 540, 1.25);
       palm(ctx, 725, 545, 0.95);
+      sprite(ctx, 'tower-bg', 0, 0, W, H);
       const start = Math.max(0, blocks.length - 12);
       const drawBlock = (b: Block, y: number, index: number) => {
         const color = ['#dec29b', '#cda47c', '#d9b58a', '#e7c89f'][index % 4];
         rounded(ctx, b.x, y, b.width, config.blockHeight - 2, 3, color);
+        ctx.strokeStyle = '#88603d';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(
+          b.x + 0.75,
+          y + 0.75,
+          Math.max(0, b.width - 1.5),
+          config.blockHeight - 3.5,
+        );
         rounded(ctx, b.x + 3, y + 3, Math.max(0, b.width - 6), 5, 2, '#fae2b3');
         ctx.strokeStyle = '#a17c62';
         ctx.lineWidth = 2;

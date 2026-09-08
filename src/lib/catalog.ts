@@ -1,13 +1,18 @@
-export type GameId = 'mango-catch' | 'temple-tower' | 'tuk-tuk-rush';
+export type GameId =
+  | 'mango-catch'
+  | 'temple-tower'
+  | 'tuk-tuk-rush'
+  | 'khmer-market-match';
 export type Game = {
   id: GameId;
-  category: 'arcade' | 'precision' | 'racing';
+  category: 'arcade' | 'precision' | 'racing' | 'memory';
   difficulty: 'easy' | 'medium';
   color: string;
   inputs: ('keyboard' | 'mouse' | 'touch')[];
   released: string;
 };
 export const games: Game[] = [
+  // Existing order stays stable; the newest sort uses release dates.
   {
     id: 'mango-catch',
     category: 'arcade',
@@ -31,6 +36,14 @@ export const games: Game[] = [
     color: '#ff9479',
     inputs: ['keyboard', 'touch'],
     released: '2026-09-06',
+  },
+  {
+    id: 'khmer-market-match',
+    category: 'memory',
+    difficulty: 'easy',
+    color: '#69aa77',
+    inputs: ['keyboard', 'mouse', 'touch'],
+    released: '2026-09-08',
   },
 ];
 export const portfolio = 'https://sayrithy-portfolio.vercel.app/';

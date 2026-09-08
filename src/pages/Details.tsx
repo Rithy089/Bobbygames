@@ -5,10 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { games } from '../lib/catalog';
 import { usePortal } from '../lib/store';
 import NotFound from './NotFound';
+import { useMatchResults } from '../games/khmer-market-match/results';
+import { formatTime } from '../games/khmer-market-match/rules';
 export default function Details() {
   const { id } = useParams();
   const game = games.find((g) => g.id === id);
   const { t } = useTranslation();
+  const matchBest = useMatchResults((s) => s.best.easy);
   const account = useAccount();
   const localBest = usePortal((s) => (game ? s.best[game.id] : undefined));
   const best =
@@ -48,7 +51,14 @@ export default function Details() {
             {t('play')}
             <ArrowRight size={19} />
           </Link>
-          {best !== undefined && (
+          {game.id === 'khmer-market-match' && (
+            <p>
+              {matchBest
+                ? `${t('easy')}: ${matchBest.moves} ${t('match.moves')} · ${formatTime(matchBest.elapsedMs)}`
+                : t('match.threeBoards')}
+            </p>
+          )}
+          {game.id !== 'khmer-market-match' && best !== undefined && (
             <p>
               {t('best')}: <b>{best}</b>
             </p>

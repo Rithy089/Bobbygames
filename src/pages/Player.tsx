@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -27,6 +27,9 @@ import { useAccount, refreshAccount } from '../features/account';
 import { useQueryClient } from '@tanstack/react-query';
 import AudioSettings from '../components/AudioSettings';
 import NotFound from './NotFound';
+const MarketMatch = lazy(
+  () => import('../games/khmer-market-match/MarketMatch'),
+);
 const loaders: Record<
   string,
   () => Promise<{ default: (options: GameOptions) => Engine }>
@@ -92,8 +95,8 @@ function PlayerGame() {
           game.id === 'mango-catch'
             ? ['mango', 'dragon', 'basket', 'countryside']
             : game.id === 'tuk-tuk-rush'
-              ? ['mango', 'bananas', 'basket']
-              : [],
+              ? ['mango', 'bananas', 'basket', 'street-bg']
+              : ['tower-bg'],
         );
         if (disposed || !canvas.current) return;
         engine.current = module.default({
@@ -437,5 +440,6 @@ function PlayerGame() {
 
 export default function Player() {
   const { id } = useParams();
+  if (id === 'khmer-market-match') return <MarketMatch />;
   return <PlayerGame key={id} />;
 }

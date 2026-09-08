@@ -4,8 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { usePortal } from '../lib/store';
 import { useFavorites, useAccount } from '../features/account';
 import type { Game } from '../lib/catalog';
+import { useMatchResults } from '../games/khmer-market-match/results';
+import { formatTime } from '../games/khmer-market-match/rules';
 export default function GameCard({ game }: { game: Game }) {
   const { t } = useTranslation();
+  const matchBest = useMatchResults((s) => s.best.easy);
   const { favorites, toggle } = useFavorites();
   const account = useAccount();
   const localBest = usePortal((s) => s.best[game.id]);
@@ -79,7 +82,13 @@ export default function GameCard({ game }: { game: Game }) {
         <div className="row between card-bottom">
           <span className="small">
             <span className="status-dot" style={{ background: game.color }} />
-            {best !== undefined ? t('best') + ': ' + best : t(game.difficulty)}
+            {game.id === 'khmer-market-match'
+              ? matchBest
+                ? `${t('easy')}: ${matchBest.moves} ${t('match.moves')} · ${formatTime(matchBest.elapsedMs)}`
+                : t('match.threeBoards')
+              : best !== undefined
+                ? t('best') + ': ' + best
+                : t(game.difficulty)}
           </span>
           <Link className="card-play" to={'/play/' + game.id}>
             {t('play')}

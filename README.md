@@ -5,8 +5,11 @@ Original Cambodian browser mini-games created for **Say Rithy (Bobby)**, a Junio
 - **Mango Catch** — fruit, hazards, lives and combos in the countryside.
 - **Temple Tower** — precision stacking with a fictional Khmer-inspired sandstone design.
 - **Tuk-Tuk Rush** — three-lane driving through an original Phnom Penh-inspired street.
+- **Khmer Market Match** — accessible market memory cards, 6/8/12 pairs, local bests ranked by fewer moves then faster active time.
 
 Made with creativity in Cambodia. [Bobby’s portfolio](https://sayrithy-portfolio.vercel.app/) · [GitHub](https://github.com/Rithy089) · [LinkedIn](https://www.linkedin.com/in/rithy-say-a59aa32a0/)
+
+[Project source code](https://github.com/Rithy089/Bobbygames) is separate from Bobby’s personal GitHub profile. The September update retains guest progress, adds eight original illustrated Cambodia topics and improves in-game art/controls. Supabase rollout remains deliberately deferred. See [update scope](docs/UPDATE-2026-09.md), [asset/source register](docs/UPDATE-ASSETS.md) and [Khmer review queue](docs/KHMER-REVIEW.md).
 
 ## Local development
 
@@ -66,4 +69,3 @@ A Vercel configuration is included. Import this repository into Vercel, configur
 Future games plug into the same GameOptions/Engine contract, receive catalog/translation entries, isolated imports, scoring tests and explicit server score bounds. Angkor Runner, Khmer Tile Match, Mekong Boat Journey, Khmer New Year Celebration, Cambodian Food Memory Match and Rice Field Adventure are roadmap ideas, not playable listings.
 
 See [security](docs/SECURITY.md), [assets and cultural sources](docs/ASSETS.md), [Khmer review](docs/KHMER-REVIEW.md), [case study](docs/CASE-STUDY.md). No commercial game assets or copied portal source are used.
-

@@ -102,15 +102,15 @@ export const culture = [
     en: {
       title: 'A morning at the market',
       description:
-        'Phnom Penh’s Central Market has stalls selling fresh produce, cooked food and clothing. Our market illustration imagines an everyday produce stall.',
+        'Around Angkor, communities make textiles, baskets and palm sugar for local markets. Our illustrated fruit stall celebrates another everyday market scene.',
     },
     km: {
       title: 'ពេលព្រឹកនៅផ្សារ',
       description:
-        'ផ្សារធំថ្មីនៅភ្នំពេញមានតូបលក់បន្លែផ្លែឈើ អាហារឆ្អិន និងសម្លៀកបំពាក់។ រូបគំនូររបស់យើងបង្ហាញតូបបន្លែផ្លែឈើបែបប្រចាំថ្ងៃ។',
+        'នៅជុំវិញអង្គរ សហគមន៍ផលិតវាយនភណ្ឌ កន្ត្រក និងស្ករត្នោតសម្រាប់ផ្សារក្នុងតំបន់។ រូបគំនូរតូបផ្លែឈើរបស់យើងបង្ហាញទិដ្ឋភាពផ្សារបែបប្រចាំថ្ងៃមួយទៀត។',
     },
     source:
-      'https://tourismcambodia.org/public/provinces/search/detail/1591/central-market',
+      'https://whc.unesco.org/en/list/668/',
   },
 ];
 

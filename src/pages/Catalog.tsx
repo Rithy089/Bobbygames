@@ -81,7 +81,7 @@ export default function Catalog({
         />
       </div>
       <div className="filter-row" aria-label={t('categories')}>
-        {['all', 'arcade', 'precision', 'racing'].map((c) => (
+        {['all', 'arcade', 'precision', 'racing', 'memory'].map((c) => (
           <button
             key={c}
             className={'filter ' + (c === category ? 'active' : '')}

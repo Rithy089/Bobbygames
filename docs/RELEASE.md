@@ -10,9 +10,9 @@
 
 ## Remaining configuration
 
-The guest arcade is complete and locally tested: three games, both languages, themes, discovery, favorites, history, personal progress, score tables and developer links. All account routes and the Supabase schema/RLS/RPC integration are implemented.
+The September update contains four locally playable games, both languages, themes, illustrated discovery, favorites, history, personal progress and developer links. Market Match has difficulty-specific results ranked by moves and active time. The existing account routes and Supabase schema/RLS/RPC integration remain in place, but this does not mean the online platform is live or fully verified.
 
-**The online account service is not configured in this workspace.** No Supabase URL/key was provided. Production signup, confirmation email, login, recovery, cross-device sync and actual live global rankings must be smoke-tested after deploying migrations and configuring Auth redirects. The current release displays this state honestly and permits guest play. No fake global scores are shown.
+**Online accounts and global rankings are deliberately deferred at Bobby’s request.** No Supabase URL/key is configured. Production signup, confirmation email, login, recovery, cross-device sync and actual live global rankings must be smoke-tested when that phase resumes. The current release displays this state honestly and permits guest play. No fake global scores are shown. Market Match currently saves only local results and never submits its results to the arcade score RPC; any future online memory ranking needs a dedicated validated result contract and database catalog entry.
 
 Khmer copy remains a draft pending Bobby’s review. See KHMER-REVIEW.md. The original artwork and factual sources are listed in ASSETS.md. No flag imagery is used in gameplay.
 

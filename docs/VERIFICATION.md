@@ -1,5 +1,17 @@
 # Verification log
 
+## September 8 scoped update
+- Began from a clean working tree and preserved the existing app and guest storage keys. GitHub API and HTTP checks confirmed the project URL separately from the personal profile; the repository itself is currently empty.
+- Strict TypeScript, ESLint, 43 unit/component/database tests, production build (22 static metadata routes) and source secret scan passed.
+- Existing arcade polish passed 10 desktop/mobile gameplay tests before Market Match integration.
+- Final full Chromium suite: 35 passed, two reduced-motion assertions failed, one intentional desktop skip for the mobile-only menu. The failure exposed a inherited tiny transition duration; card transitions now explicitly disable it. Both affected desktop/mobile tests then passed on the rebuilt output, including active Khmer cards and axe checks. This gives 37 passing browser checks across the final suite and focused rerun.
+- Market Match completed all 6/8/12-pair boards on desktop and Pixel 5 emulation, including real touch taps, Enter, arrow focus, local per-difficulty results, recently played, duplicate/rapid input, pause/resume, hidden-page pause and restart. A component test verifies timer/listener/audio cleanup and no sound activation before a gesture. Hidden cards contain no answer text or image in the accessible DOM.
+- Automated accessibility checks covered seven portal/player routes in light/dark on both viewports; active memory cards also passed in Khmer, light theme and reduced-motion mode. 200% homepage text fits both viewports.
+- All eight discovery illustrations loaded with nonempty bilingual alt text and fixed dimensions. Screenshots reviewed for desktop/mobile discovery, all four game frames and Khmer memory UI. Fixed dancer cropping to retain its full figure and removed a sprite-sheet overlap from the basket.
+- Project/portfolio links returned HTTP 200. An obsolete Ministry of Tourism URL returned 404; replaced its claim/link with a verified UNESCO market-crafts source. Image/fact provenance is in UPDATE-ASSETS.md.
+- Homepage network test verifies no arcade engine, MarketMatch component, sprite or game-scene asset downloads. Audio settings and original guest preferences remain persisted.
+- Not verified: physical devices, Safari/Firefox, native WebMCP/browser handoff and Khmer linguistic accuracy. Live Supabase/email/global rankings remain deliberately deferred. No source was pushed to the empty public GitHub repository.
+
 ## Phase 1
 - Workspace empty; no repository or AGENTS.md found. No user files overwritten.
 - Strict TypeScript passed after aligning Vite 8 output configuration.

@@ -77,6 +77,7 @@ export default function createGame(options: GameOptions) {
     draw(ctx) {
       ctx.fillStyle = '#dbbf8d';
       ctx.fillRect(0, 0, W, H);
+      const paintedStreet = sprite(ctx, 'street-bg', 0, 0, W, H);
       ctx.fillStyle = '#4a5360';
       ctx.fillRect(205, 0, 390, H);
       ctx.fillStyle = '#f5d28c';
@@ -94,6 +95,7 @@ export default function createGame(options: GameOptions) {
       }
       ctx.setLineDash([]);
       for (let i = -1; i < 4; i++) {
+        if (paintedStreet) break;
         const y = i * 220 + (options.reducedMotion?.() ? 0 : scroll % 220);
         for (const [x, color] of [
           [20, '#bb7860'],
@@ -122,6 +124,18 @@ export default function createGame(options: GameOptions) {
         }
         palm(ctx, 173, y + 175, 0.45);
         palm(ctx, 615, y + 135, 0.4);
+      }
+      if (paintedStreet) {
+        ctx.font = 'bold 17px Inter, Noto Sans Khmer, sans-serif';
+        ctx.textAlign = 'center';
+        for (const y of [110, 325, 535]) {
+          rounded(ctx, 42, y, 117, 29, 4, '#fff0cb');
+          ctx.fillStyle = '#315443';
+          ctx.fillText('ផ្សារ', 100, y + 21);
+          rounded(ctx, 646, y - 40, 110, 29, 4, '#fff0cb');
+          ctx.fillStyle = '#315443';
+          ctx.fillText('សួស្តី', 700, y - 19);
+        }
       }
       for (const item of items) {
         const x = config.lanes[item.lane];

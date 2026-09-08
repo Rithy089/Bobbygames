@@ -40,6 +40,11 @@ describe('foundation', () => {
     expect(km.games).toBe('ហ្គេម');
     expect(km.heroTitle).not.toContain('Ã');
     expect(Object.keys(km).sort()).toEqual(Object.keys(en).sort());
+    const keys = (value: object, prefix = ''): string[] =>
+      Object.entries(value).flatMap(([key, v]) =>
+        typeof v === 'object' ? keys(v, prefix + key + '.') : [prefix + key],
+      );
+    expect(keys(km).sort()).toEqual(keys(en).sort());
     for (const g of games)
       expect(Object.keys(km[g.id])).toEqual(Object.keys(en[g.id]));
   });
