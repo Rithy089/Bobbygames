@@ -1,6 +1,7 @@
 # Verification log
 
 ## September 8 scoped update
+- Private Sites version 2 deployment succeeded for application commit `49cc80d`. Vercel rejected the new production deployment because the commit author lacks project deployment permission; the new public release and its live smoke tests remain blocked. See RELEASE.md for the exact deployment and API reason.
 - Began from a clean working tree and preserved the existing app and guest storage keys. GitHub API and HTTP checks confirmed the project URL separately from the personal profile; the repository itself is currently empty.
 - Strict TypeScript, ESLint, 43 unit/component/database tests, production build (22 static metadata routes) and source secret scan passed.
 - Existing arcade polish passed 10 desktop/mobile gameplay tests before Market Match integration.

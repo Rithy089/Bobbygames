@@ -1,5 +1,13 @@
 # Release status and remaining configuration
 
+## September 8, 2026 update
+
+- Updated application source: `49cc80d0044231b4cc9beace2321ec8c108e11db`.
+- Owner-private Sites preview updated successfully: https://bobbygames.sayrithy089.chatgpt.site (version 2). Hosting API reports deployment SUCCESS. An authenticated live-browser smoke test was unavailable; local production-output browser checks are recorded in VERIFICATION.md.
+- Vercel production deployment `dpl_68UWQMWR6gKhojtmoWC1v7XdoeK7` was **BLOCKED**. The deployment API states: “The deployment was blocked because the commit author doesn’t have permission to create deployments for this project.” CLI 50.1.3 renders this as UNKNOWN and keeps waiting; the waiter was stopped after diagnosing the terminal access block.
+- The public Vercel alias has not been updated by this release. Live checks for the new public version therefore could not run. Resolve the commit author's Vercel project access before retrying deployment; no author identity, account permissions or billing settings were changed to bypass the restriction.
+- The project Source code URL is preserved separately from Bobby's personal GitHub profile. The project repository exists but is empty; this update was not pushed to public GitHub.
+
 ## Deployed September 7, 2026
 
 - Public guest release: https://bobbygames.vercel.app
@@ -14,7 +22,7 @@ The September update contains four locally playable games, both languages, theme
 
 **Online accounts and global rankings are deliberately deferred at Bobby’s request.** No Supabase URL/key is configured. Production signup, confirmation email, login, recovery, cross-device sync and actual live global rankings must be smoke-tested when that phase resumes. The current release displays this state honestly and permits guest play. No fake global scores are shown. Market Match currently saves only local results and never submits its results to the arcade score RPC; any future online memory ranking needs a dedicated validated result contract and database catalog entry.
 
-Khmer copy remains a draft pending Bobby’s review. See KHMER-REVIEW.md. The original artwork and factual sources are listed in ASSETS.md. No flag imagery is used in gameplay.
+Khmer copy remains a draft pending Bobby’s review. See KHMER-REVIEW.md. The original artwork and factual sources are listed in ASSETS.md and UPDATE-ASSETS.md. No flag imagery is used in gameplay.
 
 Privacy and Terms describe this actual portfolio application; review them against the eventual hosting/account configuration before a larger public launch. Account deletion requests currently go through Bobby’s portfolio contact links. Guest progress can be removed by clearing this site’s browser data. Personal statistics show up to the 300 most recent finished runs; best scores are retained separately.
 
