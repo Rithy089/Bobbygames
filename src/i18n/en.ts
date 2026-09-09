@@ -86,6 +86,7 @@ export default {
   restart: 'Restart',
   sound: 'Sound',
   music: 'Music',
+  muteAllAudio: 'Mute all audio',
   musicVolume: 'Music volume',
   effectsVolume: 'Sound-effects volume',
   enableSound: 'Enable sound',

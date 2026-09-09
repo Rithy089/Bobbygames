@@ -404,13 +404,14 @@ export default function MarketMatch() {
             </button>
             <button
               className="icon-button"
-              aria-label={t('sound')}
-              aria-pressed={sound.sound}
+              aria-label={t('effects')}
+              title={t('effects')}
+              aria-pressed={sound.effects}
               onClick={() =>
-                usePortal.getState().setAudio({ sound: !sound.sound })
+                usePortal.getState().setAudio({ effects: !sound.effects })
               }
             >
-              {sound.sound ? <Volume2 size={19} /> : <VolumeX size={19} />}
+              {sound.effects ? <Volume2 size={19} /> : <VolumeX size={19} />}
             </button>
           </div>
           <span className="small muted">{t('match.ranking')}</span>

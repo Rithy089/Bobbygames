@@ -1,5 +1,7 @@
 # Khmer and cultural review
 
+Audio-control clarification adds `muteAllAudio` (“បិទសំឡេងទាំងអស់”) for review. Existing Music and Sound effects translations are reused unchanged.
+
 Bobby approved the existing Khmer copy on September 9, 2026. Preserve that copy. The older review notes below are historical; English fallback remains configured with i18next.
 
 New audio strings awaiting review: `musicVolume`, `effectsVolume`, `enableSound`, `musicOffNotice`, `audioStatus_blocked`, `audioStatus_unavailable`, `audioStatus_failed` in `src/i18n/km.ts`. All existing Khmer strings are unchanged in the audio update.

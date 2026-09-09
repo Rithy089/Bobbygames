@@ -71,6 +71,41 @@ const probe = (page: import('@playwright/test').Page) =>
       rms: p.rms(),
     };
   });
+
+test('music stays audible when sound effects are switched off in every game', async ({
+  page,
+}) => {
+  for (const game of [
+    'mango-catch',
+    'temple-tower',
+    'tuk-tuk-rush',
+    'khmer-market-match',
+  ]) {
+    await page.goto('/play/' + game);
+    await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
+    const effects = page.getByRole('button', {
+      name: 'Sound effects',
+      exact: true,
+    });
+    if ((await effects.getAttribute('aria-pressed')) === 'true')
+      await effects.click();
+    await expect(effects).toHaveAttribute('aria-pressed', 'false');
+    await expect(
+      page.getByRole('switch', { name: 'Music', exact: true }),
+    ).toBeChecked();
+    await expect(
+      page.getByRole('switch', { name: 'Mute all audio', exact: true }),
+    ).not.toBeChecked();
+    await expect.poll(async () => (await probe(page)).tracks).toBe(1);
+    await expect
+      .poll(async () => (await probe(page)).rms)
+      .toBeGreaterThan(0.0005);
+    if (game === 'khmer-market-match') {
+      await page.locator('.match-card').first().click();
+      expect((await probe(page)).voices).toBe(1);
+    }
+  }
+});
 test('each game produces real audio after Start and releases its track on navigation', async ({
   page,
 }) => {
@@ -195,7 +230,9 @@ test('saved mute remains silent and new independent volumes persist', async ({
     await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
     expect((await probe(page)).states).toHaveLength(0);
   }
-  await page.getByRole('switch', { name: 'Sound', exact: true }).click();
+  await page
+    .getByRole('switch', { name: 'Mute all audio', exact: true })
+    .click();
   await expect.poll(async () => (await probe(page)).tracks).toBe(1);
   await page.getByRole('slider', { name: 'Music volume', exact: true }).focus();
   await page.keyboard.press('Home');

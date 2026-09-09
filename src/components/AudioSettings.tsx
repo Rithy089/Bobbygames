@@ -11,7 +11,15 @@ export default function AudioSettings() {
   const setAudio = usePortal((s) => s.setAudio);
   return (
     <div className="audio-settings">
-      {(['sound', 'music', 'effects'] as const).map((key) => (
+      <div className="setting-line">
+        <span>{t('muteAllAudio')}</span>
+        <Switch
+          aria-label={t('muteAllAudio')}
+          checked={!audio.sound}
+          onCheckedChange={(muted) => setAudio({ sound: !muted })}
+        />
+      </div>
+      {(['music', 'effects'] as const).map((key) => (
         <div key={key} className="setting-line">
           <span>{t(key)}</span>
           <Switch

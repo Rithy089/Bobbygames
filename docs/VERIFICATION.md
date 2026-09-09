@@ -1,5 +1,11 @@
 # Verification log
 
+## Independent music and effects controls
+
+- Renamed the ambiguous master Sound switch to Mute all audio, with checked meaning muted. Toolbar speaker buttons now control only Sound effects. Music can remain enabled independently; saved master mutes are preserved.
+- TypeScript, lint, 48 automated tests, build and secret scan passed. Twelve desktop/mobile real-audio browser tests passed, including music-only signal with effects off in every game and zero card-effect voices while music remains active.
+- Before this change, the public Vercel site was rechecked and was already serving the new soundtrack code with real audio output. Earlier deployment-blocker notes describe historical attempts, not the current public version.
+
 ## September 9 audio and feedback update
 
 - Fresh-browser diagnosis confirmed music=false with a running AudioContext; old enabled music was a single low sine tone, not a composed track. No missing music assets existed. Added four original procedural arrangements, separate gains, preserved legacy mutes, recovery diagnostics and bounded effects; see AUDIO.md for details.

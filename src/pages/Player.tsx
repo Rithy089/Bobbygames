@@ -366,11 +366,12 @@ function PlayerGame() {
             </button>
             <button
               className="icon-button"
-              aria-label={t('sound')}
-              aria-pressed={audio.sound}
-              onClick={() => setAudio({ sound: !audio.sound })}
+              aria-label={t('effects')}
+              title={t('effects')}
+              aria-pressed={audio.effects}
+              onClick={() => setAudio({ effects: !audio.effects })}
             >
-              {audio.sound ? <Volume2 size={19} /> : <VolumeX size={19} />}
+              {audio.effects ? <Volume2 size={19} /> : <VolumeX size={19} />}
             </button>
           </div>
           <span className="small muted desktop-instruction">

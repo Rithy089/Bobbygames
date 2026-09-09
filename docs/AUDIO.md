@@ -1,5 +1,9 @@
 # Audio update — September 9, 2026
 
+## Control clarification
+
+Music and Sound effects are independent. The game-toolbar speaker button controls effects only. The previously ambiguous Sound master switch is now explicitly labeled Mute all audio, checked only when everything is muted. For music-only playback: Music on, Sound effects off, Mute all audio off. Existing persisted master-mute choices are preserved.
+
 ## Verified diagnosis
 
 A fresh Chromium session started Mango Catch with `{sound:true,music:false,effects:true,volume:0.35}` saved locally and an AudioContext in `running` state. The verified fresh-session silence was the default-disabled music setting, not a browser restriction in that test. The old enabled music was one continuous 130.81 Hz sine oscillator with gain `volume * 0.025`; it had no composed melody or music assets. Existing saved settings also preserved music=false. There were no audio URLs to be missing or fail loading. Old resume promises were not caught and playback failures had no visible recovery state. Bobby's particular browser/device output settings were not inspected.
