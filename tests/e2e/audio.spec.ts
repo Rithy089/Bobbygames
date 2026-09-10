@@ -72,6 +72,54 @@ const probe = (page: import('@playwright/test').Page) =>
     };
   });
 
+test('music-only preferences survive reload and in-app game changes without overlapping tracks', async ({ page }) => {
+  test.setTimeout(60000);
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('/play/temple-tower');
+  await page.getByRole('switch', { name: 'Sound effects', exact: true }).click();
+  await page.getByRole('slider', { name: 'Music volume', exact: true }).focus();
+  await page.keyboard.press('Home');
+  for (let i = 0; i < 8; i++) await page.keyboard.press('ArrowRight');
+  await page.reload();
+  await expect(page.getByRole('switch', { name: 'Sound effects', exact: true })).not.toBeChecked();
+  await expect(page.getByRole('slider', { name: 'Music volume', exact: true })).toHaveAttribute('aria-valuenow', '40');
+  await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
+  await expect.poll(async () => (await probe(page)).rms).toBeGreaterThan(0.0005);
+  for (const game of ['mango-catch', 'tuk-tuk-rush', 'khmer-market-match', 'temple-tower']) {
+    // Client-side links preserve the document, exposing audio cleanup bugs that
+    // a full page navigation would hide by destroying the entire audio context.
+    await page.locator('.header .brand').click();
+    await expect.poll(async () => (await probe(page)).states.every((state) => state === 'closed')).toBe(true);
+    expect((await probe(page)).voices).toBe(0);
+    await page.locator(`.game-card a[href="/play/${game}"]`).first().click();
+    await expect(page.getByRole('switch', { name: 'Music', exact: true })).toBeChecked();
+    await expect(page.getByRole('switch', { name: 'Sound effects', exact: true })).not.toBeChecked();
+    await expect(page.getByRole('slider', { name: 'Music volume', exact: true })).toHaveAttribute('aria-valuenow', '40');
+    await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
+    for (let i = 0; i < 3; i++) {
+      await page.getByRole('button', { name: 'Restart', exact: true }).click();
+      if (game === 'khmer-market-match') await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
+      await expect.poll(async () => (await probe(page)).tracks).toBe(1);
+      expect((await probe(page)).states.filter((state) => state !== 'closed')).toHaveLength(1);
+    }
+    await expect.poll(async () => (await probe(page)).rms).toBeGreaterThan(0.0005);
+    await page.getByRole('button', { name: 'Pause', exact: true }).click();
+    await expect.poll(async () => (await probe(page)).states.at(-1)).toBe('suspended');
+    await page.evaluate(() => {
+      for (const hidden of [true, false]) {
+        Object.defineProperty(document, 'hidden', { configurable: true, value: hidden });
+        document.dispatchEvent(new Event('visibilitychange'));
+      }
+    });
+    await expect(page.getByRole('heading', { name: 'Take a little breather.' })).toBeVisible();
+    expect((await probe(page)).tracks).toBe(0);
+    await page.locator('.button.primary').filter({ hasText: 'Resume' }).click();
+    await expect.poll(async () => (await probe(page)).rms).toBeGreaterThan(0.0005);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('music stays audible when sound effects are switched off in every game', async ({
   page,
 }) => {

@@ -1,5 +1,11 @@
 # Verification log
 
+## September 10 focused audio recheck
+
+- No reproducible application audio bug found. Preserved the existing soundtracks, effects, preferences and gameplay. Added a regression journey that saves effects-off/music-on at 40% music volume, reloads, then switches between all four games using client-side links. It verifies one active context/track, cleanup of old contexts/voices, three restarts per game, pause/resume and preservation of manual pause across visibility changes.
+- TypeScript, ESLint, 48 tests, production build and secret scan passed. All 14 desktop/emulated-mobile audio cases passed (12 existing cases plus two new cases rerun after correcting a selector that matched both catalog and recent cards). Two additional real-signal Chromium checks passed against https://bobbygames.vercel.app, covering music-only output in every game and the complete saved-settings/in-app-navigation journey.
+- Measurements use actual Web Audio analyser output; playback restriction and synthesis failure tests deliberately inject those faults. No speaker/headphone listening, physical-phone check or visual/layout review was performed in this scoped follow-up. No new Khmer strings or Supabase configuration.
+
 ## September 10 catalog follow-up
 
 - Game-count badges now derive from the catalog (four games), retaining Khmer numerals. Recently played defaults to visit order and offers a return to that order after explicit sorting. The sidebar now highlights and announces only the correct All games or Fresh from the arcade link.

@@ -31,6 +31,8 @@ Diagnostics distinguish browser-blocked/suspended playback, unavailable AudioCon
 
 ## Verification and listening limits
 
+September 10 recheck: all 14 audio browser cases passed across desktop and Pixel 5 emulation. New coverage reloads genuinely saved music-only preferences, then changes games through client-side links without resetting the document: old contexts close, voices stop, and each new game has exactly one music track through repeated restarts. Manual pause survives hidden/visible events. Two additional real-signal checks passed on the public Vercel site. No reproducible audio defect was found, so the audio implementation and soundtracks were preserved.
+
 Actual Chromium AudioContext/AudioBufferSourceNode output was measured with AnalyserNode after the output gains. All four games produced nonzero signals after Start, retained exactly one music source through three restarts, suspended on pause/hidden-tab simulation, and closed on navigation. Saved master mute created no contexts in all four games. Independent music/effects zero levels, effects-only card output, persistence, injected blocked resume/recovery, and injected preparation failure passed on desktop and Pixel 5 emulation. Buffer tests verify distinct durations, finite samples, bounded peaks and a small loop seam; unit tests also verify the effect cap and legacy preference merge.
 
 These are real signal measurements, not a claim that speakers/headphones were heard. No listening-capable capture or physical phone validation was performed. Simulated visibility events do not reproduce every mobile OS interruption. Safari/iOS and Firefox remain unverified.
