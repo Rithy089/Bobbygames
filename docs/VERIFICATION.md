@@ -1,5 +1,11 @@
 # Verification log
 
+## September 10 portfolio cursor
+
+- Added the cyan crosshair, soft trailing glow and action label inspired by Bobby's own portfolio. Original SVG/CSS implementation; no external assets. Native cursors remain over fields and game areas, with touch, reduced-motion and forced-colors fallbacks. No animation loop is added.
+- TypeScript, ESLint, 48 automated tests, production build and secret scan passed. Ten existing desktop/mobile gameplay checks and two cursor checks passed; an initial cursor-test selector was corrected before rerunning. Reviewed the desktop homepage screenshot.
+- Verified hover labels, text/canvas fallback, keyboard hiding, touch fallback and reduced motion in Chromium. Physical devices and other browser engines were not tested in this update.
+
 ## Independent music and effects controls
 
 - Renamed the ambiguous master Sound switch to Mute all audio, with checked meaning muted. Toolbar speaker buttons now control only Sound effects. Music can remain enabled independently; saved master mutes are preserved.

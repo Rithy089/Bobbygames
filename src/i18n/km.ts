@@ -84,6 +84,7 @@ export default {
   restart: 'ចាប់ផ្តើមឡើងវិញ',
   sound: 'សំឡេង',
   music: 'តន្ត្រី',
+  cursorAction: 'ទៅ',
   muteAllAudio: 'បិទសំឡេងទាំងអស់',
   musicVolume: 'កម្រិតសំឡេងតន្ត្រី',
   effectsVolume: 'កម្រិតសំឡេងហ្គេម',

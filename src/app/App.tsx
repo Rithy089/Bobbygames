@@ -36,6 +36,7 @@ import { usePortal } from '../lib/store';
 import { portfolio, github, projectGithub, linkedin } from '../lib/catalog';
 import { AuthBridge, useAccount } from '../features/account';
 import WebTools from '../features/WebTools';
+import PortfolioCursor from '../components/PortfolioCursor';
 import { Seo } from '../lib/seo';
 const Home = lazy(() => import('../pages/Home'));
 const Catalog = lazy(() => import('../pages/Catalog'));
@@ -142,6 +143,7 @@ export default function App() {
   return (
     <Boundary>
       <AuthBridge />
+      <PortfolioCursor />
       <Seo />
       <WebTools />
       <a href="#main" className="skip-link">

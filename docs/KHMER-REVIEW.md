@@ -1,5 +1,7 @@
 # Khmer and cultural review
 
+Portfolio cursor adds `cursorAction` ("ទៅ", English "GO") for review. It reuses the wording on Bobby's portfolio; previously reviewed strings remain unchanged.
+
 Audio-control clarification adds `muteAllAudio` (“បិទសំឡេងទាំងអស់”) for review. Existing Music and Sound effects translations are reused unchanged.
 
 Bobby approved the existing Khmer copy on September 9, 2026. Preserve that copy. The older review notes below are historical; English fallback remains configured with i18next.
