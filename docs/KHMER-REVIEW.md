@@ -1,5 +1,7 @@
 # Khmer and cultural review
 
+Catalog follow-up: no new Khmer wording. The original-game count now inserts the catalog total (៤) into the existing phrase instead of the outdated fixed ៣. Existing Recently played wording is reused for the sort option.
+
 Portfolio cursor adds `cursorAction` ("ទៅ", English "GO") for review. It reuses the wording on Bobby's portfolio; previously reviewed strings remain unchanged.
 
 Audio-control clarification adds `muteAllAudio` (“បិទសំឡេងទាំងអស់”) for review. Existing Music and Sound effects translations are reused unchanged.

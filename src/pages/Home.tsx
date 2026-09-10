@@ -12,8 +12,9 @@ import { useTranslation } from 'react-i18next';
 import { games } from '../lib/catalog';
 import { usePortal } from '../lib/store';
 import GameCard from '../components/GameCard';
+import { formatCount } from '../i18n/numbers';
 export default function Home() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const account = useAccount();
   const localRecent = usePortal((s) => s.recent);
   const recent = account.user ? account.recent : localRecent;
@@ -39,7 +40,9 @@ export default function Home() {
           <div className="hero-badges">
             <span>
               <Sparkles size={15} />
-              {t('original')}
+              {t('original', {
+                gameCount: formatCount(games.length, i18n.language),
+              })}
             </span>
             <span>
               <MousePointer2 size={15} />
@@ -66,7 +69,9 @@ export default function Home() {
           </span>
           <div className="hero-game-bottom">
             <div>
-              <span className="small">01 / 04</span>
+              <span className="small">
+                01 / {String(games.length).padStart(2, '0')}
+              </span>
               <h2>{t('mango-catch.title')}</h2>
               <p>{t('mango-catch.hint')}</p>
             </div>
@@ -108,7 +113,13 @@ export default function Home() {
       )}
       <section className="culture-banner">
         <div className="culture-emblem" aria-hidden="true">
-          <img src="/discover/countryside-480.webp" width="480" height="320" loading="lazy" alt="" />
+          <img
+            src="/discover/countryside-480.webp"
+            width="480"
+            height="320"
+            loading="lazy"
+            alt=""
+          />
           <span>កម្ពុជា</span>
         </div>
         <div>

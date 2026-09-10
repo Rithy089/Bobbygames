@@ -6,12 +6,13 @@ import { usePortal } from '../lib/store';
 import { useFavorites, useAccount } from '../features/account';
 import GameCard from '../components/GameCard';
 import { Choice } from '../components/Choice';
+import { formatCount } from '../i18n/numbers';
 export default function Catalog({
   mode = 'all',
 }: {
   mode?: 'all' | 'favorites' | 'recent';
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [params, setParams] = useSearchParams();
   const { favorites } = useFavorites();
   const account = useAccount();
@@ -20,7 +21,8 @@ export default function Catalog({
   const runs = usePortal((s) => s.runs);
   const q = params.get('q') || '';
   const category = params.get('category') || 'all';
-  const sort = params.get('sort') || 'recommended';
+  const sort =
+    params.get('sort') || (mode === 'recent' ? 'recent' : 'recommended');
   const update = (key: string, value: string) => {
     const p = new URLSearchParams(params);
     p.set(key, value);
@@ -37,19 +39,25 @@ export default function Catalog({
           .includes(q.toLowerCase()),
     )
     .sort((a, b) =>
-      sort === 'alphabetical'
-        ? t(a.id + '.title').localeCompare(t(b.id + '.title'))
-        : sort === 'newest'
-          ? b.released.localeCompare(a.released)
-          : sort === 'popular'
-            ? runs.filter((r) => r.game === b.id).length -
-              runs.filter((r) => r.game === a.id).length
-            : 0,
+      sort === 'recent'
+        ? recent.indexOf(a.id) - recent.indexOf(b.id)
+        : sort === 'alphabetical'
+          ? t(a.id + '.title').localeCompare(t(b.id + '.title'))
+          : sort === 'newest'
+            ? b.released.localeCompare(a.released)
+            : sort === 'popular'
+              ? runs.filter((r) => r.game === b.id).length -
+                runs.filter((r) => r.game === a.id).length
+              : 0,
     );
   return (
     <>
       <div className="page-heading">
-        <span className="eyebrow">{t('original')}</span>
+        <span className="eyebrow">
+          {t('original', {
+            gameCount: formatCount(games.length, i18n.language),
+          })}
+        </span>
         <h1>{t(mode === 'all' ? 'allGames' : mode)}</h1>
         <p>
           {t(
@@ -75,9 +83,13 @@ export default function Catalog({
           label={t('sort')}
           value={sort}
           onChange={(v) => update('sort', v)}
-          options={['recommended', 'newest', 'alphabetical', 'popular'].map(
-            (v) => ({ value: v, label: t(v) }),
-          )}
+          options={[
+            ...(mode === 'recent' ? ['recent'] : []),
+            'recommended',
+            'newest',
+            'alphabetical',
+            'popular',
+          ].map((v) => ({ value: v, label: t(v) }))}
         />
       </div>
       <div className="filter-row" aria-label={t('categories')}>

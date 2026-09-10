@@ -91,10 +91,14 @@ export default {
   musicVolume: 'Music volume',
   effectsVolume: 'Sound-effects volume',
   enableSound: 'Enable sound',
-  musicOffNotice: 'Music is off in your saved settings. Turn on Music above to hear the soundtrack.',
-  audioStatus_blocked: 'Playback is paused or blocked by your browser. Press Enable sound to retry.',
-  audioStatus_unavailable: 'Audio is unavailable in this browser. You can keep playing silently.',
-  audioStatus_failed: 'The soundtrack or sound effect could not be prepared. You can keep playing silently.',
+  musicOffNotice:
+    'Music is off in your saved settings. Turn on Music above to hear the soundtrack.',
+  audioStatus_blocked:
+    'Playback is paused or blocked by your browser. Press Enable sound to retry.',
+  audioStatus_unavailable:
+    'Audio is unavailable in this browser. You can keep playing silently.',
+  audioStatus_failed:
+    'The soundtrack or sound effect could not be prepared. You can keep playing silently.',
   effects: 'Sound effects',
   volume: 'Volume',
   settings: 'Settings',
@@ -136,7 +140,7 @@ export default {
   heroTitle: 'A little play.\nA lot of Cambodia.',
   heroText:
     'Catch a mango. Stack a little higher. Take the scenic route. Your next good time starts here.',
-  original: '3 original games',
+  original: '{{gameCount}} original games',
   noDownload: 'No downloads',
   freePlay: 'Free to play',
   featuredGame: 'THE DAILY DOSE OF JOY',

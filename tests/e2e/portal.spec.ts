@@ -11,6 +11,7 @@ test('home has original games and no game engines downloaded', async ({
     page.getByRole('heading', { name: 'A little play. A lot of Cambodia.' }),
   ).toBeVisible();
   await expect(page.locator('.game-card')).toHaveCount(4);
+  await expect(page.locator('.hero-badges')).toContainText('4 original games');
   await expect(page.locator('.cover img').first()).toBeVisible();
   expect(requested.some((u) => /engine-|MarketMatch-|\/sprites\/|\/scenes\//.test(u))).toBe(false);
   expect(errors).toEqual([]);
@@ -48,6 +49,7 @@ test('Khmer and theme survive reload', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Language', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'km');
+  await expect(page.locator('.hero-badges')).toContainText('ហ្គេមដើម ៤');
   await page.reload();
   await expect(
     page.getByRole('heading', { name: 'លេងបន្តិច។ ស្គាល់កម្ពុជាច្រើន។' }),
@@ -98,6 +100,37 @@ test('routes, safe developer links and unavailable auth are honest', async ({
   await page.goto('/leaderboards');
   await expect(page.getByText(/Global rankings will open/)).toBeVisible();
 });
+test('recent games retain last-played order and allow an explicit sort', async ({ page }) => {
+  for (const id of ['mango-catch', 'khmer-market-match', 'temple-tower']) {
+    await page.goto('/play/' + id);
+    await expect(page.getByRole('button', { name: 'Let’s play', exact: true })).toBeVisible();
+  }
+  await page.goto('/recent');
+  await expect(page.locator('.game-card h3')).toHaveText(['Temple Tower', 'Khmer Market Match', 'Mango Catch']);
+  await page.reload();
+  await expect(page.locator('.game-card h3').first()).toHaveText('Temple Tower');
+  await page.getByRole('combobox', { name: 'Sort games' }).click();
+  await page.getByRole('option', { name: 'Newest', exact: true }).click();
+  await expect(page.locator('.game-card h3').first()).toHaveText('Khmer Market Match');
+  await page.getByRole('combobox', { name: 'Sort games' }).click();
+  await page.getByRole('option', { name: 'Recently played', exact: true }).click();
+  await expect(page.locator('.game-card h3').first()).toHaveText('Temple Tower');
+});
+
+test('sidebar distinguishes new games from all games', async ({ page, isMobile }) => {
+  await page.goto('/games');
+  if (isMobile) await page.getByRole('button', { name: 'Open navigation' }).click();
+  const sidebar = page.locator('.sidebar');
+  await expect(sidebar.locator('[aria-current="page"]')).toHaveText('All games');
+  await sidebar.getByRole('link', { name: 'Fresh from the arcade', exact: true }).click();
+  if (isMobile) await page.getByRole('button', { name: 'Open navigation' }).click();
+  await expect(sidebar.locator('[aria-current="page"]')).toHaveText('Fresh from the arcade');
+  await expect(sidebar.locator('.side-link.active')).toHaveText('Fresh from the arcade');
+  await sidebar.getByRole('link', { name: 'All games', exact: true }).click();
+  if (isMobile) await page.getByRole('button', { name: 'Open navigation' }).click();
+  await expect(sidebar.locator('[aria-current="page"]')).toHaveText('All games');
+});
+
 test('mobile menu opens and closes with navigation', async ({
   page,
   isMobile,

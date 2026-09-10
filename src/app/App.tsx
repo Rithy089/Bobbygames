@@ -79,7 +79,7 @@ export default function App() {
   const [menu, setMenu] = useState(false);
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, search: locationSearch } = useLocation();
   useEffect(() => {
     const header = document.querySelector('header');
     if (!header) return;
@@ -217,20 +217,29 @@ export default function App() {
           <div className="sidebar-top">
             <span className="eyebrow">{t('browse')}</span>
             <nav aria-label={t('browse')} onClick={() => setMenu(false)}>
-              {nav.map(([path, key, Icon]) => (
-                <NavLink
-                  key={key}
-                  to={path}
-                  end={path === '/'}
-                  className={({ isActive }) =>
-                    'side-link ' +
-                    (isActive && !path.includes('?') ? 'active' : '')
-                  }
-                >
-                  <Icon size={19} />
-                  {t(key)}
-                </NavLink>
-              ))}
+              {nav.map(([path, key, Icon]) => {
+                const newest =
+                  new URLSearchParams(locationSearch).get('sort') === 'newest';
+                const active =
+                  key === 'newGames'
+                    ? pathname === '/games' && newest
+                    : key === 'allGames'
+                      ? (pathname === '/games' ||
+                          pathname.startsWith('/games/')) &&
+                        !newest
+                      : pathname === path;
+                return (
+                  <Link
+                    key={key}
+                    to={path}
+                    aria-current={active ? 'page' : undefined}
+                    className={'side-link ' + (active ? 'active' : '')}
+                  >
+                    <Icon size={19} />
+                    {t(key)}
+                  </Link>
+                );
+              })}
             </nav>
             <span className="eyebrow side-label">{t('community')}</span>
             <nav aria-label={t('community')} onClick={() => setMenu(false)}>
@@ -274,7 +283,13 @@ export default function App() {
             </small>
           </a>
           <div className="sidebar-country">
-            <img src="/cambodia-flag.svg" width="30" height="19.2" alt={t('cambodiaFlag')} /> PHNOM PENH, CAMBODIA
+            <img
+              src="/cambodia-flag.svg"
+              width="30"
+              height="19.2"
+              alt={t('cambodiaFlag')}
+            />{' '}
+            PHNOM PENH, CAMBODIA
           </div>
         </aside>
         {menu && (
@@ -356,7 +371,11 @@ export default function App() {
                 <a href={github} target="_blank" rel="noopener noreferrer">
                   GitHub
                 </a>
-                <a href={projectGithub} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={projectGithub}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {t('sourceCode')}
                 </a>
                 <a href={linkedin} target="_blank" rel="noopener noreferrer">
@@ -368,7 +387,15 @@ export default function App() {
               <span>
                 © {new Date().getFullYear()} · {t('created')}
               </span>
-              <span className="made-country">{t('made').replace('🇰🇭','')} <img src="/cambodia-flag.svg" width="25" height="16" alt={t('cambodiaFlag')} /></span>
+              <span className="made-country">
+                {t('made').replace('🇰🇭', '')}{' '}
+                <img
+                  src="/cambodia-flag.svg"
+                  width="25"
+                  height="16"
+                  alt={t('cambodiaFlag')}
+                />
+              </span>
               <div>
                 <Link to="/privacy">{t('privacy')}</Link>
                 <span>·</span>

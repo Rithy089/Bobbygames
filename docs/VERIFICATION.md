@@ -1,5 +1,11 @@
 # Verification log
 
+## September 10 catalog follow-up
+
+- Game-count badges now derive from the catalog (four games), retaining Khmer numerals. Recently played defaults to visit order and offers a return to that order after explicit sorting. The sidebar now highlights and announces only the correct All games or Fresh from the arcade link.
+- TypeScript, ESLint, 48 tests, production build and secret scan passed. Fifteen desktop/mobile Chromium portal and cursor checks passed; one desktop-only mobile-menu skip is intentional. Verified recent ordering after reload, sorting, favorites, EN/Khmer, themes, routes, links, deferred-account states and cursor fallbacks. Desktop and emulated Pixel 5 screenshots reviewed.
+- Initial browser tests caught missing Khmer Intl locale data in the test browser; explicit digit formatting now preserves Khmer digits. A new navigation test was corrected to use the existing Fresh from the arcade label. No gameplay, audio, storage schema or online configuration changed. Physical devices and other browser engines were not tested in this follow-up.
+
 ## September 10 portfolio cursor
 
 - Added the cyan crosshair, soft trailing glow and action label inspired by Bobby's own portfolio. Original SVG/CSS implementation; no external assets. Native cursors remain over fields and game areas, with touch, reduced-motion and forced-colors fallbacks. No animation loop is added.
