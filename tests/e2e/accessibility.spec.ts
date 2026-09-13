@@ -10,6 +10,7 @@ test('portal and player controls have no automated WCAG A/AA violations', async 
       '/',
       '/games',
       '/play/mango-catch',
+      '/play/mekong-boat-journey',
       '/play/khmer-market-match',
       '/profile',
       '/login',

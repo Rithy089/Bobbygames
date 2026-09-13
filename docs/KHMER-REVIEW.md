@@ -1,5 +1,7 @@
 # Khmer and cultural review
 
+Mekong Boat Journey: review `mekong-boat-journey.title`, `.description`, `.hint`, `.instructions` and `aboutGames` (five ways to play). New game strings are drafts; existing reviewed copy is preserved.
+
 Catalog follow-up: no new Khmer wording. The original-game count now inserts the catalog total (៤) into the existing phrase instead of the outdated fixed ៣. Existing Recently played wording is reused for the sort option.
 
 Portfolio cursor adds `cursorAction` ("ទៅ", English "GO") for review. It reuses the wording on Bobby's portfolio; previously reviewed strings remain unchanged.

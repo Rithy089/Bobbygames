@@ -1,5 +1,12 @@
 # Verification log
 
+## Mekong Boat Journey release
+
+- Added a fifth original game with free steering, collectible fruit baskets, logs/rocks, three lives, recovery protection, gradual difficulty and a five-minute limit. Shared pause/restart/results, local records, independent audio settings and cleanup remain in use. Catalog, favorites, recent games, search, category, game metadata and five-game copy are connected. See MEKONG.md for rules and asset provenance.
+- TypeScript, ESLint, 52 unit/component/database tests, production build and secret scan passed. Forty-nine desktop/Pixel 5 emulation browser cases passed, with one intentional desktop skip for the mobile menu. Coverage includes new-game scoring, swept collisions, steering, life loss, game-over, pause/restart, persistence, all image responses, Khmer, favorites, metadata, shared loop cleanup, automated accessibility, and real music-only signal/volume persistence/navigation/restarts for all five games.
+- Reviewed desktop and mobile gameplay screenshots. New generated artwork is fictional, optimized and documented. No external service, account or global-ranking configuration. New Khmer game strings and five-game About heading await review. Physical-device play and speaker/headphone listening remain unverified.
+- The Sites build helper failed to resolve npm in this custom Windows checkout; the existing npm build script completed successfully. Initial unit checks caught one old fixed four-game expectation, updated to five before the passing test run.
+
 ## September 10 focused audio recheck
 
 - No reproducible application audio bug found. Preserved the existing soundtracks, effects, preferences and gameplay. Added a regression journey that saves effects-off/music-on at 40% music volume, reloads, then switches between all four games using client-side links. It verifies one active context/track, cleanup of old contexts/voices, three restarts per game, pause/resume and preservation of manual pause across visibility changes.

@@ -33,6 +33,6 @@ describe('original audio compositions', () => {
         );
       }
     }
-    expect(signatures.size).toBe(4);
+    expect(signatures.size).toBe(games.length);
   });
 });

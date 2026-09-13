@@ -4,6 +4,12 @@ const themes: Record<
   GameId,
   { bpm: number; root: number; melody: number[]; warmth: number }
 > = {
+  'mekong-boat-journey': {
+    bpm: 88,
+    root: 53,
+    melody: [0, 7, 9, 4, 2, 0, 4, 7, 12, 9, 7, 2, 4, 7, 2, 0],
+    warmth: 0.09,
+  },
   'mango-catch': {
     bpm: 100,
     root: 60,

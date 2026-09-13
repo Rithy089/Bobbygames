@@ -2,7 +2,8 @@ export type GameId =
   | 'mango-catch'
   | 'temple-tower'
   | 'tuk-tuk-rush'
-  | 'khmer-market-match';
+  | 'khmer-market-match'
+  | 'mekong-boat-journey';
 export type Game = {
   id: GameId;
   category: 'arcade' | 'precision' | 'racing' | 'memory';
@@ -44,6 +45,14 @@ export const games: Game[] = [
     color: '#69aa77',
     inputs: ['keyboard', 'mouse', 'touch'],
     released: '2026-09-08',
+  },
+  {
+    id: 'mekong-boat-journey',
+    category: 'arcade',
+    difficulty: 'easy',
+    color: '#65bca8',
+    inputs: ['keyboard', 'mouse', 'touch'],
+    released: '2026-09-14',
   },
 ];
 export const portfolio = 'https://sayrithy-portfolio.vercel.app/';

@@ -31,6 +31,7 @@ const titles = {
   '/reset-password': 'Reset password — BobbyGames',
 };
 const gameData = [
+  ['mekong-boat-journey', 'Mekong Boat Journey', 'Steer a wooden boat, avoid river obstacles and collect fruit baskets in an original Cambodian-inspired arcade game.'],
   ['khmer-market-match','Khmer Market Match','Find matching market objects in an original Cambodian memory game. Three board sizes, keyboard and touch controls, and local best results.'],
   [
     'mango-catch',

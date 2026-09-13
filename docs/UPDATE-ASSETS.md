@@ -38,3 +38,6 @@ Latest direction: restored the original overhead road with constant-size detaile
 Visual-comfort follow-up: five project-created Canvas storefront designs (fruit, food, textiles, repairs and plants) now replace the repeating shophouses. All roadside scenery remains static. No new external assets or licenses were introduced.
 
 The subsequent Rush update replaces the overhead street image during gameplay with original procedural Canvas scenery in `src/games/tuk-tuk-rush/render.ts`. Its fictional shophouses, awnings, produce stalls, palms, streetlights, cars, cones, tokens and rear-view three-wheeler are project-created code artwork. No real business logos, external models, photographs or new licensed dependencies are used. Existing cover artwork remains unchanged. `street-bg.webp` is retained as a historical asset but is no longer requested by Rush.
+# Mekong Boat Journey addition
+
+See [MEKONG.md](MEKONG.md) for original imagegen asset provenance, crop information and procedural soundtrack notes. Assets: `public/art/mekong-boat-journey-{480,960}.webp` and `public/sprites/mekong-{bg,boat,log,rock,basket}.webp`. These are fictional illustrations, not authentic photographs. No external recordings, stock images or paid services.

@@ -102,14 +102,16 @@ test('game animation stops after leaving the route', async ({ page }) => {
       get: () => pending.size,
     });
   });
-  await page.goto('/play/mango-catch');
-  await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
-  await page.locator('.header .brand').click();
-  await expect(page.locator('.hero')).toBeVisible();
-  await expect
-    .poll(() => page.evaluate(() => Reflect.get(window, 'pendingGameFrames')))
-    .toBe(0);
-  await expect(page.locator('canvas')).toHaveCount(0);
+  for (const game of ['mango-catch', 'mekong-boat-journey']) {
+    await page.goto('/play/' + game);
+    await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
+    await page.locator('.header .brand').click();
+    await expect(page.locator('.hero')).toBeVisible();
+    await expect
+      .poll(() => page.evaluate(() => Reflect.get(window, 'pendingGameFrames')))
+      .toBe(0);
+    await expect(page.locator('canvas')).toHaveCount(0);
+  }
 });
 
 test('Temple Tower and Tuk-Tuk Rush reach game-over and save runs', async ({

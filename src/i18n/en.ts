@@ -1,4 +1,10 @@
 export default {
+  'mekong-boat-journey': {
+    title: 'Mekong Boat Journey',
+    description: 'Follow a green river, steer around logs and rocks, and gather floating fruit baskets.',
+    hint: 'Steer with ← → or A/D, move your pointer, or use the touch arrows.',
+    instructions: 'Guide your boat with the arrow keys, A/D, your pointer or the touch arrows. Collect fruit baskets for 50 points each and earn one point per metre. Logs and rocks cost one of your three lives; a brief protective ring gives you time to recover. The current gradually speeds up. The journey ends after five minutes or when all lives are lost. Press P or Escape to pause. This is a fictional illustrated river inspired by Cambodia, not a navigation guide.',
+  },
   cambodiaFlag: 'Flag of Cambodia',
   memory: 'Memory',
   hard: 'Hard',
@@ -253,7 +259,7 @@ export default {
     'For account data or deletion requests, contact Bobby using the links on his portfolio. Clearing browser data removes guest progress. Signing out clears the account session from this device.',
   termsText:
     'BobbyGames is an independent portfolio project. Play fairly, use a respectful display name, and do not interfere with other players or the service. Suspicious scores may be excluded. The games are provided as available without a promise of uninterrupted service. Game artwork and experiences are original; this project is not an official Cambodian government or heritage service.',
-  aboutGames: 'Four little ways to play',
+  aboutGames: 'Five little ways to play',
   latest: 'New',
   finishRun: 'Finish a run to save your score.',
   saving: 'Saving…',

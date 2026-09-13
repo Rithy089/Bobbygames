@@ -37,6 +37,7 @@ const loaders: Record<
   'mango-catch': () => import('../games/mango-catch/engine'),
   'temple-tower': () => import('../games/temple-tower/engine'),
   'tuk-tuk-rush': () => import('../games/tuk-tuk-rush/engine'),
+  'mekong-boat-journey': () => import('../games/mekong-boat-journey/engine'),
 };
 function PlayerGame() {
   const { id } = useParams();
@@ -92,11 +93,19 @@ function PlayerGame() {
       .then(async (module) => {
         const { loadSprites } = await import('../games/shared/sprites');
         await loadSprites(
-          game.id === 'mango-catch'
-            ? ['mango', 'dragon', 'basket', 'countryside']
-            : game.id === 'tuk-tuk-rush'
-              ? []
-              : ['tower-bg'],
+          game.id === 'mekong-boat-journey'
+            ? [
+                'mekong-bg',
+                'mekong-boat',
+                'mekong-log',
+                'mekong-rock',
+                'mekong-basket',
+              ]
+            : game.id === 'mango-catch'
+              ? ['mango', 'dragon', 'basket', 'countryside']
+              : game.id === 'tuk-tuk-rush'
+                ? []
+                : ['tower-bg'],
         );
         if (disposed || !canvas.current) return;
         engine.current = module.default({
@@ -232,7 +241,7 @@ function PlayerGame() {
             <span>{t('best')}</span>
             <b>{best}</b>
           </div>
-          {game.id === 'mango-catch' ? (
+          {game.id === 'mango-catch' || game.id === 'mekong-boat-journey' ? (
             <div>
               <span>{t('lives')}</span>
               <b
@@ -266,6 +275,12 @@ function PlayerGame() {
             <span>{t('combo')}</span>
             <b>×{snapshot.combo || 1}</b>
           </div>
+          {game.id === 'mekong-boat-journey' && (
+            <div>
+              <span>{t('distance')}</span>
+              <b>{Math.floor(snapshot.distance)} m</b>
+            </div>
+          )}
         </div>
         <div className="game-stage">
           <canvas
