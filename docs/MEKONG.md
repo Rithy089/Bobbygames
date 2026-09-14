@@ -5,8 +5,8 @@ Original guest-play arcade game added September 2026. Fictional Cambodian-inspir
 ## Rules and acceptance
 
 - Five-minute run or three lost lives. One point per metre plus 50 per fruit basket. Combo counts consecutive collected baskets and resets on impact; every third basket has a brighter cue, without a hidden score multiplier.
-- Free lateral steering with arrows/A/D, pointer movement or touch arrows. Boat movement is capped at 350 canvas pixels/second. One object per row leaves a passable channel. Inset, swept relative collision bounds prevent tunnelling; 1.5 seconds of protection follows an impact.
-- Current speed rises from 145 to 310 pixels/second; spawning slows to a minimum interval of 1.05 seconds. Decorative banks remain still. Reduced motion removes wake/current animation while preserving essential moving obstacles.
+- Free movement in both axes with arrows/WASD, pointer movement, tap/drag on water or four touch arrows. Boat movement is capped at 350 canvas pixels/second, including diagonals. Hull stays inside x=205–595, y=70–535 on the 800×600 river. One object per row leaves a passable channel. Swept relative collision bounds use both boat coordinates to prevent tunnelling; 1.5 seconds of protection follows an impact.
+- Current speed rises from 145 to 310 pixels/second; spawning interval decreases to a minimum of 1.05 seconds. Decorative banks remain still. Gentle turning, a clipped paddle animation using the existing sprite, fading wakes, pickup rings and floating score feedback follow game time and freeze on pause. Reduced motion removes these decorative movements while preserving obstacles and clear static feedback. Ripple lifetimes are bounded at 0.85 seconds; no new loops or timers.
 - Shared Start/pause/restart/results, audio settings, visibility handling and cleanup. Catalog, search, arcade category, newest sorting, favorites, recent history, personal bests and local rankings use existing portal data. No online game registration, authentication or ranking configuration was deployed.
 
 ## Audio and assets

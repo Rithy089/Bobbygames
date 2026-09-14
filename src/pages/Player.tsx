@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft,
   ArrowRight,
+  ArrowUp,
+  ArrowDown,
   Pause,
   Play,
   RotateCcw,
@@ -207,7 +209,10 @@ function PlayerGame() {
     pending.current = false;
     setStarting(false);
   };
-  const direction = (dir: 'left' | 'right', pressed: boolean) => {
+  const direction = (
+    dir: 'left' | 'right' | 'up' | 'down',
+    pressed: boolean,
+  ) => {
     engine.current?.input(dir, pressed);
   };
   return (
@@ -403,7 +408,12 @@ function PlayerGame() {
             <Maximize size={18} />
           </button>
         </div>
-        <div className="touch-controls">
+        <div
+          className={
+            'touch-controls' +
+            (game.id === 'mekong-boat-journey' ? ' river-controls' : '')
+          }
+        >
           {game.id === 'temple-tower' ? (
             <button
               className="button primary"
@@ -413,11 +423,21 @@ function PlayerGame() {
               {t('drop')}
             </button>
           ) : (
-            (['left', 'right'] as const).map((dir) => (
+            (game.id === 'mekong-boat-journey'
+              ? (['left', 'up', 'down', 'right'] as const)
+              : (['left', 'right'] as const)
+            ).map((dir) => (
               <button
                 key={dir}
                 className="button secondary"
-                aria-label={t(dir === 'left' ? 'moveLeft' : 'moveRight')}
+                aria-label={t(
+                  {
+                    left: 'moveLeft',
+                    right: 'moveRight',
+                    up: 'moveUp',
+                    down: 'moveDown',
+                  }[dir],
+                )}
                 disabled={snapshot.phase !== 'running'}
                 onPointerDown={(e) => {
                   e.preventDefault();
@@ -426,13 +446,30 @@ function PlayerGame() {
                 }}
                 onPointerUp={() => direction(dir, false)}
                 onPointerCancel={() => direction(dir, false)}
+                onLostPointerCapture={() => direction(dir, false)}
+                onBlur={() => direction(dir, false)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') direction(dir, true);
                 }}
                 onKeyUp={() => direction(dir, false)}
               >
-                {dir === 'left' ? <ArrowLeft /> : <ArrowRight />}
-                {t(dir === 'left' ? 'moveLeft' : 'moveRight')}
+                {dir === 'left' ? (
+                  <ArrowLeft />
+                ) : dir === 'right' ? (
+                  <ArrowRight />
+                ) : dir === 'up' ? (
+                  <ArrowUp />
+                ) : (
+                  <ArrowDown />
+                )}
+                {t(
+                  {
+                    left: 'moveLeft',
+                    right: 'moveRight',
+                    up: 'moveUp',
+                    down: 'moveDown',
+                  }[dir],
+                )}
               </button>
             ))
           )}

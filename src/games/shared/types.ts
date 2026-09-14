@@ -11,7 +11,10 @@ export type Snapshot = {
 export type Input = {
   left: boolean;
   right: boolean;
+  up?: boolean;
+  down?: boolean;
   pointer: number | null;
+  pointerY?: number | null;
   action: boolean;
   direction: -1 | 0 | 1;
 };
@@ -20,7 +23,10 @@ export type Engine = {
   pause: () => void;
   resume: () => void;
   restart: () => void;
-  input: (key: 'left' | 'right' | 'action', pressed: boolean) => void;
+  input: (
+    key: 'left' | 'right' | 'up' | 'down' | 'action',
+    pressed: boolean,
+  ) => void;
   destroy: () => void;
 };
 export type GameOptions = {
@@ -29,6 +35,7 @@ export type GameOptions = {
   onFinish: (s: Snapshot) => void;
   audio: (kind: 'catch' | 'miss' | 'perfect') => void;
   reducedMotion?: () => boolean;
+  freeMovement?: boolean;
   labels?: { perfect: string; missed: string; hazard: string };
 };
 export type Scene = {

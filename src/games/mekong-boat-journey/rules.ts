@@ -1,6 +1,8 @@
 export const config = {
-  left: 224,
-  right: 576,
+  left: 205,
+  right: 595,
+  top: 70,
+  bottom: 535,
   playerY: 490,
   maxSeconds: 300,
   bonus: 50,
@@ -16,6 +18,24 @@ export const difficulty = (seconds: number) => ({
 });
 export const clampX = (x: number) =>
   Math.max(config.left, Math.min(config.right, x));
+export const clampY = (y: number) =>
+  Math.max(config.top, Math.min(config.bottom, y));
+export function moveToward(
+  x: number,
+  y: number,
+  targetX: number,
+  targetY: number,
+  dt: number,
+) {
+  const dx = clampX(targetX) - x,
+    dy = clampY(targetY) - y;
+  const distance = Math.hypot(dx, dy),
+    step = Math.min(distance, 350 * Math.max(0, dt));
+  return {
+    x: clampX(x + (distance ? (dx / distance) * step : 0)),
+    y: clampY(y + (distance ? (dy / distance) * step : 0)),
+  };
+}
 export const scoreFor = (distance: number, baskets: number) =>
   Math.floor(distance) + baskets * config.bonus;
 // Inset hull and obstacle bounds. Swept relative positions prevent tunnelling
@@ -25,6 +45,8 @@ export function collides(
   x: number,
   item: RiverItem,
   previousY: number,
+  previousBoatY = config.playerY,
+  boatY = config.playerY,
 ) {
   const halfX = item.type === 'log' ? 57 : item.type === 'rock' ? 43 : 40;
   const halfY = item.type === 'log' ? 42 : 48;
@@ -32,7 +54,7 @@ export function collides(
     exit = 1;
   for (const [start, end, radius] of [
     [previousX - item.x, x - item.x, halfX],
-    [previousY - config.playerY, item.y - config.playerY, halfY],
+    [previousY - previousBoatY, item.y - boatY, halfY],
   ]) {
     const delta = end - start;
     if (Math.abs(delta) < 0.00001) {

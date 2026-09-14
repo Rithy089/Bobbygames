@@ -1,5 +1,7 @@
 # Khmer and cultural review
 
+Free-movement update: review `moveUp`, `moveDown` and the revised `mekong-boat-journey.hint` / `.instructions` for WASD, tap/drag and four-direction movement. No other Khmer wording changed.
+
 Mekong Boat Journey: review `mekong-boat-journey.title`, `.description`, `.hint`, `.instructions` and `aboutGames` (five ways to play). New game strings are drafts; existing reviewed copy is preserved.
 
 Catalog follow-up: no new Khmer wording. The original-game count now inserts the catalog total (៤) into the existing phrase instead of the outdated fixed ៣. Existing Recently played wording is reused for the sort option.

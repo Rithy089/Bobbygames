@@ -1,5 +1,12 @@
 # Verification log
 
+## Mekong free movement and animation
+
+- Added up/down and diagonal boat steering inside the river, with normalized speed, WASD/arrows, pointer/touch destinations and four on-screen direction buttons. Swept collisions now use the boat's previous and current vertical positions. Pointer cancellation, button focus loss and pause clear held inputs. Other games opt out of the new vertical-input path.
+- Added gentle turning, a clipped paddle stroke using the existing original sprite, short fading wakes, bonus rings and moving score feedback. Gameplay time drives every effect, so pause freezes the canvas; reduced motion removes decorative movement. No new assets or audio changes.
+- TypeScript, ESLint, 54 automated tests, production build and secret scan passed. All 36 desktop/emulated-mobile browser cases passed, including vertical/diagonal motion, actual touch destination taps, cancellation, exact paused-canvas comparison, reduced motion, game rules/saves, audio and old-game regressions. Desktop/mobile screenshots reviewed. New Khmer direction labels and revised instructions are in KHMER-REVIEW.md.
+- Physical-phone comfort and actual listening remain unverified. Supabase remains deferred. The separate Sites project was unavailable during the preceding release; Vercel remains the public deployment target.
+
 ## Mekong Boat Journey release
 
 - Added a fifth original game with free steering, collectible fruit baskets, logs/rocks, three lives, recovery protection, gradual difficulty and a five-minute limit. Shared pause/restart/results, local records, independent audio settings and cleanup remain in use. Catalog, favorites, recent games, search, category, game metadata and five-game copy are connected. See MEKONG.md for rules and asset provenance.

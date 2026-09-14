@@ -28,6 +28,12 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
   const clearInput = () => {
     input.left = false;
     input.right = false;
+    input.up = false;
+    input.down = false;
+    if (options.freeMovement) {
+      input.pointer = null;
+      input.pointerY = null;
+    }
     input.action = false;
     input.direction = 0;
   };
@@ -38,15 +44,32 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
       publish();
     }
   };
-  const setInput = (key: 'left' | 'right' | 'action', pressed: boolean) => {
+  const setInput = (
+    key: 'left' | 'right' | 'up' | 'down' | 'action',
+    pressed: boolean,
+  ) => {
     if (scene.snapshot.phase !== 'running') return;
     input[key] = pressed;
-    if (pressed && key !== 'action') input.direction = key === 'left' ? -1 : 1;
+    if (pressed && (key === 'left' || key === 'right'))
+      input.direction = key === 'left' ? -1 : 1;
+    if (pressed && options.freeMovement) {
+      input.pointer = null;
+      input.pointerY = null;
+    }
   };
   const onKey = (e: KeyboardEvent) => {
     const key = e.key.toLowerCase();
     if (
-      ['arrowleft', 'arrowright', ' ', 'a', 'd', 'escape', 'p'].includes(key)
+      [
+        'arrowleft',
+        'arrowright',
+        ' ',
+        'a',
+        'd',
+        'escape',
+        'p',
+        ...(options.freeMovement ? ['arrowup', 'arrowdown', 'w', 's'] : []),
+      ].includes(key)
     ) {
       e.preventDefault();
       if (
@@ -67,11 +90,21 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
         setInput('left', e.type === 'keydown');
       if (key === 'arrowright' || key === 'd')
         setInput('right', e.type === 'keydown');
+      if (options.freeMovement && (key === 'arrowup' || key === 'w'))
+        setInput('up', e.type === 'keydown');
+      if (options.freeMovement && (key === 'arrowdown' || key === 's'))
+        setInput('down', e.type === 'keydown');
     }
   };
   const pointer = (e: PointerEvent) => {
+    if (options.freeMovement && scene.snapshot.phase !== 'running') return;
     const bounds = canvas.getBoundingClientRect();
     input.pointer = ((e.clientX - bounds.left) / bounds.width) * W;
+    if (options.freeMovement)
+      input.pointerY = ((e.clientY - bounds.top) / bounds.height) * H;
+  };
+  const cancelPointer = () => {
+    if (options.freeMovement) clearInput();
   };
   const down = (e: PointerEvent) => {
     canvas.focus({ preventScroll: true });
@@ -87,6 +120,7 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
   canvas.addEventListener('keyup', onKey);
   canvas.addEventListener('pointermove', pointer);
   canvas.addEventListener('pointerdown', down);
+  canvas.addEventListener('pointercancel', cancelPointer);
   window.addEventListener('blur', blur);
   document.addEventListener('visibilitychange', visibility);
   function tick(now: number) {
@@ -140,6 +174,7 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
       canvas.removeEventListener('keyup', onKey);
       canvas.removeEventListener('pointermove', pointer);
       canvas.removeEventListener('pointerdown', down);
+      canvas.removeEventListener('pointercancel', cancelPointer);
       window.removeEventListener('blur', blur);
       document.removeEventListener('visibilitychange', visibility);
     },

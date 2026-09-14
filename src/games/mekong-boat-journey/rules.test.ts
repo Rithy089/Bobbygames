@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { clampX, collides, difficulty, scoreFor, config } from './rules';
+import { clampX, clampY, moveToward, collides, difficulty, scoreFor, config } from './rules';
 import { createRiverScene } from './engine';
 import type { GameOptions, Input } from '../shared/types';
 const input: Input = {
@@ -18,6 +18,20 @@ const options = () =>
   }) satisfies GameOptions;
 afterEach(() => vi.restoreAllMocks());
 describe('Mekong Boat Journey', () => {
+  it('moves in both axes, caps diagonal speed and stays inside the river', () => {
+    const diagonal = moveToward(400, 300, 500, 400, 0.1);
+    expect(Math.hypot(diagonal.x - 400, diagonal.y - 300)).toBeCloseTo(35);
+    expect(moveToward(400, 300, -100, -100, 10)).toEqual({ x: config.left, y: config.top });
+    expect(moveToward(400, 300, 1000, 1000, 10)).toEqual({ x: config.right, y: config.bottom });
+    expect(clampY(-100)).toBe(config.top);
+    expect(moveToward(400, 300, 400, 300, 1)).toEqual({x: 400, y: 300});
+  });
+  it('checks the moving boat height instead of the old fixed row', () => {
+    const rock = { x: 400, y: 290, type: 'rock' as const };
+    expect(collides(400, 400, rock, 280, 100, 100)).toBe(false);
+    expect(collides(400, 400, rock, 280, 420, 160)).toBe(true);
+    expect(collides(400, 400, rock, 280, 200, 210)).toBe(false);
+  });
   it('caps difficulty and steering while allowing generous reaction time', () => {
     expect(difficulty(300)).toEqual(difficulty(3000));
     expect(difficulty(120).speed).toBeGreaterThan(difficulty(0).speed);

@@ -48,7 +48,9 @@ describe('game lifecycle', () => {
     expect(snapshot.score).toBe(0);
     engine.destroy();
     expect(cancelAnimationFrame).toHaveBeenCalledWith(42);
-    expect(remove).toHaveBeenCalledTimes(4);
+    expect(remove.mock.calls.map(([event]) => event).sort()).toEqual([
+      'keydown', 'keyup', 'pointercancel', 'pointerdown', 'pointermove',
+    ]);
     vi.unstubAllGlobals();
   });
 });
