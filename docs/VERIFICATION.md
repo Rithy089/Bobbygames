@@ -119,3 +119,12 @@
 - Dependency audit reports zero vulnerabilities. This and the source pattern scan are point-in-time checks, not a complete security audit.
 - Live Supabase, real email flows, physical devices and native WebMCP remain outside the verified scope, as detailed in RELEASE.md.
 - Vercel production deployment succeeded; deployed HTTP/metadata checks and all three game start/pause flows passed on desktop and emulated Pixel 5 with no page errors or horizontal overflow. Sites separately reports a successful owner-private deployment. See RELEASE.md for URLs and the deployed source revision.
+
+## Rice Field Adventure - September 15, 2026
+
+- Added the sixth game with 12 unique pickups, return-to-cart completion, active timer, buffalo time penalties, local scores, four-direction controls, original art and procedural music. All previous game rules remain unchanged.
+- `npm run check` passed: strict TypeScript, ESLint, 57 unit/component tests in 17 files, production build (26 metadata routes), and secret pattern scan. TypeScript and lint were repeated after adding browser coverage.
+- Browser checks across desktop Chromium and Pixel 5 emulation: portal/catalog/favorites, EN/Khmer and themes, safe developer links and honest unavailable accounts, metadata, automated accessibility, all-game audio signal/mute/independent volumes/cleanup, original arcade results, Market Match boards, Mekong free movement, and Rice Field collection/delivery/pause/restart/local persistence. Rice keyboard and on-screen direction buttons also collect with reduced motion enabled.
+- Initial Rice tests exposed a canceled destination after a buffalo bump; fixed while preserving the selected destination. Browser test expectations were corrected for a second bundle collected en route, and synthetic pointer events were replaced with real browser pointer input to exercise pointer capture.
+- Desktop and mobile full-page Rice screenshots reviewed in ignored outputs/review. Field artwork loads, controls and instructions fit without horizontal overflow. Audio analyser detects actual browser output; no subjective listening or physical phone testing performed.
+- New Khmer strings listed in KHMER-REVIEW.md. Assets and scoring documented in RICE-FIELD.md. Supabase/accounts/global rankings remain deferred. Private Sites hosting remains unavailable from the previously confirmed missing project; existing GitHub/Vercel publishing is retained.

@@ -102,7 +102,7 @@ test('game animation stops after leaving the route', async ({ page }) => {
       get: () => pending.size,
     });
   });
-  for (const game of ['mango-catch', 'mekong-boat-journey']) {
+  for (const game of ['mango-catch', 'mekong-boat-journey', 'rice-field-adventure']) {
     await page.goto('/play/' + game);
     await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
     await page.locator('.header .brand').click();

@@ -3,7 +3,8 @@ export type GameId =
   | 'temple-tower'
   | 'tuk-tuk-rush'
   | 'khmer-market-match'
-  | 'mekong-boat-journey';
+  | 'mekong-boat-journey'
+  | 'rice-field-adventure';
 export type Game = {
   id: GameId;
   category: 'arcade' | 'precision' | 'racing' | 'memory';
@@ -53,6 +54,14 @@ export const games: Game[] = [
     color: '#65bca8',
     inputs: ['keyboard', 'mouse', 'touch'],
     released: '2026-09-14',
+  },
+  {
+    id: 'rice-field-adventure',
+    category: 'arcade',
+    difficulty: 'easy',
+    color: '#a6bd66',
+    inputs: ['keyboard', 'mouse', 'touch'],
+    released: '2026-09-15',
   },
 ];
 export const portfolio = 'https://sayrithy-portfolio.vercel.app/';

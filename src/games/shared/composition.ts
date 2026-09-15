@@ -4,6 +4,12 @@ const themes: Record<
   GameId,
   { bpm: number; root: number; melody: number[]; warmth: number }
 > = {
+  'rice-field-adventure': {
+    bpm: 96,
+    root: 58,
+    melody: [0, 2, 7, 9, 7, 4, 2, 0, 4, 9, 12, 7, 4, 2, 7, 0],
+    warmth: 0.14,
+  },
   'mekong-boat-journey': {
     bpm: 88,
     root: 53,

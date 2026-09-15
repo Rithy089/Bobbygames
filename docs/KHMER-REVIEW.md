@@ -39,3 +39,7 @@ Check meaning, natural tone and mobile line breaks, especially “moves” (one 
 
 - Recheck `tuk-tuk-rush.instructions` in `src/i18n/km.ts`: added “ប៉ះគន្លងនៅលើផ្លូវ” to explain tapping a road lane. This is draft copy awaiting Bobby's review.
 - Existing decorative signs “ផ្សារ” and “សួស្តី” are reused; no new cultural or historical claims were added.
+
+## Rice Field Adventure (September 15)
+
+Review `rice-field-adventure.title`, `.description`, `.hint`, `.instructions`, all six `rice.*` labels, and `aboutGames` (six games) in `src/i18n/km.ts`. Earlier reviewed game strings are preserved. Check the harvest/delivery distinction and five-second buffalo penalty wording.

@@ -7,6 +7,7 @@ test('static sharing metadata is game-specific without executing JavaScript', as
     ['/games/mango-catch/', 'Mango Catch', '/art/mango-catch-960.webp'],
     ['/games/temple-tower/', 'Temple Tower', '/art/temple-tower-960.webp'],
     ['/games/mekong-boat-journey/', 'Mekong Boat Journey', '/art/mekong-boat-journey-960.webp'],
+    ['/games/rice-field-adventure/', 'Rice Field Adventure', '/art/rice-field-adventure-960.webp'],
   ]) {
     const response = await request.get(path);
     expect(response.ok()).toBe(true);

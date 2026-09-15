@@ -1,4 +1,11 @@
 export default {
+  'rice-field-adventure': {
+    title: 'Rice Field Adventure',
+    description: 'Explore golden fields, gather the harvest and find your way back to the cart.',
+    hint: 'Collect 12 rice bundles, then return to the cart. Arrow keys/WASD or touch to move.',
+    instructions: 'Explore the field with arrow keys or WASD, your mouse, or tap and drag on the field. Four touch arrows are also available. Collect all 12 golden rice bundles and return to the cart at the bottom left within 90 seconds. Give the roaming buffalo space: a bump costs five seconds, followed by brief protection. Each bundle earns 100 points. Delivering the harvest adds five points per full second remaining. Higher scores rank first. This is an original fictional countryside adventure inspired by Cambodia.',
+  },
+  rice: { time: 'Time left', collected: 'Rice bundles', objective: 'Gather all 12 rice bundles. Give the buffalo room to pass.', returnHome: 'Harvest gathered! Return to the glowing cart at the bottom left.', complete: 'Harvest delivered!', timeUp: 'Time to rest. Try another harvest!' },
   'mekong-boat-journey': {
     title: 'Mekong Boat Journey',
     description: 'Follow a green river, steer around logs and rocks, and gather floating fruit baskets.',
@@ -261,7 +268,7 @@ export default {
     'For account data or deletion requests, contact Bobby using the links on his portfolio. Clearing browser data removes guest progress. Signing out clears the account session from this device.',
   termsText:
     'BobbyGames is an independent portfolio project. Play fairly, use a respectful display name, and do not interfere with other players or the service. Suspicious scores may be excluded. The games are provided as available without a promise of uninterrupted service. Game artwork and experiences are original; this project is not an official Cambodian government or heritage service.',
-  aboutGames: 'Five little ways to play',
+  aboutGames: 'Six little ways to play',
   latest: 'New',
   finishRun: 'Finish a run to save your score.',
   saving: 'Saving…',

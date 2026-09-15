@@ -10,8 +10,8 @@ test('home has original games and no game engines downloaded', async ({
   await expect(
     page.getByRole('heading', { name: 'A little play. A lot of Cambodia.' }),
   ).toBeVisible();
-  await expect(page.locator('.game-card')).toHaveCount(5);
-  await expect(page.locator('.hero-badges')).toContainText('5 original games');
+  await expect(page.locator('.game-card')).toHaveCount(6);
+  await expect(page.locator('.hero-badges')).toContainText('6 original games');
   await expect(page.locator('.cover img').first()).toBeVisible();
   expect(requested.some((u) => /engine-|MarketMatch-|\/sprites\/|\/scenes\//.test(u))).toBe(false);
   expect(errors).toEqual([]);
@@ -42,14 +42,14 @@ test('search, categories, sorting and favorites persist', async ({ page }) => {
   await page.getByRole('combobox', { name: 'Sort games' }).click();
   await page.getByRole('option', { name: 'Newest', exact: true }).click();
   await expect(page.locator('.game-card h3').first()).toHaveText(
-    'Mekong Boat Journey',
+    'Rice Field Adventure',
   );
 });
 test('Khmer and theme survive reload', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Language', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'km');
-  await expect(page.locator('.hero-badges')).toContainText('ហ្គេមដើម ៥');
+  await expect(page.locator('.hero-badges')).toContainText('ហ្គេមដើម ៦');
   await page.reload();
   await expect(
     page.getByRole('heading', { name: 'លេងបន្តិច។ ស្គាល់កម្ពុជាច្រើន។' }),

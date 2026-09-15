@@ -41,3 +41,7 @@ The subsequent Rush update replaces the overhead street image during gameplay wi
 # Mekong Boat Journey addition
 
 See [MEKONG.md](MEKONG.md) for original imagegen asset provenance, crop information and procedural soundtrack notes. Assets: `public/art/mekong-boat-journey-{480,960}.webp` and `public/sprites/mekong-{bg,boat,log,rock,basket}.webp`. These are fictional illustrations, not authentic photographs. No external recordings, stock images or paid services.
+
+## Rice Field Adventure
+
+Original generated cover, fictional rice-field background and alpha sprites (farmer, bundle, buffalo, cart) are documented in [RICE-FIELD.md](RICE-FIELD.md). No external reference assets, commercial music or new factual claims. Procedural music is composed in the shared soundtrack module.

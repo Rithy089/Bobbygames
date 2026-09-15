@@ -40,6 +40,7 @@ const loaders: Record<
   'temple-tower': () => import('../games/temple-tower/engine'),
   'tuk-tuk-rush': () => import('../games/tuk-tuk-rush/engine'),
   'mekong-boat-journey': () => import('../games/mekong-boat-journey/engine'),
+  'rice-field-adventure': () => import('../games/rice-field-adventure/engine'),
 };
 function PlayerGame() {
   const { id } = useParams();
@@ -60,6 +61,8 @@ function PlayerGame() {
     };
   }, [t]);
   const game = games.find((g) => g.id === id);
+  const field = game?.id === 'rice-field-adventure';
+  const freeMovement = field || game?.id === 'mekong-boat-journey';
   const canvas = useRef<HTMLCanvasElement>(null);
   const frame = useRef<HTMLDivElement>(null);
   const engine = useRef<Engine | null>(null);
@@ -95,19 +98,27 @@ function PlayerGame() {
       .then(async (module) => {
         const { loadSprites } = await import('../games/shared/sprites');
         await loadSprites(
-          game.id === 'mekong-boat-journey'
+          game.id === 'rice-field-adventure'
             ? [
-                'mekong-bg',
-                'mekong-boat',
-                'mekong-log',
-                'mekong-rock',
-                'mekong-basket',
+                'rice-bg',
+                'rice-farmer',
+                'rice-bundle',
+                'rice-buffalo',
+                'rice-cart',
               ]
-            : game.id === 'mango-catch'
-              ? ['mango', 'dragon', 'basket', 'countryside']
-              : game.id === 'tuk-tuk-rush'
-                ? []
-                : ['tower-bg'],
+            : game.id === 'mekong-boat-journey'
+              ? [
+                  'mekong-bg',
+                  'mekong-boat',
+                  'mekong-log',
+                  'mekong-rock',
+                  'mekong-basket',
+                ]
+              : game.id === 'mango-catch'
+                ? ['mango', 'dragon', 'basket', 'countryside']
+                : game.id === 'tuk-tuk-rush'
+                  ? []
+                  : ['tower-bg'],
         );
         if (disposed || !canvas.current) return;
         engine.current = module.default({
@@ -267,18 +278,30 @@ function PlayerGame() {
           ) : (
             <div>
               <span>
-                {t(game.id === 'temple-tower' ? 'height' : 'distance')}
+                {t(
+                  field
+                    ? 'rice.time'
+                    : game.id === 'temple-tower'
+                      ? 'height'
+                      : 'distance',
+                )}
               </span>
               <b>
-                {game.id === 'temple-tower'
-                  ? snapshot.height
-                  : Math.floor(snapshot.distance) + ' m'}
+                {field
+                  ? Math.ceil(
+                      snapshot.phase === 'ready' ? 90 : snapshot.distance,
+                    ) + ' s'
+                  : game.id === 'temple-tower'
+                    ? snapshot.height
+                    : Math.floor(snapshot.distance) + ' m'}
               </b>
             </div>
           )}
           <div>
-            <span>{t('combo')}</span>
-            <b>×{snapshot.combo || 1}</b>
+            <span>{t(field ? 'rice.collected' : 'combo')}</span>
+            <b>
+              {field ? snapshot.combo + ' / 12' : '×' + (snapshot.combo || 1)}
+            </b>
           </div>
           {game.id === 'mekong-boat-journey' && (
             <div>
@@ -287,6 +310,11 @@ function PlayerGame() {
             </div>
           )}
         </div>
+        {field && (
+          <p className="rice-mission" role="status">
+            {t(snapshot.combo === 12 ? 'rice.returnHome' : 'rice.objective')}
+          </p>
+        )}
         <div className="game-stage">
           <canvas
             ref={canvas}
@@ -319,7 +347,11 @@ function PlayerGame() {
                     ? 'ready'
                     : snapshot.phase === 'paused'
                       ? 'paused'
-                      : 'gameOver',
+                      : field
+                        ? snapshot.height === 1
+                          ? 'rice.complete'
+                          : 'rice.timeUp'
+                        : 'gameOver',
                 )}
               </h2>
               <p>
@@ -409,10 +441,7 @@ function PlayerGame() {
           </button>
         </div>
         <div
-          className={
-            'touch-controls' +
-            (game.id === 'mekong-boat-journey' ? ' river-controls' : '')
-          }
+          className={'touch-controls' + (freeMovement ? ' river-controls' : '')}
         >
           {game.id === 'temple-tower' ? (
             <button
@@ -423,7 +452,7 @@ function PlayerGame() {
               {t('drop')}
             </button>
           ) : (
-            (game.id === 'mekong-boat-journey'
+            (freeMovement
               ? (['left', 'up', 'down', 'right'] as const)
               : (['left', 'right'] as const)
             ).map((dir) => (
