@@ -63,11 +63,43 @@ test('harvest, delivery, pause, restart and local best on a responsive field', a
     await visit(x, y);
   await expect(page.getByTestId('score')).toHaveText('1200');
   await visit(90, 500, 4000);
+  await expect(page.locator('.rice-mission')).toContainText('Harvest 2 / 3');
+  await expect(page.getByTestId('score')).toHaveText('1200');
+  const base = [
+    [180, 120],
+    [330, 110],
+    [490, 120],
+    [670, 110],
+    [130, 300],
+    [310, 280],
+    [485, 300],
+    [700, 280],
+    [220, 480],
+    [370, 490],
+    [540, 475],
+    [700, 490],
+  ];
+  for (let round = 1; round < 3; round++) {
+    for (const [i, p] of base.entries()) {
+      const x =
+        round === 1
+          ? p[1] > 440
+            ? Math.max(190, 800 - p[0])
+            : 800 - p[0]
+          : p[0] + (i % 2 ? -30 : 30);
+      const y = round === 1 ? p[1] : p[1] + (i % 2 ? 20 : -20);
+      await visit(x, y);
+    }
+    await expect(page.getByTestId('score')).toHaveText(
+      String((round + 1) * 1200),
+    );
+    await visit(90, 500, 4000);
+  }
   await expect(
-    page.getByRole('heading', { name: 'Harvest delivered!' }),
+    page.getByRole('heading', { name: 'All three harvests delivered!' }),
   ).toBeVisible();
   const best = Number(await page.getByTestId('score').textContent());
-  expect(best).toBeGreaterThan(1200);
+  expect(best).toBeGreaterThan(3600);
   await page.getByRole('button', { name: 'Restart', exact: true }).click();
   await expect(page.getByTestId('score')).toHaveText('0');
   expect(

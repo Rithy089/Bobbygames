@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { createFieldScene } from './engine';
 import {
   bundles,
+  bundlesFor,
   home,
   config,
   moveToward,
@@ -59,21 +60,31 @@ describe('Rice Field Adventure', () => {
     walk(bundles.at(-1)!);
     expect(scene.snapshot.combo).toBe(config.total);
     walk(home, 4);
-    expect(scene.snapshot.phase).toBe('over');
+    expect(scene.snapshot.phase).toBe('running');
     expect(scene.snapshot.height).toBe(1);
-    expect(scene.snapshot.score).toBeGreaterThan(1200);
+    expect(scene.snapshot.combo).toBe(0);
+    expect(scene.snapshot.score).toBe(1200);
+    for (let round = 1; round < config.rounds; round++) {
+      for (const bundle of bundlesFor(round)) walk(bundle);
+      expect(scene.snapshot.combo).toBe(12);
+      expect(scene.snapshot.score).toBe((round + 1) * 1200);
+      walk(home, 4);
+    }
+    expect(scene.snapshot.phase).toBe('over');
+    expect(scene.snapshot.height).toBe(3);
+    expect(scene.snapshot.score).toBeGreaterThan(3600);
     scene.reset();
     expect(scene.snapshot).toMatchObject({
       score: 0,
       combo: 0,
-      distance: 90,
+      distance: 240,
       phase: 'ready',
     });
   });
   it('times out without awarding a delivery bonus', () => {
     const scene = make();
     scene.snapshot.phase = 'running';
-    scene.snapshot.elapsed = 90;
+    scene.snapshot.elapsed = 240;
     scene.update(0.05, idle);
     expect(scene.snapshot).toMatchObject({
       phase: 'over',

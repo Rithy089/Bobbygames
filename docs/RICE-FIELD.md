@@ -1,6 +1,6 @@
 # Rice Field Adventure
 
-Sixth original guest game, September 2026. Explore a fictional Cambodian-inspired rice field in four directions, gather 12 bundles and return to the cart within 90 active seconds. Each bundle awards 100 points once. Delivery adds five points per remaining whole second. A buffalo encounter costs five seconds and grants 1.4 seconds of protection; animals are never harmed. Higher total scores rank first.
+Sixth original guest game, September 2026. Explore a fictional Cambodian-inspired rice field in four directions, complete three harvests of 12 bundles each and return to the cart after each harvest within 240 active seconds. Each bundle awards 100 points once per harvest. Bundle positions change each round; the score and timer carry forward. The mission bar displays the current harvest. Only the final delivery adds five points per remaining whole second. A buffalo encounter costs five seconds and grants 1.4 seconds of protection; animals are never harmed. Higher total scores rank first.
 
 Keyboard arrows/WASD, pointer destinations and four touch buttons share normalized movement. Pause excludes elapsed time. Restart resets the harvest, penalties and destination. Shared game lifecycle manages visibility, audio, listeners and animation cleanup. Reduced motion removes walking rotation, floating bundles and collection rings while preserving readable static feedback.
 
@@ -17,3 +17,5 @@ Original procedural 96 BPM soundtrack uses evolving warm plucked phrases over 32
 ## Review
 
 New Khmer game metadata, six-game About copy and all `rice.*` labels need Bobby's review. Physical mobile comfort and subjective speaker/headphone listening remain manual checks.
+
+September 15 length update: three rounds replace the single short harvest. Existing local scores are preserved; longer runs can establish a new best. Review updated instructions, hint, rice.round and rice.complete in Khmer.

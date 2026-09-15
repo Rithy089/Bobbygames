@@ -128,3 +128,10 @@
 - Initial Rice tests exposed a canceled destination after a buffalo bump; fixed while preserving the selected destination. Browser test expectations were corrected for a second bundle collected en route, and synthetic pointer events were replaced with real browser pointer input to exercise pointer capture.
 - Desktop and mobile full-page Rice screenshots reviewed in ignored outputs/review. Field artwork loads, controls and instructions fit without horizontal overflow. Audio analyser detects actual browser output; no subjective listening or physical phone testing performed.
 - New Khmer strings listed in KHMER-REVIEW.md. Assets and scoring documented in RICE-FIELD.md. Supabase/accounts/global rankings remain deferred. Private Sites hosting remains unavailable from the previously confirmed missing project; existing GitHub/Vercel publishing is retained.
+
+## Rice run length update - September 15
+
+Changed Rice Field Adventure from one harvest/90 seconds to three distinct bundle layouts with a shared 240-second timer. Each round requires delivery; score carries forward and the remaining-time bonus is awarded only after round three. Existing local scores are retained. New layouts keep pickups outside the cart arrival zone.
+
+`npm run check` passed: strict TypeScript, ESLint, all 57 unit/component tests, production build and secret scan. Tests now exercise all three deliveries, intermediate score preservation, final-only bonus and restart. Mobile screenshot reviewed with the round label and longer instructions. Updated Khmer hint/instructions/round/completion strings are listed for review.
+Browser verification: 21 Playwright checks passed across desktop and Pixel 5 emulation; one desktop-only skip for the mobile menu. Complete three-harvest runs, controls, reduced motion, pause/restart, local best persistence, portal links, settings and automated accessibility passed. Physical-device listening/comfort remains a manual check.

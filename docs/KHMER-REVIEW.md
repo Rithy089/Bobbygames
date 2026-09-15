@@ -43,3 +43,7 @@ Check meaning, natural tone and mobile line breaks, especially “moves” (one 
 ## Rice Field Adventure (September 15)
 
 Review `rice-field-adventure.title`, `.description`, `.hint`, `.instructions`, all six `rice.*` labels, and `aboutGames` (six games) in `src/i18n/km.ts`. Earlier reviewed game strings are preserved. Check the harvest/delivery distinction and five-second buffalo penalty wording.
+
+## Longer Rice Field Adventure
+
+Review the updated `rice-field-adventure.hint`, `.instructions`, `rice.round` and `rice.complete`: three harvests of 12 bundles, a shared four-minute timer, fresh locations each round, and a time bonus on final delivery only. No other reviewed Khmer copy changed.

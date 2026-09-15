@@ -10,7 +10,7 @@ import { sprite } from '../shared/sprites';
 import {
   config,
   home,
-  bundles,
+  bundlesFor,
   buffaloAt,
   distance,
   moveToward,
@@ -29,6 +29,8 @@ export function createFieldScene(options: GameOptions): Scene {
     facing = 1;
   let pointer: Point | null = null;
   let collected = new Set<number>();
+  let round = 0;
+  let bundles = bundlesFor(round);
   let particles: (Point & { age: number })[] = [];
   let feedback = 0,
     bumped = false;
@@ -43,6 +45,8 @@ export function createFieldScene(options: GameOptions): Scene {
       walking = false;
       facing = 1;
       collected = new Set();
+      round = 0;
+      bundles = bundlesFor(round);
       particles = [];
     },
     update(dt, input) {
@@ -108,12 +112,28 @@ export function createFieldScene(options: GameOptions): Scene {
         collected.size === config.total &&
         distance(position, home) < config.homeRadius &&
         snapshot.distance > 0;
-      snapshot.height = delivered ? 1 : 0;
-      snapshot.score = scoreFor(collected.size, snapshot.distance, delivered);
-      if (delivered || snapshot.distance === 0) {
+      const complete = delivered && round === config.rounds - 1;
+      snapshot.score = scoreFor(
+        round * config.total + collected.size,
+        snapshot.distance,
+        complete,
+      );
+      if (delivered) {
+        round++;
+        snapshot.height = round;
+        options.audio('perfect');
+        if (!complete) {
+          collected = new Set();
+          bundles = bundlesFor(round);
+          snapshot.combo = 0;
+          particles = [];
+          feedback = 0;
+          protection = 1.4;
+        }
+      }
+      if (complete || snapshot.distance === 0) {
         snapshot.phase = 'over';
         walking = false;
-        if (delivered) options.audio('perfect');
       }
     },
     draw(ctx) {

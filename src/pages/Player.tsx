@@ -289,7 +289,7 @@ function PlayerGame() {
               <b>
                 {field
                   ? Math.ceil(
-                      snapshot.phase === 'ready' ? 90 : snapshot.distance,
+                      snapshot.phase === 'ready' ? 240 : snapshot.distance,
                     ) + ' s'
                   : game.id === 'temple-tower'
                     ? snapshot.height
@@ -312,6 +312,11 @@ function PlayerGame() {
         </div>
         {field && (
           <p className="rice-mission" role="status">
+            {t('rice.round', {
+              current: Math.min(snapshot.height + 1, 3),
+              total: 3,
+            })}
+            {' · '}
             {t(snapshot.combo === 12 ? 'rice.returnHome' : 'rice.objective')}
           </p>
         )}
@@ -348,7 +353,7 @@ function PlayerGame() {
                     : snapshot.phase === 'paused'
                       ? 'paused'
                       : field
-                        ? snapshot.height === 1
+                        ? snapshot.height === 3
                           ? 'rice.complete'
                           : 'rice.timeUp'
                         : 'gameOver',

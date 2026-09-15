@@ -2,10 +2,10 @@ export default {
   'rice-field-adventure': {
     title: 'Rice Field Adventure',
     description: 'Explore golden fields, gather the harvest and find your way back to the cart.',
-    hint: 'Collect 12 rice bundles, then return to the cart. Arrow keys/WASD or touch to move.',
-    instructions: 'Explore the field with arrow keys or WASD, your mouse, or tap and drag on the field. Four touch arrows are also available. Collect all 12 golden rice bundles and return to the cart at the bottom left within 90 seconds. Give the roaming buffalo space: a bump costs five seconds, followed by brief protection. Each bundle earns 100 points. Delivering the harvest adds five points per full second remaining. Higher scores rank first. This is an original fictional countryside adventure inspired by Cambodia.',
+    hint: 'Complete three harvests: collect 12 bundles per round and return to the cart. Arrows/WASD or touch to move.',
+    instructions: 'Explore with arrows/WASD, your mouse, or tap and drag on the field. Four touch arrows are also available. Complete three harvests within four minutes: collect 12 bundles and return to the bottom-left cart each round. New bundle locations appear after each delivery. Give buffalo room: a bump costs five seconds, followed by brief protection. Each bundle earns 100 points. The final delivery adds five points per full second remaining. Higher scores rank first. This is an original fictional countryside adventure inspired by Cambodia.',
   },
-  rice: { time: 'Time left', collected: 'Rice bundles', objective: 'Gather all 12 rice bundles. Give the buffalo room to pass.', returnHome: 'Harvest gathered! Return to the glowing cart at the bottom left.', complete: 'Harvest delivered!', timeUp: 'Time to rest. Try another harvest!' },
+  rice: { round: 'Harvest {{current}} / {{total}}', time: 'Time left', collected: 'Rice bundles', objective: 'Gather all 12 rice bundles. Give the buffalo room to pass.', returnHome: 'Harvest gathered! Return to the glowing cart at the bottom left.', complete: 'All three harvests delivered!', timeUp: 'Time to rest. Try another harvest!' },
   'mekong-boat-journey': {
     title: 'Mekong Boat Journey',
     description: 'Follow a green river, steer around logs and rocks, and gather floating fruit baskets.',

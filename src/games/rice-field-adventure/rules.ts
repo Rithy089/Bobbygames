@@ -1,6 +1,7 @@
 export type Point = { x: number; y: number };
 export const config = {
-  seconds: 90,
+  seconds: 240,
+  rounds: 3,
   speed: 215,
   pickupRadius: 29,
   homeRadius: 48,
@@ -22,6 +23,14 @@ export const bundles: Point[] = [
   { x: 540, y: 475 },
   { x: 700, y: 490 },
 ];
+export const bundlesFor = (round: number): Point[] =>
+  bundles.map((p, i) =>
+    round === 0
+      ? p
+      : round === 1
+        ? { x: p.y > 440 ? Math.max(190, 800 - p.x) : 800 - p.x, y: p.y }
+        : { x: p.x + (i % 2 ? -30 : 30), y: p.y + (i % 2 ? 20 : -20) },
+  );
 export const buffaloAt = (seconds: number): Point[] => [
   { x: 400 + Math.sin(seconds * 0.43) * 250, y: 210 },
   { x: 400 + Math.sin(seconds * 0.37 + 2) * 250, y: 385 },
