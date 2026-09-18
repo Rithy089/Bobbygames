@@ -16,6 +16,7 @@ export type Input = {
   pointer: number | null;
   pointerY?: number | null;
   action: boolean;
+  slideAction?: boolean;
   direction: -1 | 0 | 1;
 };
 export type Engine = {
@@ -36,6 +37,7 @@ export type GameOptions = {
   audio: (kind: 'catch' | 'miss' | 'perfect') => void;
   reducedMotion?: () => boolean;
   freeMovement?: boolean;
+  verticalControls?: boolean;
   labels?: { perfect: string; missed: string; hazard: string };
 };
 export type Scene = {

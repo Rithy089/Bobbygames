@@ -1,0 +1,78 @@
+{
+  "generator": "Built-in image_gen.imagegen",
+  "requests": 3,
+  "variants": 0,
+  "edits": 0,
+  "generatedOn": "2026-09-19",
+  "assets": [
+    {
+      "file": "angkor-runner-cover.png",
+      "prompt": "Use case: illustration-story. Asset type: original 3:2 landscape cover illustration for Khmer cartoon arcade game Angkor Runner. Scene: layered Cambodian tropical jungle trail with palms, warm morning light, a subtle distant fictional Khmer sandstone pavilion, original invented architecture. Subject: cheerful Cambodian adult adventurer, warm brown skin, short black hair, teal shirt, red checked krama scarf, dark trousers, running shoes, jumping over a horizontal fallen wood log on trail. Dynamic appealing silhouette, polished warm hand-painted cartoon arcade illustration, rich palm greens, sandstone gold, teal and red accents, expressive confident face. Compose as complete landscape artwork with no words. Avoid exact Angkor reconstruction, sacred artifacts, flags, text, labels, logos, watermark."
+    },
+    {
+      "file": "angkor-runner-backdrop.png",
+      "prompt": "Use case: illustration-story. Asset type: original 4:3 landscape game backdrop for 800x600 side-scroller. Strict side-on lateral view of layered Cambodian tropical forest and palms, warm morning sky, a distant subtle original invented Khmer sandstone pavilion used only as scenery, calm atmospheric far background and uncluttered central play area for separately composited game sprites. Ground line precisely at 75 percent image height. Lower quarter is clear horizontal ochre dirt trail continuing straight from left edge to right edge without perspective convergence. Warm polished Khmer cartoon arcade illustration, rich palm greens, sandstone gold, soft clean silhouettes. Keep central gameplay area calm with low contrast distant greenery. No characters, no obstacles, no logs or branches crossing playable space, no pickups, no sacred artifacts, no exact Angkor reconstruction, no text, no flags, no UI, no watermark."
+    },
+    {
+      "file": "angkor-runner-sprites.png",
+      "prompt": "Use case: stylized-concept. Asset type: game sprite sheet, genuinely transparent background with real alpha, six fully isolated sprites in exactly two columns and three rows with wide transparent gutters. Flat consistent side view, no perspective. Each cell contains one complete sprite with generous transparent margins, nothing clipped or crossing cells. Top left: right-facing cheerful Cambodian adult runner with warm brown skin short black hair teal shirt red checked krama scarf dark trousers running shoes, running pose A. Top right: exactly same adult character and outfit running pose B, opposing stride. Middle left: same character tucked jumping pose facing right. Middle right: same character low sliding pose facing right, legs extending forward, compact low silhouette. Bottom left: one horizontal fallen wooden log obstacle. Bottom right: one low arching tree branch attached to a single small tree trunk at RIGHT side, branch extends left across passage with open space underneath for sliding runner; natural wood branch, not architecture. Warm polished Khmer cartoon arcade illustration with clear silhouettes and consistent scale across runner poses, rich palm greens sandstone gold teal and red accents, subtle clean contour shading. Transparent pixels around and between all sprites, no ground planes or drop shadows. No labels, no text, no numbers, no grid lines, no panels, no checkerboard drawn into image, no flags, no sacred artifacts, no architectural arch."
+    }
+  ],
+  "spriteSheet": {
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGBA",
+    "boundsFormat": "x,y,width,height; padded visual object bounds",
+    "bounds": {
+      "runA": [
+        225,
+        20,
+        330,
+        350
+      ],
+      "runB": [
+        950,
+        20,
+        320,
+        355
+      ],
+      "jump": [
+        265,
+        390,
+        300,
+        280
+      ],
+      "slide": [
+        910,
+        450,
+        420,
+        230
+      ],
+      "log": [
+        80,
+        790,
+        610,
+        165
+      ],
+      "treeBranchFull": [
+        835,
+        685,
+        670,
+        325
+      ],
+      "branchOnly": [
+        835,
+        685,
+        435,
+        160
+      ]
+    },
+    "notes": "Background is real transparent alpha; alpha max 254. RGB behind transparent pixels contains colored glows. Two running poses have similar leg positioning. Branch-only crop clips the tree branch at right to omit upright trunk; full tree shape is otherwise available."
+  },
+  "backdrop": {
+    "width": 1448,
+    "height": 1086,
+    "observedGroundLineY": 749,
+    "notes": "Ground at 69% versus requested75%; central trail clean but foreground foliage extends into bottom corners. Use image y=0,height652.5 on 800x600 to align visual ground at450, or cover lower part with a subtle ground overlay."
+  }
+}

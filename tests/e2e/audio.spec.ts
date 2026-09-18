@@ -86,7 +86,7 @@ test('music-only preferences survive reload and in-app game changes without over
   await expect(page.getByRole('slider', { name: 'Music volume', exact: true })).toHaveAttribute('aria-valuenow', '40');
   await page.getByRole('button', { name: 'Let’s play', exact: true }).click();
   await expect.poll(async () => (await probe(page)).rms).toBeGreaterThan(0.0005);
-  for (const game of ['rice-field-adventure', 'mekong-boat-journey', 'mango-catch', 'tuk-tuk-rush', 'khmer-market-match', 'temple-tower']) {
+  for (const game of ['angkor-runner', 'rice-field-adventure', 'mekong-boat-journey', 'mango-catch', 'tuk-tuk-rush', 'khmer-market-match', 'temple-tower']) {
     // Client-side links preserve the document, exposing audio cleanup bugs that
     // a full page navigation would hide by destroying the entire audio context.
     await page.locator('.header .brand').click();
@@ -124,7 +124,7 @@ test('music stays audible when sound effects are switched off in every game', as
   page,
 }) => {
   for (const game of [
-    'rice-field-adventure',
+    'angkor-runner', 'rice-field-adventure',
     'mekong-boat-journey',
     'mango-catch',
     'temple-tower',
@@ -162,7 +162,7 @@ test('each game produces real audio after Start and releases its track on naviga
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   for (const game of [
-    'rice-field-adventure',
+    'angkor-runner', 'rice-field-adventure',
     'mekong-boat-journey',
     'mango-catch',
     'temple-tower',
@@ -273,7 +273,7 @@ test('saved mute remains silent and new independent volumes persist', async ({
     ),
   );
   for (const game of [
-    'rice-field-adventure',
+    'angkor-runner', 'rice-field-adventure',
     'mekong-boat-journey',
     'mango-catch',
     'tuk-tuk-rush',

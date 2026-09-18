@@ -4,7 +4,8 @@ export type GameId =
   | 'tuk-tuk-rush'
   | 'khmer-market-match'
   | 'mekong-boat-journey'
-  | 'rice-field-adventure';
+  | 'rice-field-adventure'
+  | 'angkor-runner';
 export type Game = {
   id: GameId;
   category: 'arcade' | 'precision' | 'racing' | 'memory';
@@ -62,6 +63,14 @@ export const games: Game[] = [
     color: '#a6bd66',
     inputs: ['keyboard', 'mouse', 'touch'],
     released: '2026-09-15',
+  },
+  {
+    id: 'angkor-runner',
+    category: 'arcade',
+    difficulty: 'medium',
+    color: '#dfaa5b',
+    inputs: ['keyboard', 'mouse', 'touch'],
+    released: '2026-09-19',
   },
 ];
 export const portfolio = 'https://sayrithy-portfolio.vercel.app/';

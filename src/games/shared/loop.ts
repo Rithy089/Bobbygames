@@ -35,6 +35,7 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
       input.pointerY = null;
     }
     input.action = false;
+    input.slideAction = false;
     input.direction = 0;
   };
   const pause = () => {
@@ -50,6 +51,11 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
   ) => {
     if (scene.snapshot.phase !== 'running') return;
     input[key] = pressed;
+    // Keep quick runner taps until a frame consumes them, even after pointerup.
+    if (options.verticalControls && pressed) {
+      if (key === 'up') input.action = true;
+      if (key === 'down') input.slideAction = true;
+    }
     if (pressed && (key === 'left' || key === 'right'))
       input.direction = key === 'left' ? -1 : 1;
     if (pressed && options.freeMovement) {
@@ -68,7 +74,9 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
         'd',
         'escape',
         'p',
-        ...(options.freeMovement ? ['arrowup', 'arrowdown', 'w', 's'] : []),
+        ...(options.freeMovement || options.verticalControls
+          ? ['arrowup', 'arrowdown', 'w', 's']
+          : []),
       ].includes(key)
     ) {
       e.preventDefault();
@@ -90,9 +98,15 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
         setInput('left', e.type === 'keydown');
       if (key === 'arrowright' || key === 'd')
         setInput('right', e.type === 'keydown');
-      if (options.freeMovement && (key === 'arrowup' || key === 'w'))
+      if (
+        (options.freeMovement || options.verticalControls) &&
+        (key === 'arrowup' || key === 'w')
+      )
         setInput('up', e.type === 'keydown');
-      if (options.freeMovement && (key === 'arrowdown' || key === 's'))
+      if (
+        (options.freeMovement || options.verticalControls) &&
+        (key === 'arrowdown' || key === 's')
+      )
         setInput('down', e.type === 'keydown');
     }
   };
@@ -131,6 +145,7 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
       scene.snapshot.elapsed += dt;
       scene.update(dt, input);
       input.action = false;
+      input.slideAction = false;
       input.direction = 0;
     }
     scene.draw(ctx!);

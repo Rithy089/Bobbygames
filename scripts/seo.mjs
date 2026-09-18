@@ -31,6 +31,7 @@ const titles = {
   '/reset-password': 'Reset password — BobbyGames',
 };
 const gameData = [
+  ['angkor-runner', 'Angkor Runner', 'Jump logs, slide under branches and collect mangoes on an original fictional Khmer-inspired forest trail. Endless browser runner with guest play and local best scores.'],
   ['rice-field-adventure', 'Rice Field Adventure', 'Explore a fictional Cambodian countryside, collect twelve rice bundles and bring the harvest home. Original browser game with local scores.'],
   ['mekong-boat-journey', 'Mekong Boat Journey', 'Steer a wooden boat, avoid river obstacles and collect fruit baskets in an original Cambodian-inspired arcade game.'],
   ['khmer-market-match','Khmer Market Match','Find matching market objects in an original Cambodian memory game. Three board sizes, keyboard and touch controls, and local best results.'],

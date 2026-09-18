@@ -47,3 +47,7 @@ Review `rice-field-adventure.title`, `.description`, `.hint`, `.instructions`, a
 ## Longer Rice Field Adventure
 
 Review the updated `rice-field-adventure.hint`, `.instructions`, `rice.round` and `rice.complete`: three harvests of 12 bundles, a shared four-minute timer, fresh locations each round, and a time bonus on final delivery only. No other reviewed Khmer copy changed.
+
+## Angkor Runner
+
+Review `angkor-runner.title`, `.description`, `.hint`, `.instructions`, `runner.jump`, `runner.slide`, and the updated seven-game `aboutGames` in `src/i18n/km.ts`. Please check natural wording for sliding under branches and the distinction between the fictional forest trail and actual monuments. Previously reviewed game strings remain unchanged.

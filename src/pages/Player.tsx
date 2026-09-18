@@ -41,6 +41,7 @@ const loaders: Record<
   'tuk-tuk-rush': () => import('../games/tuk-tuk-rush/engine'),
   'mekong-boat-journey': () => import('../games/mekong-boat-journey/engine'),
   'rice-field-adventure': () => import('../games/rice-field-adventure/engine'),
+  'angkor-runner': () => import('../games/angkor-runner/engine'),
 };
 function PlayerGame() {
   const { id } = useParams();
@@ -62,6 +63,7 @@ function PlayerGame() {
   }, [t]);
   const game = games.find((g) => g.id === id);
   const field = game?.id === 'rice-field-adventure';
+  const runner = game?.id === 'angkor-runner';
   const freeMovement = field || game?.id === 'mekong-boat-journey';
   const canvas = useRef<HTMLCanvasElement>(null);
   const frame = useRef<HTMLDivElement>(null);
@@ -98,27 +100,38 @@ function PlayerGame() {
       .then(async (module) => {
         const { loadSprites } = await import('../games/shared/sprites');
         await loadSprites(
-          game.id === 'rice-field-adventure'
+          game.id === 'angkor-runner'
             ? [
-                'rice-bg',
-                'rice-farmer',
-                'rice-bundle',
-                'rice-buffalo',
-                'rice-cart',
+                'runner-bg',
+                'runner-run-a',
+                'runner-run-b',
+                'runner-jump',
+                'runner-slide',
+                'runner-log',
+                'runner-branch',
+                'mango',
               ]
-            : game.id === 'mekong-boat-journey'
+            : game.id === 'rice-field-adventure'
               ? [
-                  'mekong-bg',
-                  'mekong-boat',
-                  'mekong-log',
-                  'mekong-rock',
-                  'mekong-basket',
+                  'rice-bg',
+                  'rice-farmer',
+                  'rice-bundle',
+                  'rice-buffalo',
+                  'rice-cart',
                 ]
-              : game.id === 'mango-catch'
-                ? ['mango', 'dragon', 'basket', 'countryside']
-                : game.id === 'tuk-tuk-rush'
-                  ? []
-                  : ['tower-bg'],
+              : game.id === 'mekong-boat-journey'
+                ? [
+                    'mekong-bg',
+                    'mekong-boat',
+                    'mekong-log',
+                    'mekong-rock',
+                    'mekong-basket',
+                  ]
+                : game.id === 'mango-catch'
+                  ? ['mango', 'dragon', 'basket', 'countryside']
+                  : game.id === 'tuk-tuk-rush'
+                    ? []
+                    : ['tower-bg'],
         );
         if (disposed || !canvas.current) return;
         engine.current = module.default({
@@ -257,7 +270,9 @@ function PlayerGame() {
             <span>{t('best')}</span>
             <b>{best}</b>
           </div>
-          {game.id === 'mango-catch' || game.id === 'mekong-boat-journey' ? (
+          {game.id === 'mango-catch' ||
+          game.id === 'mekong-boat-journey' ||
+          runner ? (
             <div>
               <span>{t('lives')}</span>
               <b
@@ -303,7 +318,7 @@ function PlayerGame() {
               {field ? snapshot.combo + ' / 12' : '×' + (snapshot.combo || 1)}
             </b>
           </div>
-          {game.id === 'mekong-boat-journey' && (
+          {(game.id === 'mekong-boat-journey' || runner) && (
             <div>
               <span>{t('distance')}</span>
               <b>{Math.floor(snapshot.distance)} m</b>
@@ -457,21 +472,27 @@ function PlayerGame() {
               {t('drop')}
             </button>
           ) : (
-            (freeMovement
-              ? (['left', 'up', 'down', 'right'] as const)
-              : (['left', 'right'] as const)
+            (runner
+              ? (['up', 'down'] as const)
+              : freeMovement
+                ? (['left', 'up', 'down', 'right'] as const)
+                : (['left', 'right'] as const)
             ).map((dir) => (
               <button
                 key={dir}
                 className="button secondary"
-                aria-label={t(
-                  {
-                    left: 'moveLeft',
-                    right: 'moveRight',
-                    up: 'moveUp',
-                    down: 'moveDown',
-                  }[dir],
-                )}
+                aria-label={
+                  runner
+                    ? t(dir === 'up' ? 'runner.jump' : 'runner.slide')
+                    : t(
+                        {
+                          left: 'moveLeft',
+                          right: 'moveRight',
+                          up: 'moveUp',
+                          down: 'moveDown',
+                        }[dir],
+                      )
+                }
                 disabled={snapshot.phase !== 'running'}
                 onPointerDown={(e) => {
                   e.preventDefault();
@@ -496,14 +517,16 @@ function PlayerGame() {
                 ) : (
                   <ArrowDown />
                 )}
-                {t(
-                  {
-                    left: 'moveLeft',
-                    right: 'moveRight',
-                    up: 'moveUp',
-                    down: 'moveDown',
-                  }[dir],
-                )}
+                {runner
+                  ? t(dir === 'up' ? 'runner.jump' : 'runner.slide')
+                  : t(
+                      {
+                        left: 'moveLeft',
+                        right: 'moveRight',
+                        up: 'moveUp',
+                        down: 'moveDown',
+                      }[dir],
+                    )}
               </button>
             ))
           )}

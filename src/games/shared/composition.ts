@@ -4,6 +4,12 @@ const themes: Record<
   GameId,
   { bpm: number; root: number; melody: number[]; warmth: number }
 > = {
+  'angkor-runner': {
+    bpm: 108,
+    root: 59,
+    melody: [0, 7, 4, 9, 7, 2, 4, 0, 7, 12, 9, 4, 2, 7, 4, 0],
+    warmth: 0.18,
+  },
   'rice-field-adventure': {
     bpm: 96,
     root: 58,

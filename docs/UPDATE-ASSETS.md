@@ -45,3 +45,7 @@ See [MEKONG.md](MEKONG.md) for original imagegen asset provenance, crop informat
 ## Rice Field Adventure
 
 Original generated cover, fictional rice-field background and alpha sprites (farmer, bundle, buffalo, cart) are documented in [RICE-FIELD.md](RICE-FIELD.md). No external reference assets, commercial music or new factual claims. Procedural music is composed in the shared soundtrack module.
+
+## Angkor Runner
+
+Original generated cover, fictional forest backdrop and alpha sprites are documented in [ANGKOR-RUNNER.md](ANGKOR-RUNNER.md). Built-in image generation used three requests with no external references; full prompts are in ANGKOR-RUNNER-ASSETS.json. Existing original mango artwork and shared sound effects are reused. An original 108 BPM procedural soundtrack is added. No new factual claims or external licenses.

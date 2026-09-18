@@ -1,4 +1,11 @@
 export default {
+  'angkor-runner': {
+    title: 'Angkor Runner',
+    description: 'Jump fallen logs, slide under leafy branches and collect mangoes on a forest trail.',
+    hint: 'Jump: Space / ↑ / W or tap the trail. Slide: ↓ / S or the Slide button.',
+    instructions: 'Run as far as you can with three lives. Press Space, Up or W, or tap the trail to jump over fallen logs. Press Down or S, or use Slide to duck under leafy branches. Jump and Slide touch buttons are below the trail. Release before repeating an action; holding a button does not repeat jumps or extend slides. Each mango adds 50 points; each metre adds one. Obstacles gradually approach faster, with time to react between them. A collision costs one life and gives brief protection. Pause with P or Escape. This is a fictional forest trail with Khmer-inspired scenery, not a route through the actual Angkor monuments.',
+  },
+  runner: { jump: 'Jump', slide: 'Slide' },
   'rice-field-adventure': {
     title: 'Rice Field Adventure',
     description: 'Explore golden fields, gather the harvest and find your way back to the cart.',
@@ -268,7 +275,7 @@ export default {
     'For account data or deletion requests, contact Bobby using the links on his portfolio. Clearing browser data removes guest progress. Signing out clears the account session from this device.',
   termsText:
     'BobbyGames is an independent portfolio project. Play fairly, use a respectful display name, and do not interfere with other players or the service. Suspicious scores may be excluded. The games are provided as available without a promise of uninterrupted service. Game artwork and experiences are original; this project is not an official Cambodian government or heritage service.',
-  aboutGames: 'Six little ways to play',
+  aboutGames: 'Seven little ways to play',
   latest: 'New',
   finishRun: 'Finish a run to save your score.',
   saving: 'Saving…',
