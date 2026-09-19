@@ -34,3 +34,9 @@ Gold tokens are original Canvas vector artwork in engine.ts: beveled rims, a geo
 ## Moving scenery: first review step
 
 Original Canvas roadside plants and small stones move with world distance, with perspective producing stronger nearby motion. Low-contrast sand ripples flow along the trail. The distant illustration and camera stay fixed. Decorative silhouettes remain outside playable lanes, and no obstacle, collision, score or difficulty rule changed. Reduced motion freezes the new scenery; pause freezes distance, and restart resets it. This uses the existing game loop with no extra assets, listeners or timers. No new Khmer strings.
+
+## Step two: portrait view and trail props
+
+On portrait phones, runner-only 13:15 framing enlarges the action by about 54% compared with the old 4:3 frame. Center cropping preserves 520 of 800 world pixels, including all three lanes and approaching obstacle widths; it does not stretch art or change swipe distances. Touch controls occupy one row. Desktop and other games retain their framing.
+
+Original Canvas wooden carts with sacks introduce a later dodge-only visual variant of rock obstacles, starting at row seven on alternating rows when a rock is generated. Existing collision rules, jump/slide timing, score values, difficulty and open-lane guarantees stay unchanged. Original geometric sandstone pillars decorate the roadside only; these are fictional, non-sacred, non-destructible props. No external assets, new downloads or services.

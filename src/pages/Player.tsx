@@ -260,7 +260,10 @@ function PlayerGame() {
           {t('best')} <b>{best}</b>
         </span>
       </div>
-      <div className="game-frame" ref={frame}>
+      <div
+        className={'game-frame' + (runner ? ' runner-frame' : '')}
+        ref={frame}
+      >
         <div className="scorebar">
           <div>
             <span>{t('score')}</span>

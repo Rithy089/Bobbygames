@@ -58,3 +58,6 @@ Review `angkor-runner.description`, `.hint`, `.instructions` in Khmer: three lan
 # Gold-coin update — review requested
 
 Angkor Runner description and instructions now use **កាក់មាស** (gold coin) instead of mango. Only these two strings changed; please review the new noun in context. Previously reviewed copy elsewhere is preserved.
+# Runner carts — review requested
+
+The runner instruction now says **ថ្មធំឬរទេះ** (“large rocks or carts”) when explaining lane changes. Please review this small addition; other reviewed Khmer strings are preserved.

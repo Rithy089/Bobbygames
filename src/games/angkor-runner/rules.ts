@@ -13,6 +13,7 @@ export type TrailItem = {
   lane: Lane;
   kind: 'log' | 'branch' | 'rock' | 'coin';
   resolved: boolean;
+  appearance?: 'cart';
 };
 export const difficulty = (seconds: number) => ({
   speed: Math.min(90, 55 + Math.max(0, seconds) * 0.2),
@@ -41,6 +42,7 @@ export function makeRow(count: number, random: () => number): TrailItem[] {
               Math.min(2, Math.floor(random() * 3))
             ],
     resolved: false,
+    appearance: count >= 6 && count % 2 === 0 ? 'cart' : undefined,
   }));
   const coinLane = count < 3 ? -1 : safe;
   for (const z of [205, 220, 235])

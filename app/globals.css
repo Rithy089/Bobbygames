@@ -2420,3 +2420,18 @@ td:nth-child(2) {
 .river-controls button:nth-child(3) { grid-column: 2; grid-row: 2; }
 .river-controls button:nth-child(4) { grid-column: 3; grid-row: 2; }
 .rice-mission { margin:0; padding:12px 18px; background:#263e32; color:#fff4d2; text-align:center; font-size:14px; line-height:1.6; }
+
+/* Runner portrait framing: larger action, original proportions, all three lanes visible. */
+@media (max-width: 700px) and (orientation: portrait) {
+  .runner-frame:not(:fullscreen) .game-stage { aspect-ratio: 13 / 15; }
+  .runner-frame:not(:fullscreen) .game-stage canvas {
+    width: 100%; height: 100%; object-fit: cover; object-position: center;
+  }
+  .runner-frame .scorebar { gap: 8px; padding: 10px 8px; }
+  .runner-frame .scorebar > div { min-width: 0; }
+  .runner-frame .scorebar b { font-size: 1.1rem; }
+  .runner-frame .life-icons { gap: 2px; }
+  .runner-frame .life-icons svg { width: 15px; }
+  .runner-frame .touch-controls { gap: 6px; padding: 8px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .runner-frame .touch-controls .button { padding-inline: 4px; grid-column: auto; grid-row: 1; font-size: .75rem; }
+}

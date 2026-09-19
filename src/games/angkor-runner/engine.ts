@@ -2,6 +2,7 @@
 import { type GameOptions, type Scene, W, H } from '../shared/types';
 import { sprite } from '../shared/sprites';
 import { drawScenery } from './scenery';
+import { drawCart } from './trail-art';
 import { advance, initialState, project, type TrailItem } from './rules';
 export function createRunnerScene(options: GameOptions): Scene {
   const state = initialState();
@@ -84,6 +85,14 @@ export function createRunnerScene(options: GameOptions): Scene {
           ctx.lineTo(-6, 0);
           ctx.closePath();
           ctx.fill();
+          ctx.restore();
+          return;
+        }
+        if (item.kind === 'rock' && item.appearance === 'cart') {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.scale(p.scale, p.scale);
+          drawCart(ctx);
           ctx.restore();
           return;
         }

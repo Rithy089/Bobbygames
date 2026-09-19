@@ -162,3 +162,7 @@ Final production-build browser run: 16 tests passed across desktop and Pixel 5 e
 ## Moving scenery first step
 
 Full check passed: TypeScript, ESLint, 66 unit/component tests, production build, secret scan. Runner/shared-game browser suite: 16 passes on desktop and Pixel 5 emulation before final edge-spacing/color refinement. Final-build real Canvas pixel checks confirm roadside pixels change while running, remain identical under reduced motion, and stay frozen when paused in both modes. Desktop and final mobile screenshots reviewed. Physical-device comfort awaits Bobby review. No gameplay-rule or translation changes.
+
+## Runner step two: larger phone view, carts and pillars
+
+Final npm run check passed: TypeScript, ESLint, 67 tests / 18 files, production build and secret scan. Six final-build Playwright runner checks passed on desktop and Pixel 5 emulation (swipes, keyboard, pause, restart, local best, game-over, reduced motion, assets and portrait framing). Additional browser measurements at 320px and 393px confirmed no game-frame horizontal overflow and a single control row with touch targets over 44px. Screenshots reviewed, including carts/pillars and final phone layout. Physical phone comfort remains for Bobby to assess.

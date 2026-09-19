@@ -165,6 +165,7 @@ test('runner jumps, slides, pauses, ends and preserves a local best', async ({
 
 test('runner assets, reduced motion and catalog integration', async ({
   page,
+  isMobile,
 }) => {
   const failures: string[] = [];
   page.on('response', (r) => {
@@ -174,6 +175,12 @@ test('runner assets, reduced motion and catalog integration', async ({
   await page.goto('/play/angkor-runner');
   await page.getByRole('button', { name: /Let.s play/, exact: true }).click();
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
+  const bounds = await page.locator('canvas').boundingBox();
+  if (isMobile) {
+    expect(bounds!.height / bounds!.width).toBeGreaterThan(1.1);
+    // Portrait cropping preserves at least the 520-world-pixel gameplay corridor.
+    expect(bounds!.width / (bounds!.height / 600)).toBeGreaterThanOrEqual(519);
+  }
   expect(failures).toEqual([]);
   expect(
     await page.evaluate(

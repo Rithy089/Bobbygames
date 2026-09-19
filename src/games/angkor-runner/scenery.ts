@@ -1,4 +1,5 @@
 import { project } from './rules';
+import { drawPillar } from './trail-art';
 
 // Same world speed as obstacles. Perspective makes near details pass faster.
 // Wrap behind the camera and fade at the horizon, never inside the visible trail.
@@ -55,7 +56,9 @@ export function drawScenery(
     ctx.beginPath();
     ctx.ellipse(0, 2, 28, 7, 0, 0, Math.PI * 2);
     ctx.fill();
-    if (i % 4 === 0) {
+    if (i % 6 === 0) {
+      drawPillar(ctx);
+    } else if (i % 4 === 0) {
       // Small rounded roadside stones differ clearly from tall collision rocks.
       const stone = ctx.createLinearGradient(0, -17, 0, 2);
       stone.addColorStop(0, '#b4a27a');

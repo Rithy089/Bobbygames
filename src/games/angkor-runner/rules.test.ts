@@ -25,6 +25,17 @@ const tick = (s: RunnerState, seconds: number, input = idle) => {
   }
 };
 describe('Angkor Runner lanes', () => {
+  it('introduces carts after the opening rows with the same dodge-only collision', () => {
+    expect(
+      makeRow(2, () => 0.99).some((item) => item.appearance === 'cart'),
+    ).toBe(false);
+    const cart = makeRow(6, () => 0.99).find(
+      (item) => item.kind === 'rock' && item.appearance === 'cart',
+    )!;
+    expect(cart).toBeDefined();
+    expect(collides(cart, cart.lane, 144, true)).toBe(true);
+    expect(collides(cart, cart.lane === 0 ? 1 : 0, 0, false)).toBe(false);
+  });
   it('lands with bounded feedback and preserves the coin scoring rule', () => {
     const s = initialState();
     advance(s, 0.01, { ...idle, action: true });
