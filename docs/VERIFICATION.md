@@ -158,3 +158,7 @@ After the final obstacle-size and held-button refinements, lint/build passed aga
 
 `npm run check`: strict TypeScript, ESLint, 66 tests in 18 files, production build and secret scan passed. Canvas screenshot reviewed at outputs/review/runner-gold-coins.png: gold paths, obstacle depth and runner remain readable. Physical phone comfort and subjective realism still require user review. No online features configured.
 Final production-build browser run: 16 tests passed across desktop and Pixel 5 emulation (runner and shared game regression suites), including swipes, keyboard controls, pause, restart, game-over, persistence, reduced motion, asset loading and route cleanup.
+
+## Moving scenery first step
+
+Full check passed: TypeScript, ESLint, 66 unit/component tests, production build, secret scan. Runner/shared-game browser suite: 16 passes on desktop and Pixel 5 emulation before final edge-spacing/color refinement. Final-build real Canvas pixel checks confirm roadside pixels change while running, remain identical under reduced motion, and stay frozen when paused in both modes. Desktop and final mobile screenshots reviewed. Physical-device comfort awaits Bobby review. No gameplay-rule or translation changes.

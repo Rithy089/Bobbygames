@@ -30,3 +30,7 @@ Updated Khmer description, hint and instructions for three lanes, rocks and swip
 ## Gold coins and grounded movement
 
 Gold tokens are original Canvas vector artwork in engine.ts: beveled rims, a geometric diamond and restrained rotation. No external asset or currency imagery is used. Mango sprites no longer preload in this game. Coin values, collisions and local-score compatibility remain unchanged. Strides track distance, lane changes lean from the feet, jump shadows soften, and landings compress briefly. Sparse projected ground details and bounded analytic dust reinforce travel without camera movement. Reduced motion disables these decorative animations.
+
+## Moving scenery: first review step
+
+Original Canvas roadside plants and small stones move with world distance, with perspective producing stronger nearby motion. Low-contrast sand ripples flow along the trail. The distant illustration and camera stay fixed. Decorative silhouettes remain outside playable lanes, and no obstacle, collision, score or difficulty rule changed. Reduced motion freezes the new scenery; pause freezes distance, and restart resets it. This uses the existing game loop with no extra assets, listeners or timers. No new Khmer strings.

@@ -1,6 +1,7 @@
 ﻿import { createLoop } from '../shared/loop';
 import { type GameOptions, type Scene, W, H } from '../shared/types';
 import { sprite } from '../shared/sprites';
+import { drawScenery } from './scenery';
 import { advance, initialState, project, type TrailItem } from './rules';
 export function createRunnerScene(options: GameOptions): Scene {
   const state = initialState();
@@ -20,6 +21,7 @@ export function createRunnerScene(options: GameOptions): Scene {
       const stride = snapshot.distance * 1.35;
       ctx.clearRect(0, 0, W, H);
       sprite(ctx, 'runner-forward-bg', 0, 0, W, H);
+      drawScenery(ctx, snapshot.distance, reduced);
       ctx.strokeStyle = '#f5d49a';
       ctx.lineWidth = 2;
       ctx.globalAlpha = 0.55;
@@ -33,25 +35,6 @@ export function createRunnerScene(options: GameOptions): Scene {
       }
       ctx.globalAlpha = 1;
       if (!reduced) {
-        // Sparse ground details advance in world space; the camera never shakes.
-        ctx.fillStyle = '#a47c48';
-        for (let i = 0; i < 30; i++) {
-          const z = (((i * 13 - snapshot.distance * 3) % 390) + 390) % 390;
-          const point = project((((i * 7) % 17) - 8) / 5, z);
-          ctx.globalAlpha = 0.22;
-          ctx.beginPath();
-          ctx.ellipse(
-            point.x,
-            point.y,
-            3 * point.scale,
-            1.1 * point.scale,
-            0,
-            0,
-            Math.PI * 2,
-          );
-          ctx.fill();
-        }
-        ctx.globalAlpha = 1;
         ctx.strokeStyle = '#be9354';
         for (let i = 0; i < 16; i++) {
           const z = (((i * 22 - snapshot.distance * 3) % 352) + 352) % 352;
