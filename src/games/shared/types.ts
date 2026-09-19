@@ -38,6 +38,7 @@ export type GameOptions = {
   reducedMotion?: () => boolean;
   freeMovement?: boolean;
   verticalControls?: boolean;
+  swipeControls?: boolean;
   labels?: { perfect: string; missed: string; hazard: string };
 };
 export type Scene = {

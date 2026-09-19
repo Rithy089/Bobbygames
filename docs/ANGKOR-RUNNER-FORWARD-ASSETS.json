@@ -1,0 +1,49 @@
+{
+  "generator": "Built-in image_gen.imagegen",
+  "requests": [
+    "Original game background illustration for Cambodian cartoon arcade Angkor Runner, behind-the-runner camera looking straight forward down a broad warm ochre forest trail toward vanishing point exactly center x50% y26%. 4:3 landscape composition. Trail clear of all obstacles and people, expands from narrow path at horizon to occupy entire bottom edge, with three subtle worn tracks suggesting three lanes. Palm trees, lush jungle and small fictional Khmer-inspired sandstone pavilion far outside trail. Warm golden morning, rich green, painterly polished friendly arcade, calm stable perspective, no text, no flags, no real monuments, no items, no characters, no HUD. Clear lower playing area. Original not based on another game's assets. Save as background artwork.",
+    "Original transparent game sprite sheet, 2x2 grid four separate poses of SAME Cambodian adult runner viewed STRICTLY FROM BEHIND facing AWAY into screen, teal short sleeve shirt, red-and-white krama scarf hanging from neck, dark trousers, brown running shoes, short black hair. Top left rear-view running pose left foot forward, top right rear-view running pose right foot forward. Bottom left rear-view jumping with knees tucked, bottom right rear-view low sliding seated leaning back with legs pointing AWAY from viewer. Entire bodies each isolated, generous clear alpha margins, same polished warm hand-painted cartoon arcade style. No faces looking at camera, no side views, no ground, no glow, no text, no grid lines. Genuine transparent background. Original character not from any existing commercial game."
+  ],
+  "externalReferences": [],
+  "background": {
+    "file": "public/sprites/runner-forward-bg.webp",
+    "size": [
+      1200,
+      900
+    ]
+  },
+  "sheet": {
+    "size": [
+      1223,
+      1286
+    ],
+    "transparent": true,
+    "crops": {
+      "run-a": [
+        145,
+        8,
+        305,
+        696
+      ],
+      "run-b": [
+        765,
+        8,
+        320,
+        720
+      ],
+      "jump": [
+        32,
+        727,
+        550,
+        500
+      ],
+      "slide": [
+        650,
+        845,
+        568,
+        400
+      ]
+    }
+  },
+  "notes": "Original fictional Cambodian-inspired illustrations. Rear-view crops retain alpha at 320px high; reused original log, branch, mango and Mekong rock assets. No third-party commercial assets."
+}

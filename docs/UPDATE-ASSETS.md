@@ -49,3 +49,7 @@ Original generated cover, fictional rice-field background and alpha sprites (far
 ## Angkor Runner
 
 Original generated cover, fictional forest backdrop and alpha sprites are documented in [ANGKOR-RUNNER.md](ANGKOR-RUNNER.md). Built-in image generation used three requests with no external references; full prompts are in ANGKOR-RUNNER-ASSETS.json. Existing original mango artwork and shared sound effects are reused. An original 108 BPM procedural soundtrack is added. No new factual claims or external licenses.
+
+## Angkor Runner forward view
+
+Added original rear-view character poses and a fictional perspective trail via two built-in image-generation requests. Asset paths, crop bounds and exact prompts are in ANGKOR-RUNNER-FORWARD-ASSETS.json. Existing cover, music, mango/log/branch and original Mekong rock assets are reused. No new external licenses or factual claims.

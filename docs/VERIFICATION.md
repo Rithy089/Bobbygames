@@ -144,3 +144,12 @@ Production build generates 28 metadata routes and splits the new engine. TypeScr
 
 New Khmer strings and asset prompts/crops are documented in KHMER-REVIEW.md and ANGKOR-RUNNER.md/ANGKOR-RUNNER-ASSETS.json. Supabase, live accounts and global rankings remain deferred. No new external services or dependencies. Existing GitHub/Vercel delivery remains in use; the previously missing private Sites project was not recreated.
 Final verification: 64 unit/component tests passed in 18 files. The full Playwright run passed 75 checks with one intentional desktop mobile-menu skip. Two search checks expected Mango to match only one game; Angkor Runner also mentions mangoes, so the test now searches Mango Catch. Both corrected checks passed on rerun (77 distinct browser checks passed overall). No gameplay failure remained. Desktop/mobile runner, audio output, accessibility, all existing games, local persistence and safe links were covered.
+
+## Angkor Runner three-lane redesign
+
+Replaced side-view running with a fixed forward camera, rear-view poses, interpolated lane switching, depth-projected approaching obstacles, mango paths, and four-way swipes. Inputs support arrows/WASD/Space, touch buttons, pointer drag/swipe and tap-to-jump. Existing audio settings, music and local scores remain preserved. Rocks require lane changes; every row leaves an open lane. Branch/log artwork bounds cover their collision thresholds, with forgiving player bounds.
+
+Verified `npm run check`: strict TypeScript, ESLint, 65 unit/component tests in 18 files, production build and secret scan. A previous lifecycle test caught an extra pointerup listener on unrelated games; swipe listener registration is now scoped to swipe-enabled games, and all unit checks pass. 42 Playwright checks passed across desktop Chromium and Pixel 5 emulation: real browser touch swipes in four directions, tap and cancellation, keyboard lanes/jump, touch slide, pause/resume/restart, game-over/local persistence, images, reduced motion, automated accessibility, audio output/mute/volumes/lifecycle and regressions for original arcade games and Mekong. Desktop/mobile screenshots reviewed in ignored outputs/review.
+
+Art prompts/crops: ANGKOR-RUNNER-FORWARD-ASSETS.json. Updated Khmer description/hint/instructions await Bobby's review. No physical-phone or subjective listening verification. Supabase/accounts/global rankings remain deferred.
+After the final obstacle-size and held-button refinements, lint/build passed again and all six runner browser tests passed again on desktop/mobile emulation.

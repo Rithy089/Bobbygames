@@ -102,13 +102,14 @@ function PlayerGame() {
         await loadSprites(
           game.id === 'angkor-runner'
             ? [
-                'runner-bg',
-                'runner-run-a',
-                'runner-run-b',
-                'runner-jump',
-                'runner-slide',
+                'runner-forward-bg',
+                'runner-rear-run-a',
+                'runner-rear-run-b',
+                'runner-rear-jump',
+                'runner-rear-slide',
                 'runner-log',
                 'runner-branch',
+                'mekong-rock',
                 'mango',
               ]
             : game.id === 'rice-field-adventure'
@@ -461,7 +462,9 @@ function PlayerGame() {
           </button>
         </div>
         <div
-          className={'touch-controls' + (freeMovement ? ' river-controls' : '')}
+          className={
+            'touch-controls' + (freeMovement || runner ? ' river-controls' : '')
+          }
         >
           {game.id === 'temple-tower' ? (
             <button
@@ -473,7 +476,7 @@ function PlayerGame() {
             </button>
           ) : (
             (runner
-              ? (['up', 'down'] as const)
+              ? (['left', 'up', 'down', 'right'] as const)
               : freeMovement
                 ? (['left', 'up', 'down', 'right'] as const)
                 : (['left', 'right'] as const)
@@ -482,7 +485,7 @@ function PlayerGame() {
                 key={dir}
                 className="button secondary"
                 aria-label={
-                  runner
+                  runner && (dir === 'up' || dir === 'down')
                     ? t(dir === 'up' ? 'runner.jump' : 'runner.slide')
                     : t(
                         {
@@ -504,6 +507,7 @@ function PlayerGame() {
                 onLostPointerCapture={() => direction(dir, false)}
                 onBlur={() => direction(dir, false)}
                 onKeyDown={(e) => {
+                  if (runner && e.repeat) return;
                   if (e.key === 'Enter' || e.key === ' ') direction(dir, true);
                 }}
                 onKeyUp={() => direction(dir, false)}
@@ -517,7 +521,7 @@ function PlayerGame() {
                 ) : (
                   <ArrowDown />
                 )}
-                {runner
+                {runner && (dir === 'up' || dir === 'down')
                   ? t(dir === 'up' ? 'runner.jump' : 'runner.slide')
                   : t(
                       {

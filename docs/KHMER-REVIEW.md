@@ -51,3 +51,7 @@ Review the updated `rice-field-adventure.hint`, `.instructions`, `rice.round` an
 ## Angkor Runner
 
 Review `angkor-runner.title`, `.description`, `.hint`, `.instructions`, `runner.jump`, `runner.slide`, and the updated seven-game `aboutGames` in `src/i18n/km.ts`. Please check natural wording for sliding under branches and the distinction between the fictional forest trail and actual monuments. Previously reviewed game strings remain unchanged.
+
+## Angkor Runner forward-view update
+
+Review `angkor-runner.description`, `.hint`, `.instructions` in Khmer: three lanes, left/right actions, four-way swipes, rocks, and steady camera. Jump/Slide labels and other games' reviewed text are unchanged.

@@ -1,56 +1,74 @@
-import { freshSnapshot, type Input } from '../shared/types';
-
+﻿import { freshSnapshot, type Input } from '../shared/types';
 export const config = {
-  ground: 450,
-  playerX: 160,
   gravity: 1800,
   jumpSpeed: 720,
   slideSeconds: 0.75,
   protection: 1.4,
+  spawnDepth: 240,
+  laneSpeed: 8,
 };
+export type Lane = -1 | 0 | 1;
 export type TrailItem = {
-  x: number;
-  kind: 'log' | 'branch' | 'fruit';
+  z: number;
+  lane: Lane;
+  kind: 'log' | 'branch' | 'rock' | 'fruit';
   resolved: boolean;
 };
 export const difficulty = (seconds: number) => ({
-  speed: Math.min(410, 240 + Math.max(0, seconds) * 1.1),
-  interval: Math.max(1.7, 2.5 - Math.max(0, seconds) * 0.006),
+  speed: Math.min(90, 55 + Math.max(0, seconds) * 0.2),
+  interval: Math.max(1.65, 2.4 - Math.max(0, seconds) * 0.004),
 });
-export const body = (height: number, sliding: boolean) => ({
-  left: 147,
-  right: 173,
-  top: config.ground - height - (sliding ? 28 : 64),
-  bottom: config.ground - height - 4,
-});
+export const clampLane = (lane: number): Lane =>
+  Math.max(-1, Math.min(1, lane)) as Lane;
+// A fixed camera: this projection is shared by trail marks and objects.
+export function project(lane: number, z: number) {
+  const scale = 1 / (1 + Math.max(-35, z) / 80);
+  return { x: 400 + lane * 170 * scale, y: 155 + 345 * scale, scale };
+}
+export function makeRow(count: number, random: () => number): TrailItem[] {
+  const safe = ((count % 3) - 1) as Lane;
+  const blocked: Lane[] =
+    count < 3 ? [0] : ([-1, 0, 1] as Lane[]).filter((lane) => lane !== safe);
+  const items: TrailItem[] = blocked.map((lane) => ({
+    lane,
+    z: config.spawnDepth,
+    kind:
+      count === 0
+        ? 'log'
+        : count === 1
+          ? 'branch'
+          : (['log', 'branch', 'rock'] as const)[
+              Math.min(2, Math.floor(random() * 3))
+            ],
+    resolved: false,
+  }));
+  const fruitLane = count < 3 ? -1 : safe;
+  for (const z of [205, 220, 235])
+    items.push({ lane: fruitLane, z, kind: 'fruit', resolved: false });
+  return items;
+}
 export function collides(
   item: TrailItem,
-  previousX: number,
+  lane: number,
   height: number,
   sliding: boolean,
 ) {
-  const player = body(height, sliding);
-  const bounds =
-    item.kind === 'log'
-      ? { width: 54, top: 414, bottom: 450 }
-      : item.kind === 'branch'
-        ? { width: 90, top: 365, bottom: 405 }
-        : { width: 26, top: 404, bottom: 430 };
-  return (
-    item.x < player.right &&
-    previousX + bounds.width > player.left &&
-    player.bottom > bounds.top &&
-    player.top < bounds.bottom
-  );
+  if (Math.abs(item.lane - lane) > 0.42) return false;
+  if (item.kind === 'fruit') return height < 100;
+  if (item.kind === 'log') return height < 42;
+  if (item.kind === 'branch') return !sliding || height > 15;
+  return true;
 }
 export function initialState() {
   return {
     snapshot: freshSnapshot(),
+    lane: 0,
+    targetLane: 0 as Lane,
     height: 0,
     velocity: 0,
     slide: 0,
     protection: 0,
-    spawn: 1.5,
+    spawn: 0.8,
     count: 0,
     fruits: 0,
     previousJump: false,
@@ -58,7 +76,7 @@ export function initialState() {
     feedback: 0,
     hit: false,
     items: [] as TrailItem[],
-    rings: [] as { x: number; age: number }[],
+    rings: [] as { lane: number; age: number }[],
   };
 }
 export type RunnerState = ReturnType<typeof initialState>;
@@ -71,8 +89,15 @@ export function advance(
   const cues: ('catch' | 'miss' | 'perfect')[] = [];
   const { snapshot } = state;
   const d = difficulty(snapshot.elapsed);
-  const jump = !!input.up || input.action;
-  const slide = !!input.down || !!input.slideAction;
+  const oldLane = state.lane,
+    oldHeight = state.height;
+  if (input.direction)
+    state.targetLane = clampLane(state.targetLane + input.direction);
+  const move = state.targetLane - state.lane;
+  state.lane +=
+    Math.sign(move) * Math.min(Math.abs(move), config.laneSpeed * dt);
+  const jump = !!input.up || input.action,
+    slide = !!input.down || !!input.slideAction;
   state.slide = Math.max(0, state.slide - dt);
   state.protection = Math.max(0, state.protection - dt);
   state.feedback = Math.max(0, state.feedback - dt);
@@ -92,39 +117,30 @@ export function advance(
     state.height + state.velocity * dt - (config.gravity * dt * dt) / 2,
   );
   state.velocity = state.height > 0 ? state.velocity - config.gravity * dt : 0;
-  snapshot.distance += (d.speed * dt) / 12;
+  snapshot.distance += (d.speed * dt) / 3;
   state.spawn -= dt;
   if (state.spawn <= 0) {
-    const kind =
-      state.count < 2
-        ? state.count === 0
-          ? 'log'
-          : 'branch'
-        : random() < 0.5
-          ? 'log'
-          : 'branch';
-    state.items.push(
-      { x: 850, kind, resolved: false },
-      { x: 1030, kind: 'fruit', resolved: false },
-    );
-    state.count++;
+    state.items.push(...makeRow(state.count++, random));
     state.spawn += d.interval;
   }
   state.rings = state.rings
-    .map((r) => ({ x: r.x - d.speed * dt, age: r.age + dt }))
+    .map((r) => ({ ...r, age: r.age + dt }))
     .filter((r) => r.age < 0.65);
   for (const item of state.items) {
-    const previousX = item.x;
-    item.x -= d.speed * dt;
-    if (item.resolved) continue;
-    if (collides(item, previousX, state.height, state.slide > 0)) {
-      item.resolved = true;
+    const previousZ = item.z;
+    item.z -= d.speed * dt;
+    if (item.resolved || previousZ < 0 || item.z > 0) continue;
+    item.resolved = true;
+    const fraction = previousZ / (previousZ - item.z);
+    const lane = oldLane + (state.lane - oldLane) * fraction,
+      height = oldHeight + (state.height - oldHeight) * fraction;
+    if (collides(item, lane, height, state.slide > 0)) {
       if (item.kind === 'fruit') {
         state.fruits++;
         snapshot.combo++;
         state.hit = false;
         state.feedback = 0.65;
-        state.rings.push({ x: config.playerX, age: 0 });
+        state.rings.push({ lane: state.lane, age: 0 });
         cues.push(snapshot.combo % 3 === 0 ? 'perfect' : 'catch');
       } else if (state.protection === 0) {
         snapshot.lives--;
@@ -134,12 +150,9 @@ export function advance(
         state.feedback = 0.75;
         cues.push('miss');
       }
-    } else if (item.x < 105 && item.kind === 'fruit') {
-      item.resolved = true;
-      snapshot.combo = 0;
-    }
+    } else if (item.kind === 'fruit') snapshot.combo = 0;
   }
-  state.items = state.items.filter((item) => item.x > -150);
+  state.items = state.items.filter((item) => item.z > -35);
   snapshot.score = Math.floor(snapshot.distance) + state.fruits * 50;
   if (snapshot.lives <= 0) snapshot.phase = 'over';
   return cues;

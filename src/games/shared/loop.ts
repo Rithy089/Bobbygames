@@ -25,7 +25,9 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
     direction: 0,
   };
   const publish = () => onSnapshot({ ...scene.snapshot });
+  let gesture: { id: number; x: number; y: number } | null = null;
   const clearInput = () => {
+    gesture = null;
     input.left = false;
     input.right = false;
     input.up = false;
@@ -111,6 +113,7 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
     }
   };
   const pointer = (e: PointerEvent) => {
+    if (options.swipeControls) return;
     if (options.freeMovement && scene.snapshot.phase !== 'running') return;
     const bounds = canvas.getBoundingClientRect();
     input.pointer = ((e.clientX - bounds.left) / bounds.width) * W;
@@ -118,13 +121,32 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
       input.pointerY = ((e.clientY - bounds.top) / bounds.height) * H;
   };
   const cancelPointer = () => {
-    if (options.freeMovement) clearInput();
+    if (options.freeMovement || options.swipeControls) clearInput();
   };
   const down = (e: PointerEvent) => {
     canvas.focus({ preventScroll: true });
+    if (options.swipeControls) {
+      if (scene.snapshot.phase === 'running' && !gesture) {
+        gesture = { id: e.pointerId, x: e.clientX, y: e.clientY };
+        canvas.setPointerCapture(e.pointerId);
+      }
+      return;
+    }
     pointer(e);
     if (scene.snapshot.phase === 'running') input.action = true;
     canvas.setPointerCapture(e.pointerId);
+  };
+  const up = (e: PointerEvent) => {
+    if (!options.swipeControls || !gesture || gesture.id !== e.pointerId)
+      return;
+    const dx = e.clientX - gesture.x,
+      dy = e.clientY - gesture.y;
+    gesture = null;
+    if (scene.snapshot.phase !== 'running') return;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) input.action = true;
+    else if (Math.abs(dx) > Math.abs(dy)) input.direction = dx < 0 ? -1 : 1;
+    else if (dy < 0) input.action = true;
+    else input.slideAction = true;
   };
   const blur = () => pause();
   const visibility = () => {
@@ -134,6 +156,7 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
   canvas.addEventListener('keyup', onKey);
   canvas.addEventListener('pointermove', pointer);
   canvas.addEventListener('pointerdown', down);
+  if (options.swipeControls) canvas.addEventListener('pointerup', up);
   canvas.addEventListener('pointercancel', cancelPointer);
   window.addEventListener('blur', blur);
   document.addEventListener('visibilitychange', visibility);
@@ -189,6 +212,7 @@ export function createLoop(scene: Scene, options: GameOptions): Engine {
       canvas.removeEventListener('keyup', onKey);
       canvas.removeEventListener('pointermove', pointer);
       canvas.removeEventListener('pointerdown', down);
+      if (options.swipeControls) canvas.removeEventListener('pointerup', up);
       canvas.removeEventListener('pointercancel', cancelPointer);
       window.removeEventListener('blur', blur);
       document.removeEventListener('visibilitychange', visibility);

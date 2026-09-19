@@ -1,8 +1,7 @@
-import { createLoop } from '../shared/loop';
+﻿import { createLoop } from '../shared/loop';
 import { type GameOptions, type Scene, W, H } from '../shared/types';
 import { sprite } from '../shared/sprites';
-import { advance, initialState, config } from './rules';
-
+import { advance, initialState, project, type TrailItem } from './rules';
 export function createRunnerScene(options: GameOptions): Scene {
   const state = initialState();
   return {
@@ -16,62 +15,126 @@ export function createRunnerScene(options: GameOptions): Scene {
       for (const cue of advance(state, dt, input)) options.audio(cue);
     },
     draw(ctx) {
-      const reduced = options.reducedMotion?.() ?? false;
-      const { snapshot } = state;
+      const reduced = options.reducedMotion?.() ?? false,
+        { snapshot } = state;
       ctx.clearRect(0, 0, W, H);
-      sprite(ctx, 'runner-bg', 0, 0, W, H);
-      // Sparse trail markers convey travel without moving the whole background.
-      ctx.strokeStyle = '#bc9859';
-      ctx.lineWidth = 3;
-      if (!reduced)
-        for (let i = 0; i < 9; i++) {
-          const x =
-            ((((i * 110 - snapshot.distance * 12) % 990) + 990) % 990) - 80;
-          ctx.beginPath();
-          ctx.moveTo(x, 468 + (i % 3) * 12);
-          ctx.lineTo(x + 18, 468 + (i % 3) * 12);
-          ctx.stroke();
-        }
-      for (const item of state.items) {
-        if (item.resolved && item.kind === 'fruit') continue;
-        if (item.kind === 'log')
-          sprite(ctx, 'runner-log', item.x - 27, 418, 108, 32);
-        else if (item.kind === 'branch')
-          sprite(ctx, 'runner-branch', item.x - 6, 365, 110, 40);
-        else sprite(ctx, 'mango', item.x - 3, 400, 32, 36);
+      sprite(ctx, 'runner-forward-bg', 0, 0, W, H);
+      ctx.strokeStyle = '#f5d49a';
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.55;
+      for (const lane of [-0.5, 0.5]) {
+        const far = project(lane, 600),
+          near = project(lane, -20);
+        ctx.beginPath();
+        ctx.moveTo(far.x, far.y);
+        ctx.lineTo(near.x, near.y);
+        ctx.stroke();
       }
-      const sliding = state.slide > 0;
+      ctx.globalAlpha = 1;
+      if (!reduced) {
+        ctx.strokeStyle = '#be9354';
+        for (let i = 0; i < 16; i++) {
+          const z = (((i * 22 - snapshot.distance * 3) % 352) + 352) % 352;
+          for (const lane of [-0.5, 0.5]) {
+            const a = project(lane, z),
+              b = project(lane, z + 5);
+            ctx.lineWidth = 2 * a.scale;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+      const drawItem = (item: TrailItem) => {
+        if (item.resolved && item.kind === 'fruit') return;
+        const p = project(item.lane, item.z);
+        let id = 'mango',
+          width = 34,
+          height = 40,
+          lift = 35;
+        if (item.kind === 'log') {
+          id = 'runner-log';
+          width = 122;
+          height = 48;
+          lift = 0;
+        }
+        if (item.kind === 'branch') {
+          id = 'runner-branch';
+          width = 150;
+          height = 78;
+          lift = 80;
+        }
+        if (item.kind === 'rock') {
+          id = 'mekong-rock';
+          width = 120;
+          height = 125;
+          lift = 0;
+        }
+        if (item.kind !== 'fruit') {
+          ctx.fillStyle = '#493e27';
+          ctx.globalAlpha = 0.18;
+          ctx.beginPath();
+          ctx.ellipse(
+            p.x,
+            p.y,
+            (width * p.scale) / 2,
+            7 * p.scale,
+            0,
+            0,
+            Math.PI * 2,
+          );
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+        sprite(
+          ctx,
+          id,
+          p.x - (width * p.scale) / 2,
+          p.y - (height + lift) * p.scale,
+          width * p.scale,
+          height * p.scale,
+        );
+      };
+      const items = [...state.items].sort((a, b) => b.z - a.z);
+      for (const item of items) if (item.z >= 0) drawItem(item);
+      const p = project(state.lane, 0),
+        sliding = state.slide > 0;
       const pose = sliding
         ? 'slide'
         : state.height > 0
           ? 'jump'
-          : !reduced && Math.floor(snapshot.elapsed * 8) % 2
+          : !reduced && Math.floor(snapshot.elapsed * 9) % 2
             ? 'run-b'
             : 'run-a';
-      const width = sliding ? 88 : 80,
-        height = sliding ? 48 : state.height > 0 ? 75 : 84;
-      ctx.fillStyle = '#543e29';
-      ctx.globalAlpha = 0.2;
+      const width = sliding ? 104 : state.height > 0 ? 110 : 68,
+        height = sliding ? 73 : state.height > 0 ? 100 : 148;
+      const bob =
+        !reduced && !sliding && state.height === 0
+          ? Math.sin(snapshot.elapsed * 18) * 2
+          : 0;
+      ctx.fillStyle = '#493e27';
+      ctx.globalAlpha = 0.22;
       ctx.beginPath();
-      ctx.ellipse(config.playerX, 453, sliding ? 42 : 24, 7, 0, 0, Math.PI * 2);
+      ctx.ellipse(p.x, 503, 36, 11, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalAlpha = 1;
       sprite(
         ctx,
-        'runner-' + pose,
-        config.playerX - width / 2,
-        config.ground - state.height - height,
+        'runner-rear-' + pose,
+        p.x - width / 2,
+        p.y - state.height - height + bob,
         width,
         height,
       );
       if (state.protection > 0) {
-        ctx.strokeStyle = '#fff0b9';
+        ctx.strokeStyle = '#fff1b3';
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.ellipse(
-          config.playerX,
-          config.ground - state.height - height / 2,
-          width / 2 + 8,
+          p.x,
+          p.y - state.height - height / 2,
+          width / 2 + 9,
           height / 2 + 8,
           0,
           0,
@@ -79,27 +142,33 @@ export function createRunnerScene(options: GameOptions): Scene {
         );
         ctx.stroke();
       }
+      for (const item of items) if (item.z < 0) drawItem(item);
       if (!reduced)
-        for (const ring of state.rings) {
-          ctx.globalAlpha = 1 - ring.age / 0.65;
-          ctx.strokeStyle = '#ffe09a';
+        for (const r of state.rings) {
+          const point = project(r.lane, 0);
+          ctx.globalAlpha = 1 - r.age / 0.65;
+          ctx.strokeStyle = '#fff1b3';
           ctx.lineWidth = 3;
           ctx.beginPath();
-          ctx.arc(ring.x, 410, 12 + ring.age * 35, 0, Math.PI * 2);
+          ctx.arc(point.x, 455, 15 + r.age * 40, 0, Math.PI * 2);
           ctx.stroke();
         }
       ctx.globalAlpha = 1;
       if (state.feedback > 0) {
-        const text = state.hit ? '−1 ♥' : '+50';
+        const text = state.hit ? '\u22121 \u2665' : '+50';
         ctx.font = 'bold 22px Inter';
         ctx.textAlign = 'center';
         ctx.lineWidth = 4;
         ctx.strokeStyle = '#304135';
         ctx.fillStyle = '#fff1bf';
         const y =
-          330 - state.height - (reduced ? 0 : (0.75 - state.feedback) * 15);
-        ctx.strokeText(text, config.playerX, y);
-        ctx.fillText(text, config.playerX, y);
+          p.y -
+          state.height -
+          height -
+          14 -
+          (reduced ? 0 : (0.75 - state.feedback) * 15);
+        ctx.strokeText(text, p.x, y);
+        ctx.fillText(text, p.x, y);
       }
     },
   };
@@ -108,5 +177,6 @@ export default function createGame(options: GameOptions) {
   return createLoop(createRunnerScene(options), {
     ...options,
     verticalControls: true,
+    swipeControls: true,
   });
 }

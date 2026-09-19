@@ -1,9 +1,9 @@
 export default {
   'angkor-runner': {
     title: 'Angkor Runner',
-    description: 'Jump fallen logs, slide under leafy branches and collect mangoes on a forest trail.',
-    hint: 'Jump: Space / ↑ / W or tap the trail. Slide: ↓ / S or the Slide button.',
-    instructions: 'Run as far as you can with three lives. Press Space, Up or W, or tap the trail to jump over fallen logs. Press Down or S, or use Slide to duck under leafy branches. Jump and Slide touch buttons are below the trail. Release before repeating an action; holding a button does not repeat jumps or extend slides. Each mango adds 50 points; each metre adds one. Obstacles gradually approach faster, with time to react between them. A collision costs one life and gives brief protection. Pause with P or Escape. This is a fictional forest trail with Khmer-inspired scenery, not a route through the actual Angkor monuments.',
+    description: 'Race down a three-lane forest trail. Dodge rocks, jump logs, slide under branches and follow mango paths.',
+    hint: '← / → change lanes · ↑ / Space jump · ↓ slide. Swipe in any direction on mobile.',
+    instructions: 'Run forward through three lanes with three lives. Use Left/Right or A/D to switch lanes, Up/W/Space to jump, and Down/S to slide. On mobile, swipe left or right to change lanes, up to jump, or down to slide. Tap the trail to jump; four buttons are also available. Jump logs, slide under low branches, and change lanes around large rocks. Follow mango paths for 50 points per fruit, plus one point per metre. Each row leaves a route open. Speed increases gradually; collisions cost one life and grant brief protection. Release keys before repeating actions. Pause with P or Escape. The camera stays steady. This is a fictional Khmer-inspired forest trail, not a route through actual Angkor monuments.',
   },
   runner: { jump: 'Jump', slide: 'Slide' },
   'rice-field-adventure': {
