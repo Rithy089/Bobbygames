@@ -17,6 +17,7 @@ export function createRunnerScene(options: GameOptions): Scene {
     draw(ctx) {
       const reduced = options.reducedMotion?.() ?? false,
         { snapshot } = state;
+      const stride = snapshot.distance * 1.35;
       ctx.clearRect(0, 0, W, H);
       sprite(ctx, 'runner-forward-bg', 0, 0, W, H);
       ctx.strokeStyle = '#f5d49a';
@@ -32,6 +33,25 @@ export function createRunnerScene(options: GameOptions): Scene {
       }
       ctx.globalAlpha = 1;
       if (!reduced) {
+        // Sparse ground details advance in world space; the camera never shakes.
+        ctx.fillStyle = '#a47c48';
+        for (let i = 0; i < 30; i++) {
+          const z = (((i * 13 - snapshot.distance * 3) % 390) + 390) % 390;
+          const point = project((((i * 7) % 17) - 8) / 5, z);
+          ctx.globalAlpha = 0.22;
+          ctx.beginPath();
+          ctx.ellipse(
+            point.x,
+            point.y,
+            3 * point.scale,
+            1.1 * point.scale,
+            0,
+            0,
+            Math.PI * 2,
+          );
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
         ctx.strokeStyle = '#be9354';
         for (let i = 0; i < 16; i++) {
           const z = (((i * 22 - snapshot.distance * 3) % 352) + 352) % 352;
@@ -47,9 +67,44 @@ export function createRunnerScene(options: GameOptions): Scene {
         }
       }
       const drawItem = (item: TrailItem) => {
-        if (item.resolved && item.kind === 'fruit') return;
+        if (item.resolved && item.kind === 'coin') return;
         const p = project(item.lane, item.z);
-        let id = 'mango',
+        if (item.kind === 'coin') {
+          // Original vector artwork: fictional gold token, no real currency imagery.
+          const spin = reduced
+            ? 1
+            : 0.3 +
+              0.7 * Math.abs(Math.cos(snapshot.elapsed * 2.8 + item.z * 0.025));
+          ctx.save();
+          ctx.translate(p.x, p.y - 55 * p.scale);
+          ctx.scale(p.scale * spin, p.scale);
+          const gold = ctx.createLinearGradient(-17, -20, 17, 20);
+          gold.addColorStop(0, '#fff1a0');
+          gold.addColorStop(0.45, '#f7c943');
+          gold.addColorStop(1, '#c07a13');
+          ctx.fillStyle = gold;
+          ctx.strokeStyle = '#915511';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 17, 20, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.strokeStyle = '#fff0a0';
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 12, 15, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.fillStyle = '#ad7219';
+          ctx.beginPath();
+          ctx.moveTo(0, -9);
+          ctx.lineTo(6, 0);
+          ctx.lineTo(0, 9);
+          ctx.lineTo(-6, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+          return;
+        }
+        let id = 'runner-log',
           width = 34,
           height = 40,
           lift = 35;
@@ -71,7 +126,7 @@ export function createRunnerScene(options: GameOptions): Scene {
           height = 125;
           lift = 0;
         }
-        if (item.kind !== 'fruit') {
+        {
           ctx.fillStyle = '#493e27';
           ctx.globalAlpha = 0.18;
           ctx.beginPath();
@@ -104,21 +159,61 @@ export function createRunnerScene(options: GameOptions): Scene {
         ? 'slide'
         : state.height > 0
           ? 'jump'
-          : !reduced && Math.floor(snapshot.elapsed * 9) % 2
+          : !reduced && Math.sin(stride) > 0
             ? 'run-b'
             : 'run-a';
-      const width = sliding ? 104 : state.height > 0 ? 110 : 68,
-        height = sliding ? 73 : state.height > 0 ? 100 : 148;
+      const compression = reduced ? 0 : state.landing / 0.22;
+      const width = sliding
+          ? 104
+          : state.height > 0
+            ? 110
+            : 68 + compression * 5,
+        height = sliding ? 73 : state.height > 0 ? 100 : 148 - compression * 9;
       const bob =
         !reduced && !sliding && state.height === 0
-          ? Math.sin(snapshot.elapsed * 18) * 2
+          ? -Math.abs(Math.sin(stride)) * 5
           : 0;
       ctx.fillStyle = '#493e27';
-      ctx.globalAlpha = 0.22;
+      ctx.globalAlpha = 0.22 - state.height / 1400;
       ctx.beginPath();
-      ctx.ellipse(p.x, 503, 36, 11, 0, 0, Math.PI * 2);
+      ctx.ellipse(
+        p.x,
+        503,
+        36 - state.height / 12,
+        11 - state.height / 40,
+        0,
+        0,
+        Math.PI * 2,
+      );
       ctx.fill();
       ctx.globalAlpha = 1;
+      if (!reduced && state.height === 0) {
+        // Small footfall/landing dust, analytically aged: no timers or particle allocations.
+        for (let i = 0; i < 6; i++) {
+          const age = (snapshot.distance * 0.6 + i / 6) % 1;
+          ctx.globalAlpha = (1 - age) * (sliding ? 0.2 : 0.11);
+          ctx.fillStyle = '#e5c58b';
+          ctx.beginPath();
+          ctx.ellipse(
+            p.x + (i % 2 ? 1 : -1) * (12 + age * 19),
+            501 + age * 23,
+            3 + age * 9,
+            2 + age * 4,
+            0,
+            0,
+            Math.PI * 2,
+          );
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+      ctx.save();
+      // Lean into lane changes around the grounded feet, rather than sliding upright.
+      if (!reduced) {
+        ctx.translate(p.x, p.y - state.height);
+        ctx.rotate((state.targetLane - state.lane) * 0.14);
+        ctx.translate(-p.x, -p.y + state.height);
+      }
       sprite(
         ctx,
         'runner-rear-' + pose,
@@ -127,6 +222,7 @@ export function createRunnerScene(options: GameOptions): Scene {
         width,
         height,
       );
+      ctx.restore();
       if (state.protection > 0) {
         ctx.strokeStyle = '#fff1b3';
         ctx.lineWidth = 3;

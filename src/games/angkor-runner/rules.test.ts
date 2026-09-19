@@ -25,6 +25,19 @@ const tick = (s: RunnerState, seconds: number, input = idle) => {
   }
 };
 describe('Angkor Runner lanes', () => {
+  it('lands with bounded feedback and preserves the coin scoring rule', () => {
+    const s = initialState();
+    advance(s, 0.01, { ...idle, action: true });
+    tick(s, 0.8);
+    expect(s.height).toBe(0);
+    expect(s.landing).toBeGreaterThan(0);
+    tick(s, 0.3);
+    expect(s.landing).toBe(0);
+    s.items = [{ z: 1, lane: 0, kind: 'coin', resolved: false }];
+    advance(s, 0.05, idle);
+    expect(s.coins).toBe(1);
+    expect(s.snapshot.score).toBe(Math.floor(s.snapshot.distance) + 50);
+  });
   it('moves smoothly one lane per action, including while airborne, and clamps edges', () => {
     const s = initialState();
     advance(s, 0.01, { ...idle, direction: 1, action: true });
@@ -74,11 +87,11 @@ describe('Angkor Runner lanes', () => {
   });
   it('resolves swept depth crossings once and protects against repeated impacts', () => {
     const s = initialState();
-    s.items = [{ z: 1, lane: 0, kind: 'fruit', resolved: false }];
+    s.items = [{ z: 1, lane: 0, kind: 'coin', resolved: false }];
     advance(s, 0.05, idle);
-    expect(s.fruits).toBe(1);
+    expect(s.coins).toBe(1);
     advance(s, 0.05, idle);
-    expect(s.fruits).toBe(1);
+    expect(s.coins).toBe(1);
     s.items = [
       { z: 1, lane: 0, kind: 'log', resolved: false },
       { z: 1, lane: 0, kind: 'rock', resolved: false },
@@ -104,13 +117,13 @@ describe('Angkor Runner lanes', () => {
     advance(safe, 0.05, idle);
     expect(safe.snapshot.lives).toBe(3);
   });
-  it('leaves a reachable lane and fruit path open in every generated row', () => {
+  it('leaves a reachable lane and coin path open in every generated row', () => {
     for (let i = 0; i < 100; i++) {
       const row = makeRow(i, () => (i % 3) / 3);
-      const blocked = row.filter((o) => o.kind !== 'fruit').map((o) => o.lane);
+      const blocked = row.filter((o) => o.kind !== 'coin').map((o) => o.lane);
       expect(new Set(blocked).size).toBeLessThan(3);
-      for (const fruit of row.filter((o) => o.kind === 'fruit'))
-        expect(blocked).not.toContain(fruit.lane);
+      for (const coin of row.filter((o) => o.kind === 'coin'))
+        expect(blocked).not.toContain(coin.lane);
     }
     expect(difficulty(0).speed).toBe(55);
     expect(difficulty(999).speed).toBe(90);
@@ -124,7 +137,7 @@ describe('Angkor Runner lanes', () => {
     for (let i = 0; i < 18000; i++) {
       s.snapshot.elapsed += 0.01;
       const threats = s.items.filter(
-        (o) => o.kind !== 'fruit' && !o.resolved && o.z < 40 && o.z > 0,
+        (o) => o.kind !== 'coin' && !o.resolved && o.z < 40 && o.z > 0,
       );
       let direction: -1 | 0 | 1 = 0;
       if (threats.some((o) => o.lane === s.targetLane)) {

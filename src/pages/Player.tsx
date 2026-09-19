@@ -110,7 +110,6 @@ function PlayerGame() {
                 'runner-log',
                 'runner-branch',
                 'mekong-rock',
-                'mango',
               ]
             : game.id === 'rice-field-adventure'
               ? [

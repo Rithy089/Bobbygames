@@ -11,7 +11,7 @@ export type Lane = -1 | 0 | 1;
 export type TrailItem = {
   z: number;
   lane: Lane;
-  kind: 'log' | 'branch' | 'rock' | 'fruit';
+  kind: 'log' | 'branch' | 'rock' | 'coin';
   resolved: boolean;
 };
 export const difficulty = (seconds: number) => ({
@@ -42,9 +42,9 @@ export function makeRow(count: number, random: () => number): TrailItem[] {
             ],
     resolved: false,
   }));
-  const fruitLane = count < 3 ? -1 : safe;
+  const coinLane = count < 3 ? -1 : safe;
   for (const z of [205, 220, 235])
-    items.push({ lane: fruitLane, z, kind: 'fruit', resolved: false });
+    items.push({ lane: coinLane, z, kind: 'coin', resolved: false });
   return items;
 }
 export function collides(
@@ -54,7 +54,7 @@ export function collides(
   sliding: boolean,
 ) {
   if (Math.abs(item.lane - lane) > 0.42) return false;
-  if (item.kind === 'fruit') return height < 100;
+  if (item.kind === 'coin') return height < 100;
   if (item.kind === 'log') return height < 42;
   if (item.kind === 'branch') return !sliding || height > 15;
   return true;
@@ -70,10 +70,11 @@ export function initialState() {
     protection: 0,
     spawn: 0.8,
     count: 0,
-    fruits: 0,
+    coins: 0,
     previousJump: false,
     previousSlide: false,
     feedback: 0,
+    landing: 0,
     hit: false,
     items: [] as TrailItem[],
     rings: [] as { lane: number; age: number }[],
@@ -101,6 +102,7 @@ export function advance(
   state.slide = Math.max(0, state.slide - dt);
   state.protection = Math.max(0, state.protection - dt);
   state.feedback = Math.max(0, state.feedback - dt);
+  state.landing = Math.max(0, state.landing - dt);
   if (jump && !state.previousJump && state.height === 0 && state.slide === 0)
     state.velocity = config.jumpSpeed;
   if (
@@ -117,6 +119,7 @@ export function advance(
     state.height + state.velocity * dt - (config.gravity * dt * dt) / 2,
   );
   state.velocity = state.height > 0 ? state.velocity - config.gravity * dt : 0;
+  if (oldHeight > 0 && state.height === 0) state.landing = 0.22;
   snapshot.distance += (d.speed * dt) / 3;
   state.spawn -= dt;
   if (state.spawn <= 0) {
@@ -135,8 +138,8 @@ export function advance(
     const lane = oldLane + (state.lane - oldLane) * fraction,
       height = oldHeight + (state.height - oldHeight) * fraction;
     if (collides(item, lane, height, state.slide > 0)) {
-      if (item.kind === 'fruit') {
-        state.fruits++;
+      if (item.kind === 'coin') {
+        state.coins++;
         snapshot.combo++;
         state.hit = false;
         state.feedback = 0.65;
@@ -150,10 +153,10 @@ export function advance(
         state.feedback = 0.75;
         cues.push('miss');
       }
-    } else if (item.kind === 'fruit') snapshot.combo = 0;
+    } else if (item.kind === 'coin') snapshot.combo = 0;
   }
   state.items = state.items.filter((item) => item.z > -35);
-  snapshot.score = Math.floor(snapshot.distance) + state.fruits * 50;
+  snapshot.score = Math.floor(snapshot.distance) + state.coins * 50;
   if (snapshot.lives <= 0) snapshot.phase = 'over';
   return cues;
 }

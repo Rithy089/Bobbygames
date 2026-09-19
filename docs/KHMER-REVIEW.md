@@ -55,3 +55,6 @@ Review `angkor-runner.title`, `.description`, `.hint`, `.instructions`, `runner.
 ## Angkor Runner forward-view update
 
 Review `angkor-runner.description`, `.hint`, `.instructions` in Khmer: three lanes, left/right actions, four-way swipes, rocks, and steady camera. Jump/Slide labels and other games' reviewed text are unchanged.
+# Gold-coin update — review requested
+
+Angkor Runner description and instructions now use **កាក់មាស** (gold coin) instead of mango. Only these two strings changed; please review the new noun in context. Previously reviewed copy elsewhere is preserved.

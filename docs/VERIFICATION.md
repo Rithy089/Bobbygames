@@ -153,3 +153,8 @@ Verified `npm run check`: strict TypeScript, ESLint, 65 unit/component tests in 
 
 Art prompts/crops: ANGKOR-RUNNER-FORWARD-ASSETS.json. Updated Khmer description/hint/instructions await Bobby's review. No physical-phone or subjective listening verification. Supabase/accounts/global rankings remain deferred.
 After the final obstacle-size and held-button refinements, lint/build passed again and all six runner browser tests passed again on desktop/mobile emulation.
+
+## Angkor Runner gold-coin and grounded-motion update
+
+`npm run check`: strict TypeScript, ESLint, 66 tests in 18 files, production build and secret scan passed. Canvas screenshot reviewed at outputs/review/runner-gold-coins.png: gold paths, obstacle depth and runner remain readable. Physical phone comfort and subjective realism still require user review. No online features configured.
+Final production-build browser run: 16 tests passed across desktop and Pixel 5 emulation (runner and shared game regression suites), including swipes, keyboard controls, pause, restart, game-over, persistence, reduced motion, asset loading and route cleanup.
