@@ -1,0 +1,16 @@
+{
+  "source": "Original images generated for BobbyGames using the built-in image tool. Fictional illustrated scenery, not authentic location photographs. No third-party stock/reference assets.",
+  "reference": "public/sprites/runner-forward-bg.webp (existing original BobbyGames asset)",
+  "assets": [
+    {
+      "file": "public/sprites/runner-courtyard-bg.webp",
+      "prompt": "Create one original landscape 4:3 game background variant using the attached BobbyGames trail as style and camera reference. Preserve EXACT centered one-point perspective, horizon at 30 percent from top, broad unobstructed path expanding to fill bottom, same warm painterly Khmer cartoon arcade rendering. Replace forest roadside with a fictional sandstone garden courtyard: elegant low geometric sandstone walls, rows of square decorative pillars, palm planters, modest original pavilions only on far sides. Pale warm sandstone paved running surface, soft sunny sky. Keep middle 65 percent absolutely clear for gameplay, no obstacles, people, coins, text, logos, flags, religious statues or recognizable real monuments. Not Angkor Wat reconstruction. Camera and composition must match reference for a smooth crossfade. Asset only, no UI."
+    },
+    {
+      "file": "public/sprites/runner-green-trail-bg.webp",
+      "prompt": "Create one original landscape 4:3 game background variant using attached BobbyGames trail as style and camera reference. Preserve centered one-point perspective, horizon at 30 percent from top, wide unobstructed path expanding to fill bottom, same polished painterly Khmer cartoon arcade rendering. A lush green Cambodian-inspired fictional countryside trail: dense palms, bamboo, banana leaves and flowering bushes along far sides, distant soft green hills, fresh blue sky and warm gentle daylight. NO architecture. Warm muted ochre dirt road, absolutely clear central 65 percent for gameplay. No rocks or obstacles in road, no people, coins, text, logos, flags or real-location claim. Match camera and composition for crossfade. Asset only no UI."
+    }
+  ],
+  "processing": "Resized to 1200x900 WebP quality 80 using Sharp. Loaded only by Angkor Runner.",
+  "claims": "No claim to represent a real monument or historical reconstruction."
+}

@@ -40,3 +40,9 @@ Original Canvas roadside plants and small stones move with world distance, with 
 On portrait phones, runner-only 13:15 framing enlarges the action by about 54% compared with the old 4:3 frame. Center cropping preserves 520 of 800 world pixels, including all three lanes and approaching obstacle widths; it does not stretch art or change swipe distances. Touch controls occupy one row. Desktop and other games retain their framing.
 
 Original Canvas wooden carts with sacks introduce a later dodge-only visual variant of rock obstacles, starting at row seven on alternating rows when a rock is generated. Existing collision rules, jump/slide timing, score values, difficulty and open-lane guarantees stay unchanged. Original geometric sandstone pillars decorate the roadside only; these are fictional, non-sacred, non-destructible props. No external assets, new downloads or services.
+
+## Step three: changing environments
+
+Three original illustrated settings cycle by distance: forest, fictional sandstone garden courtyard, and lush green trail. Each segment lasts 300 metres; the final 75 metres ease into the next background. The cycle repeats after 900 metres without ending the run. Camera and collision projection remain fixed. Courtyard paving and additional roadside pillars blend with the background; pillars fade away in the green trail. Reduced motion holds the forest setting and freezes decorative scenery. Pause holds distance and blend; restart returns to forest. No new copy, score rules or controls.
+
+Two game-route-only WebP assets total 360,038 bytes; source briefs and provenance are recorded in RUNNER-ENVIRONMENT-ASSETS.json. They are original fictional illustrations, not photographs or representations of actual monuments.

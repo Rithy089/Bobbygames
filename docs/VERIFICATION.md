@@ -166,3 +166,7 @@ Full check passed: TypeScript, ESLint, 66 unit/component tests, production build
 ## Runner step two: larger phone view, carts and pillars
 
 Final npm run check passed: TypeScript, ESLint, 67 tests / 18 files, production build and secret scan. Six final-build Playwright runner checks passed on desktop and Pixel 5 emulation (swipes, keyboard, pause, restart, local best, game-over, reduced motion, assets and portrait framing). Additional browser measurements at 320px and 393px confirmed no game-frame horizontal overflow and a single control row with touch targets over 44px. Screenshots reviewed, including carts/pillars and final phone layout. Physical phone comfort remains for Bobby to assess.
+
+## Runner environment progression
+
+2026-09-24: `npm run check` passed strict TypeScript, ESLint, 69 unit/component tests in 19 files, production build, and secret scan. `npx playwright test tests/e2e/runner.spec.ts tests/e2e/runner-environments.spec.ts`: 8/8 passed across desktop and Pixel 5 emulation. The browser test completes a continuous run through forest, courtyard and green trail under normal collision rules, verifies pause freezes the Canvas and restart returns to forest. Existing runner browser tests cover keyboard, swipes, game-over, saved local best, asset loading and reduced-motion layout. Mobile courtyard and green screenshots were inspected for path and obstacle readability. Physical-device smoothness remains for Bobby to judge. No Khmer strings were added.

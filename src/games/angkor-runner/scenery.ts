@@ -17,9 +17,25 @@ export function drawScenery(
   ctx: CanvasRenderingContext2D,
   distance: number,
   reduced: boolean,
+  environment: number[] = [1, 0, 0],
 ) {
   const travel = reduced ? 0 : distance;
   ctx.save();
+  // Paving joints flow only in the courtyard; remain below all gameplay objects.
+  if (environment[1] > 0) {
+    ctx.strokeStyle = '#947345';
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = environment[1] * 0.22;
+    for (let i = 0; i < 22; i++) {
+      const z = sceneryDepth(i, 22, travel, 22);
+      const left = project(-2, z),
+        right = project(2, z);
+      ctx.beginPath();
+      ctx.moveTo(left.x, left.y);
+      ctx.lineTo(right.x, right.y);
+      ctx.stroke();
+    }
+  }
   // Broken, low-contrast sand ripples give the trail a flowing surface.
   for (let i = 0; i < 56; i++) {
     const z = sceneryDepth(i, 8, travel, 56);
@@ -56,9 +72,15 @@ export function drawScenery(
     ctx.beginPath();
     ctx.ellipse(0, 2, 28, 7, 0, 0, Math.PI * 2);
     ctx.fill();
-    if (i % 6 === 0) {
+    const pillarOpacity =
+      i % 6 === 0 ? 1 - environment[2] : i % 3 === 0 ? environment[1] : 0;
+    if (pillarOpacity > 0) {
+      ctx.save();
+      ctx.globalAlpha *= pillarOpacity;
       drawPillar(ctx);
-    } else if (i % 4 === 0) {
+      ctx.restore();
+    }
+    if (i % 4 === 0) {
       // Small rounded roadside stones differ clearly from tall collision rocks.
       const stone = ctx.createLinearGradient(0, -17, 0, 2);
       stone.addColorStop(0, '#b4a27a');

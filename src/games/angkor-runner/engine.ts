@@ -3,6 +3,7 @@ import { type GameOptions, type Scene, W, H } from '../shared/types';
 import { sprite } from '../shared/sprites';
 import { drawScenery } from './scenery';
 import { drawCart } from './trail-art';
+import { drawEnvironment } from './environment';
 import { advance, initialState, project, type TrailItem } from './rules';
 export function createRunnerScene(options: GameOptions): Scene {
   const state = initialState();
@@ -21,8 +22,8 @@ export function createRunnerScene(options: GameOptions): Scene {
         { snapshot } = state;
       const stride = snapshot.distance * 1.35;
       ctx.clearRect(0, 0, W, H);
-      sprite(ctx, 'runner-forward-bg', 0, 0, W, H);
-      drawScenery(ctx, snapshot.distance, reduced);
+      const environment = drawEnvironment(ctx, snapshot.distance, reduced);
+      drawScenery(ctx, snapshot.distance, reduced, environment);
       ctx.strokeStyle = '#f5d49a';
       ctx.lineWidth = 2;
       ctx.globalAlpha = 0.55;
