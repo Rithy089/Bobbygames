@@ -43,9 +43,9 @@ Original illustrated wooden carts with sacks introduce a later dodge-only visual
 
 ## Step three: changing environments
 
-Three original illustrated settings cycle by distance: forest, fictional sandstone garden courtyard, and lush green trail. Each segment lasts 300 metres; the final 75 metres ease into the next background. The cycle repeats after 900 metres without ending the run. Camera and collision projection remain fixed. Courtyard paving and additional roadside pillars blend with the background; pillars fade away in the green trail. Reduced motion holds the forest setting and freezes decorative scenery. Pause holds distance and blend; restart returns to forest. No new copy, score rules or controls.
+Five original illustrated settings cycle by distance: forest, respectful distant Angkor Wat vista, fictional Siem Reap-inspired riverside, sandstone garden courtyard, and lush green trail. Each segment lasts 550 metres; the last 140 metres ease into the next background. The first transition begins at 410 metres rather than 225 metres, and a full cycle takes 2,750 metres. Angkor Wat is distant scenery across water, never the running surface or an obstacle. The riverside composition is fictional. Camera and collision projection remain fixed. Courtyard paving and extra roadside pillars blend with the background; pillars are absent by the river and the Angkor view. Reduced motion still shows each setting, switching at segment boundaries without the animated crossfade. Pause holds distance and blend; restart returns to forest. No new copy, score rules or controls.
 
-Two game-route-only WebP assets total 360,038 bytes; source briefs and provenance are recorded in RUNNER-ENVIRONMENT-ASSETS.json. They are original fictional illustrations, not photographs or representations of actual monuments.
+Four game-route-only WebP variants are documented in RUNNER-ENVIRONMENT-ASSETS.json, including the art prompts and primary sources for Angkor Wat's location and Siem Reap's river. The new views are original stylized illustrations, not photographs or exact location reconstructions.
 
 ## Object art update
 

@@ -2,17 +2,30 @@ import { sprite } from '../shared/sprites';
 
 export const environments = [
   'runner-forward-bg',
+  'runner-angkor-vista-bg',
+  'runner-siem-reap-river-bg',
   'runner-courtyard-bg',
   'runner-green-trail-bg',
 ] as const;
+export const segmentDistance = 550;
+export const transitionDistance = 140;
 // Distance-based scenery freezes naturally on pause and returns to forest on restart.
 export function environmentAt(distance: number, reduced = false) {
-  const progress = Math.max(0, distance) % 900;
-  const current = Math.floor(progress / 300);
-  const t = Math.max(0, ((progress % 300) - 225) / 75);
+  const progress =
+    Math.max(0, distance) % (segmentDistance * environments.length);
+  const current = Math.floor(progress / segmentDistance);
+  const t = Math.max(
+    0,
+    ((progress % segmentDistance) - (segmentDistance - transitionDistance)) /
+      transitionDistance,
+  );
   return reduced
-    ? { current: 0, next: 0, blend: 0 }
-    : { current, next: (current + 1) % 3, blend: t * t * (3 - 2 * t) };
+    ? { current, next: current, blend: 0 }
+    : {
+        current,
+        next: (current + 1) % environments.length,
+        blend: t * t * (3 - 2 * t),
+      };
 }
 export function drawEnvironment(
   ctx: CanvasRenderingContext2D,
@@ -27,7 +40,7 @@ export function drawEnvironment(
     sprite(ctx, environments[phase.next], 0, 0, 800, 600);
   }
   ctx.restore();
-  const weights = [0, 0, 0];
+  const weights = environments.map(() => 0);
   weights[phase.current] += 1 - phase.blend;
   weights[phase.next] += phase.blend;
   return weights;

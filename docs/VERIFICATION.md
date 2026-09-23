@@ -174,3 +174,7 @@ Final npm run check passed: TypeScript, ESLint, 67 tests / 18 files, production 
 ## Runner object art refresh
 
 `npm run check` passed TypeScript, ESLint, 69 unit/component tests, production build and secret scan. Runner browser suites: 8/8 passed on desktop and Pixel 5 emulation. Asset decoding, swipes, keyboard actions, pause, restart, local best, reduced-motion layout and a complete scenery cycle were exercised. New gate, rock, cart, coin and pillar were visually inspected in game-sized mobile and desktop Canvas screenshots under forest and courtyard settings. Generated sprite crops were individually checked for transparent gutters and adjacent-object leakage. Physical-phone appearance remains for Bobby to assess.
+
+## Slower Siem Reap scenery cycle
+
+TypeScript, ESLint, 69 unit/component tests, production build and secret scan passed. All 8 runner browser checks passed on desktop and Pixel 5 emulation after the five-setting timing change, including a continuous run from forest through Angkor vista and Siem Reap-inspired riverside, pause, restart, local best, controls and asset loading. Portrait screenshots exposed a crop issue in the first Angkor illustration; the final art was edited to place the temple farther inside the left midground. The final production build then passed the long-run test on both mobile and desktop, with updated phone and desktop screenshots inspected. No new Khmer text. Physical-device comfort remains a manual check.

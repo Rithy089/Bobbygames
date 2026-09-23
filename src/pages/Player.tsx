@@ -103,6 +103,8 @@ function PlayerGame() {
           game.id === 'angkor-runner'
             ? [
                 'runner-forward-bg',
+                'runner-angkor-vista-bg',
+                'runner-siem-reap-river-bg',
                 'runner-courtyard-bg',
                 'runner-green-trail-bg',
                 'runner-rear-run-a',

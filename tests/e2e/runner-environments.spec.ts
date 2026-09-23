@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-test('a continuous run visits every environment and restart restores forest', async ({
+test('a continuous run reaches Angkor and riverside scenes, then restart restores forest', async ({
   page,
 }) => {
-  test.setTimeout(60000);
+  test.setTimeout(90000);
   await page.addInitScript(() => {
     Math.random = () => 0; // Logs after the introductory branch; normal collision rules.
     const draw = CanvasRenderingContext2D.prototype.drawImage;
@@ -14,7 +14,11 @@ test('a continuous run visits every environment and restart restores forest', as
     ) {
       const image = args[0];
       if (image instanceof HTMLImageElement) {
-        if (/runner-(forward|courtyard|green-trail)-bg/.test(image.src)) {
+        if (
+          /runner-(forward|angkor-vista|siem-reap-river|courtyard|green-trail)-bg/.test(
+            image.src,
+          )
+        ) {
           threats = [];
           Reflect.set(window, 'runnerEnvironment', image.src);
         }
@@ -40,7 +44,8 @@ test('a continuous run visits every environment and restart restores forest', as
   await page.getByRole('button', { name: /Let.s play/, exact: true }).click();
   let lane = 0;
   const seen = new Set<string>();
-  for (let i = 0; i < 230; i++) {
+  let riversideFrames = 0;
+  for (let i = 0; i < 330; i++) {
     const threats = await page.evaluate(
       () => (Reflect.get(window, 'runnerThreats') as number[]) || [],
     );
@@ -57,24 +62,22 @@ test('a continuous run visits every environment and restart restores forest', as
       String(Reflect.get(window, 'runnerEnvironment')),
     );
     seen.add(environment.split('/').pop()!);
-    if (environment.includes('green-trail') && i % 15 === 0)
-      await page
-        .locator('canvas')
-        .screenshot({
-          path: `outputs/review/runner-green-${test.info().project.name}.png`,
-        });
-    if (environment.includes('courtyard') && i % 15 === 0)
-      await page
-        .locator('canvas')
-        .screenshot({
-          path: `outputs/review/runner-courtyard-${test.info().project.name}.png`,
-        });
+    if (environment.includes('siem-reap-river')) riversideFrames++;
+    if (environment.includes('angkor-vista') && i % 20 === 0)
+      await page.locator('canvas').screenshot({
+        path: `outputs/review/runner-angkor-${test.info().project.name}.png`,
+      });
+    if (environment.includes('siem-reap-river') && i % 20 === 0)
+      await page.locator('canvas').screenshot({
+        path: `outputs/review/runner-river-${test.info().project.name}.png`,
+      });
+    if (riversideFrames > 12) break;
   }
   expect([...seen]).toEqual(
     expect.arrayContaining([
       'runner-forward-bg.webp',
-      'runner-courtyard-bg.webp',
-      'runner-green-trail-bg.webp',
+      'runner-angkor-vista-bg.webp',
+      'runner-siem-reap-river-bg.webp',
     ]),
   );
   await expect(
