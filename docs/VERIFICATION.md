@@ -170,3 +170,7 @@ Final npm run check passed: TypeScript, ESLint, 67 tests / 18 files, production 
 ## Runner environment progression
 
 2026-09-24: `npm run check` passed strict TypeScript, ESLint, 69 unit/component tests in 19 files, production build, and secret scan. `npx playwright test tests/e2e/runner.spec.ts tests/e2e/runner-environments.spec.ts`: 8/8 passed across desktop and Pixel 5 emulation. The browser test completes a continuous run through forest, courtyard and green trail under normal collision rules, verifies pause freezes the Canvas and restart returns to forest. Existing runner browser tests cover keyboard, swipes, game-over, saved local best, asset loading and reduced-motion layout. Mobile courtyard and green screenshots were inspected for path and obstacle readability. Physical-device smoothness remains for Bobby to judge. No Khmer strings were added.
+
+## Runner object art refresh
+
+`npm run check` passed TypeScript, ESLint, 69 unit/component tests, production build and secret scan. Runner browser suites: 8/8 passed on desktop and Pixel 5 emulation. Asset decoding, swipes, keyboard actions, pause, restart, local best, reduced-motion layout and a complete scenery cycle were exercised. New gate, rock, cart, coin and pillar were visually inspected in game-sized mobile and desktop Canvas screenshots under forest and courtyard settings. Generated sprite crops were individually checked for transparent gutters and adjacent-object leakage. Physical-phone appearance remains for Bobby to assess.

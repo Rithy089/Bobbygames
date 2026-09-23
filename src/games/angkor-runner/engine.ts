@@ -2,7 +2,6 @@
 import { type GameOptions, type Scene, W, H } from '../shared/types';
 import { sprite } from '../shared/sprites';
 import { drawScenery } from './scenery';
-import { drawCart } from './trail-art';
 import { drawEnvironment } from './environment';
 import { advance, initialState, project, type TrailItem } from './rules';
 export function createRunnerScene(options: GameOptions): Scene {
@@ -55,7 +54,7 @@ export function createRunnerScene(options: GameOptions): Scene {
         if (item.resolved && item.kind === 'coin') return;
         const p = project(item.lane, item.z);
         if (item.kind === 'coin') {
-          // Original vector artwork: fictional gold token, no real currency imagery.
+          // Original fictional token artwork; reduced motion holds the face steady.
           const spin = reduced
             ? 1
             : 0.3 +
@@ -63,60 +62,30 @@ export function createRunnerScene(options: GameOptions): Scene {
           ctx.save();
           ctx.translate(p.x, p.y - 55 * p.scale);
           ctx.scale(p.scale * spin, p.scale);
-          const gold = ctx.createLinearGradient(-17, -20, 17, 20);
-          gold.addColorStop(0, '#fff1a0');
-          gold.addColorStop(0.45, '#f7c943');
-          gold.addColorStop(1, '#c07a13');
-          ctx.fillStyle = gold;
-          ctx.strokeStyle = '#915511';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.ellipse(0, 0, 17, 20, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-          ctx.strokeStyle = '#fff0a0';
-          ctx.beginPath();
-          ctx.ellipse(0, 0, 12, 15, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.fillStyle = '#ad7219';
-          ctx.beginPath();
-          ctx.moveTo(0, -9);
-          ctx.lineTo(6, 0);
-          ctx.lineTo(0, 9);
-          ctx.lineTo(-6, 0);
-          ctx.closePath();
-          ctx.fill();
+          sprite(ctx, 'runner-coin-v2', -21, -22, 42, 44);
           ctx.restore();
           return;
         }
-        if (item.kind === 'rock' && item.appearance === 'cart') {
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.scale(p.scale, p.scale);
-          drawCart(ctx);
-          ctx.restore();
-          return;
-        }
-        let id = 'runner-log',
-          width = 34,
-          height = 40,
-          lift = 35;
+        let id = 'runner-log-v2',
+          width = 122,
+          height = 48,
+          lift = 0;
         if (item.kind === 'log') {
-          id = 'runner-log';
+          id = 'runner-log-v2';
           width = 122;
           height = 48;
           lift = 0;
         }
         if (item.kind === 'branch') {
-          id = 'runner-branch';
-          width = 150;
-          height = 78;
-          lift = 80;
+          id = 'runner-gate-v2';
+          width = 200;
+          height = 155;
+          lift = 0;
         }
         if (item.kind === 'rock') {
-          id = 'mekong-rock';
-          width = 120;
-          height = 125;
+          id = item.appearance === 'cart' ? 'runner-cart-v2' : 'runner-rock-v2';
+          width = item.appearance === 'cart' ? 140 : 130;
+          height = item.appearance === 'cart' ? 112 : 102;
           lift = 0;
         }
         {

@@ -18,13 +18,10 @@ test('a continuous run visits every environment and restart restores forest', as
           threats = [];
           Reflect.set(window, 'runnerEnvironment', image.src);
         }
-        if (/runner-(log|branch)\.webp/.test(image.src)) {
+        if (/runner-(log-v2|gate-v2)\.webp/.test(image.src)) {
           const scale =
-            Number(args[3]) / (image.src.includes('branch') ? 150 : 122);
-          const bottom =
-            Number(args[2]) +
-            Number(args[4]) +
-            (image.src.includes('branch') ? 80 * scale : 0);
+            Number(args[3]) / (image.src.includes('gate') ? 200 : 122);
+          const bottom = Number(args[2]) + Number(args[4]);
           if (bottom > 395 && bottom < 500)
             threats.push(
               Math.round(

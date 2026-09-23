@@ -1,5 +1,5 @@
 import { project } from './rules';
-import { drawPillar } from './trail-art';
+import { sprite } from '../shared/sprites';
 
 // Same world speed as obstacles. Perspective makes near details pass faster.
 // Wrap behind the camera and fade at the horizon, never inside the visible trail.
@@ -77,7 +77,7 @@ export function drawScenery(
     if (pillarOpacity > 0) {
       ctx.save();
       ctx.globalAlpha *= pillarOpacity;
-      drawPillar(ctx);
+      sprite(ctx, 'runner-pillar-v2', -52, -137, 104, 137);
       ctx.restore();
     }
     if (i % 4 === 0) {

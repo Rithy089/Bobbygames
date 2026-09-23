@@ -109,9 +109,12 @@ function PlayerGame() {
                 'runner-rear-run-b',
                 'runner-rear-jump',
                 'runner-rear-slide',
-                'runner-log',
-                'runner-branch',
-                'mekong-rock',
+                'runner-log-v2',
+                'runner-gate-v2',
+                'runner-rock-v2',
+                'runner-cart-v2',
+                'runner-pillar-v2',
+                'runner-coin-v2',
               ]
             : game.id === 'rice-field-adventure'
               ? [

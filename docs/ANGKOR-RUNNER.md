@@ -19,7 +19,7 @@ Original 108 BPM procedural composition: 32 evolving bars (about 71.1 seconds), 
 
 Three image requests used the built-in OpenAI image tool, with no third-party references or licensed stock. Generated illustrations are fictional. Full briefs are recorded in `ANGKOR-RUNNER-ASSETS.json`.
 
-The forward-view update adds two original built-in image-generation requests, documented in ANGKOR-RUNNER-FORWARD-ASSETS.json. Active artwork: runner-forward-bg.webp, runner-rear-{run-a,run-b,jump,slide}.webp, existing log/branch artwork and original mekong-rock.webp. Background is 1200x900; rear sprites retain alpha at 320px high. Existing covers and legacy assets are preserved, but legacy character/background files no longer load in this game.
+The forward-view update added two original built-in image-generation requests, documented in ANGKOR-RUNNER-FORWARD-ASSETS.json. Current artwork uses runner-forward-bg.webp, runner-rear-{run-a,run-b,jump,slide}.webp and upgraded object sprites documented in RUNNER-OBJECT-ASSETS.json. Background is 1200x900; rear sprites retain alpha at 320px high. Existing covers and legacy assets are preserved, but legacy character/background files no longer load in this game.
 
 Source sheet 1536x1024 crop rectangles (x,y,width,height): run A (225,20,330,350); run B (950,20,320,355); jump (265,390,300,280); slide (910,450,420,230); log (80,790,610,165); branch (835,685,435,160). All assets are local, with no remote loading dependency.
 
@@ -29,7 +29,7 @@ Updated Khmer description, hint and instructions for three lanes, rocks and swip
 
 ## Gold coins and grounded movement
 
-Gold tokens are original Canvas vector artwork in engine.ts: beveled rims, a geometric diamond and restrained rotation. No external asset or currency imagery is used. Mango sprites no longer preload in this game. Coin values, collisions and local-score compatibility remain unchanged. Strides track distance, lane changes lean from the feet, jump shadows soften, and landings compress briefly. Sparse projected ground details and bounded analytic dust reinforce travel without camera movement. Reduced motion disables these decorative animations.
+Gold tokens use an original illustrated WebP with a geometric diamond and restrained rotation. No external asset or real currency imagery is used. Mango sprites no longer preload in this game. Coin values, collisions and local-score compatibility remain unchanged. Strides track distance, lane changes lean from the feet, jump shadows soften, and landings compress briefly. Sparse projected ground details and bounded analytic dust reinforce travel without camera movement. Reduced motion disables these decorative animations.
 
 ## Moving scenery: first review step
 
@@ -39,10 +39,14 @@ Original Canvas roadside plants and small stones move with world distance, with 
 
 On portrait phones, runner-only 13:15 framing enlarges the action by about 54% compared with the old 4:3 frame. Center cropping preserves 520 of 800 world pixels, including all three lanes and approaching obstacle widths; it does not stretch art or change swipe distances. Touch controls occupy one row. Desktop and other games retain their framing.
 
-Original Canvas wooden carts with sacks introduce a later dodge-only visual variant of rock obstacles, starting at row seven on alternating rows when a rock is generated. Existing collision rules, jump/slide timing, score values, difficulty and open-lane guarantees stay unchanged. Original geometric sandstone pillars decorate the roadside only; these are fictional, non-sacred, non-destructible props. No external assets, new downloads or services.
+Original illustrated wooden carts with sacks introduce a later dodge-only visual variant of rock obstacles, starting at row seven on alternating rows when a rock is generated. Existing collision rules, jump/slide timing, score values, difficulty and open-lane guarantees stay unchanged. Original geometric sandstone pillars decorate the roadside only; these are fictional, non-sacred, non-destructible props. The first Canvas art has since been replaced with local game sprites.
 
 ## Step three: changing environments
 
 Three original illustrated settings cycle by distance: forest, fictional sandstone garden courtyard, and lush green trail. Each segment lasts 300 metres; the final 75 metres ease into the next background. The cycle repeats after 900 metres without ending the run. Camera and collision projection remain fixed. Courtyard paving and additional roadside pillars blend with the background; pillars fade away in the green trail. Reduced motion holds the forest setting and freezes decorative scenery. Pause holds distance and blend; restart returns to forest. No new copy, score rules or controls.
 
 Two game-route-only WebP assets total 360,038 bytes; source briefs and provenance are recorded in RUNNER-ENVIRONMENT-ASSETS.json. They are original fictional illustrations, not photographs or representations of actual monuments.
+
+## Object art update
+
+The runner now uses six new original transparent WebP sprites: fallen log (jump), leafy crossbar (slide), angular boulder (dodge), market handcart (dodge), gold token (collect), and roadside sandstone pillar (decoration). They share the scenery's lighting and painterly style. The pillar is fictional and stays off the playable lanes. The token is fictional currency. The prior flat cart, simple pillar, round shared Mekong rock, and vector coin are no longer used by this game. Log/branch collision types remain unchanged internally, along with scoring, obstacle timing, and the clear lane in every row. The six assets total about 217 KB and load with the runner route only. Sources, exact prompts and crop details are in RUNNER-OBJECT-ASSETS.json. No new Khmer strings.
