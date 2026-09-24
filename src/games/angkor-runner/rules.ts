@@ -1,4 +1,5 @@
 ﻿import { freshSnapshot, type Input } from '../shared/types';
+import { environmentAt } from './environment';
 export const config = {
   gravity: 1800,
   jumpSpeed: 720,
@@ -13,7 +14,8 @@ export type TrailItem = {
   lane: Lane;
   kind: 'log' | 'branch' | 'rock' | 'coin';
   resolved: boolean;
-  appearance?: 'cart';
+  appearance?: 'cart' | 'baskets' | 'planter' | 'bamboo';
+  intro?: boolean;
 };
 export const difficulty = (seconds: number) => ({
   speed: Math.min(90, 55 + Math.max(0, seconds) * 0.2),
@@ -26,25 +28,59 @@ export function project(lane: number, z: number) {
   const scale = 1 / (1 + Math.max(-35, z) / 80);
   return { x: 400 + lane * 170 * scale, y: 155 + 345 * scale, scale };
 }
-export function makeRow(count: number, random: () => number): TrailItem[] {
+export function makeRow(
+  count: number,
+  random: () => number,
+  zone = 0,
+  zoneRow = count,
+): TrailItem[] {
   const safe = ((count % 3) - 1) as Lane;
-  const blocked: Lane[] =
-    count < 3 ? [0] : ([-1, 0, 1] as Lane[]).filter((lane) => lane !== safe);
-  const items: TrailItem[] = blocked.map((lane) => ({
-    lane,
-    z: config.spawnDepth,
-    kind:
+  const intro = count < 3 || (zone > 0 && zoneRow === 0);
+  const blocked: Lane[] = intro
+    ? [0]
+    : ([-1, 0, 1] as Lane[]).filter((lane) => lane !== safe);
+  const kinds = (
+    zone === 1
+      ? ['branch', 'rock', 'branch']
+      : zone === 2
+        ? ['log', 'rock', 'branch']
+        : zone === 3
+          ? ['rock', 'branch', 'log']
+          : ['log', 'branch', 'rock']
+  ) as ('log' | 'branch' | 'rock')[];
+  const items: TrailItem[] = blocked.map((lane) => {
+    const kind =
       count === 0
         ? 'log'
-        : count === 1
+        : count === 1 || (zone === 1 && zoneRow === 0)
           ? 'branch'
-          : (['log', 'branch', 'rock'] as const)[
-              Math.min(2, Math.floor(random() * 3))
-            ],
-    resolved: false,
-    appearance: count >= 6 && count % 2 === 0 ? 'cart' : undefined,
-  }));
-  const coinLane = count < 3 ? -1 : safe;
+          : zone === 2 && zoneRow === 0
+            ? 'log'
+            : zone === 3 && zoneRow === 0
+              ? 'rock'
+              : zone === 4 && zoneRow === 0
+                ? 'log'
+                : kinds[Math.min(2, Math.floor(random() * 3))];
+    const appearance =
+      zone === 2 && kind === 'log'
+        ? 'baskets'
+        : zone === 3 && kind === 'rock'
+          ? 'planter'
+          : zone === 4 && kind === 'log'
+            ? 'bamboo'
+            : kind === 'rock' && count >= 6 && count % 2 === 0 && zone !== 4
+              ? 'cart'
+              : undefined;
+    return {
+      lane,
+      z: config.spawnDepth,
+      kind,
+      resolved: false,
+      appearance,
+      intro: zone > 0 && zoneRow === 0,
+    };
+  });
+  const coinLane = intro ? -1 : safe;
   for (const z of [205, 220, 235])
     items.push({ lane: coinLane, z, kind: 'coin', resolved: false });
   return items;
@@ -72,6 +108,8 @@ export function initialState() {
     protection: 0,
     spawn: 0.8,
     count: 0,
+    zone: 0,
+    zoneRows: 0,
     coins: 0,
     previousJump: false,
     previousSlide: false,
@@ -125,7 +163,12 @@ export function advance(
   snapshot.distance += (d.speed * dt) / 3;
   state.spawn -= dt;
   if (state.spawn <= 0) {
-    state.items.push(...makeRow(state.count++, random));
+    const zone = environmentAt(snapshot.distance).current;
+    if (zone !== state.zone) {
+      state.zone = zone;
+      state.zoneRows = 0;
+    }
+    state.items.push(...makeRow(state.count++, random, zone, state.zoneRows++));
     state.spawn += d.interval;
   }
   state.rings = state.rings

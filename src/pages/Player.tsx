@@ -115,6 +115,9 @@ function PlayerGame() {
                 'runner-gate-v2',
                 'runner-rock-v2',
                 'runner-cart-v2',
+                'runner-baskets-v1',
+                'runner-planter-v1',
+                'runner-bamboo-v1',
                 'runner-pillar-v2',
                 'runner-coin-v2',
               ]

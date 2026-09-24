@@ -22,9 +22,21 @@ test('a continuous run reaches Angkor and riverside scenes, then restart restore
           threats = [];
           Reflect.set(window, 'runnerEnvironment', image.src);
         }
-        if (/runner-(log-v2|gate-v2)\.webp/.test(image.src)) {
-          const scale =
-            Number(args[3]) / (image.src.includes('gate') ? 200 : 122);
+        if (
+          /runner-(log-v2|gate-v2|baskets-v1|planter-v1|bamboo-v1|cart-v2|rock-v2)\.webp/.test(
+            image.src,
+          )
+        ) {
+          const width = image.src.includes('gate')
+            ? 200
+            : image.src.includes('baskets')
+              ? 105
+              : image.src.includes('cart')
+                ? 140
+                : image.src.includes('log') || image.src.includes('bamboo')
+                  ? 122
+                  : 130;
+          const scale = Number(args[3]) / width;
           const bottom = Number(args[2]) + Number(args[4]);
           if (bottom > 395 && bottom < 500)
             threats.push(
@@ -50,7 +62,9 @@ test('a continuous run reaches Angkor and riverside scenes, then restart restore
       () => (Reflect.get(window, 'runnerThreats') as number[]) || [],
     );
     if (threats.includes(lane)) {
-      const safe = [-1, 0, 1].find((value) => !threats.includes(value))!;
+      const safe = [-1, 0, 1].find((value) => !threats.includes(value));
+      if (safe === undefined)
+        throw new Error(`No safe lane at ${i}: ${threats.join(',')}`);
       while (lane !== safe) {
         await page.keyboard.press(lane < safe ? 'ArrowRight' : 'ArrowLeft');
         lane += lane < safe ? 1 : -1;
@@ -63,14 +77,6 @@ test('a continuous run reaches Angkor and riverside scenes, then restart restore
     );
     seen.add(environment.split('/').pop()!);
     if (environment.includes('siem-reap-river')) riversideFrames++;
-    if (environment.includes('angkor-vista') && i % 20 === 0)
-      await page.locator('canvas').screenshot({
-        path: `outputs/review/runner-angkor-${test.info().project.name}.png`,
-      });
-    if (environment.includes('siem-reap-river') && i % 20 === 0)
-      await page.locator('canvas').screenshot({
-        path: `outputs/review/runner-river-${test.info().project.name}.png`,
-      });
     if (riversideFrames > 12) break;
   }
   expect([...seen]).toEqual(

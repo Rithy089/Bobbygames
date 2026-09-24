@@ -71,9 +71,19 @@ export function createRunnerScene(options: GameOptions): Scene {
           height = 48,
           lift = 0;
         if (item.kind === 'log') {
-          id = 'runner-log-v2';
-          width = 122;
-          height = 48;
+          id =
+            item.appearance === 'baskets'
+              ? 'runner-baskets-v1'
+              : item.appearance === 'bamboo'
+                ? 'runner-bamboo-v1'
+                : 'runner-log-v2';
+          width = item.appearance === 'baskets' ? 105 : 122;
+          height =
+            item.appearance === 'baskets'
+              ? 72
+              : item.appearance === 'bamboo'
+                ? 57
+                : 48;
           lift = 0;
         }
         if (item.kind === 'branch') {
@@ -83,9 +93,19 @@ export function createRunnerScene(options: GameOptions): Scene {
           lift = 0;
         }
         if (item.kind === 'rock') {
-          id = item.appearance === 'cart' ? 'runner-cart-v2' : 'runner-rock-v2';
+          id =
+            item.appearance === 'planter'
+              ? 'runner-planter-v1'
+              : item.appearance === 'cart'
+                ? 'runner-cart-v2'
+                : 'runner-rock-v2';
           width = item.appearance === 'cart' ? 140 : 130;
-          height = item.appearance === 'cart' ? 112 : 102;
+          height =
+            item.appearance === 'planter'
+              ? 109
+              : item.appearance === 'cart'
+                ? 112
+                : 102;
           lift = 0;
         }
         {
@@ -112,6 +132,28 @@ export function createRunnerScene(options: GameOptions): Scene {
           width * p.scale,
           height * p.scale,
         );
+        if (item.intro && item.z > 25 && item.z < 190) {
+          // The first themed prop is isolated and marked with its familiar control.
+          const cue =
+            item.kind === 'log' ? '↑' : item.kind === 'branch' ? '↓' : '↔';
+          const y = p.y - height * p.scale - 20 * p.scale;
+          ctx.fillStyle = '#23372e';
+          ctx.beginPath();
+          ctx.roundRect(
+            p.x - 16 * p.scale,
+            y - 15 * p.scale,
+            32 * p.scale,
+            30 * p.scale,
+            9 * p.scale,
+          );
+          ctx.fill();
+          ctx.fillStyle = '#fff4ce';
+          ctx.font = `bold ${22 * p.scale}px Inter`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(cue, p.x, y);
+          ctx.textBaseline = 'alphabetic';
+        }
       };
       const items = [...state.items].sort((a, b) => b.z - a.z);
       for (const item of items) if (item.z >= 0) drawItem(item);

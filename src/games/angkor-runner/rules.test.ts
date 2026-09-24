@@ -36,6 +36,59 @@ describe('Angkor Runner lanes', () => {
     expect(collides(cart, cart.lane, 144, true)).toBe(true);
     expect(collides(cart, cart.lane === 0 ? 1 : 0, 0, false)).toBe(false);
   });
+  it('introduces one themed obstacle per setting before denser patterns', () => {
+    const expected = [
+      ['branch', undefined],
+      ['log', 'baskets'],
+      ['rock', 'planter'],
+      ['log', 'bamboo'],
+    ] as const;
+    for (let zone = 1; zone <= 4; zone++) {
+      const row = makeRow(12 + zone, () => 0.99, zone, 0);
+      const threats = row.filter((item) => item.kind !== 'coin');
+      expect(threats).toHaveLength(1);
+      expect(threats[0]).toMatchObject({
+        lane: 0,
+        kind: expected[zone - 1][0],
+        appearance: expected[zone - 1][1],
+        intro: true,
+      });
+      expect(
+        row
+          .filter((item) => item.kind === 'coin')
+          .every((item) => item.lane === -1),
+      ).toBe(true);
+      const followUp = makeRow(15 + zone, () => 0, zone, 1);
+      expect(followUp.filter((item) => item.kind !== 'coin')).toHaveLength(2);
+    }
+    const baskets = makeRow(20, () => 0, 2, 2)[0];
+    const planter = makeRow(20, () => 0, 3, 2)[0];
+    const bamboo = makeRow(20, () => 0, 4, 2)[0];
+    expect(collides(baskets, baskets.lane, 90, false)).toBe(false);
+    expect(collides(planter, planter.lane, 90, true)).toBe(true);
+    expect(collides(bamboo, bamboo.lane, 90, false)).toBe(false);
+  });
+  it('switches obstacle families at scenery boundaries and resets after a full cycle', () => {
+    const state = initialState();
+    state.count = 20;
+    for (let zone = 1; zone <= 4; zone++) {
+      state.snapshot.distance = zone * 550;
+      state.spawn = 0;
+      advance(state, 0.01, idle, () => 0);
+      expect(state.zone).toBe(zone);
+      expect(state.zoneRows).toBe(1);
+      expect(
+        state.items.filter((item) => item.intro && !item.resolved).at(-1)
+          ?.appearance,
+      ).toBe([undefined, 'baskets', 'planter', 'bamboo'][zone - 1]);
+      state.items = [];
+    }
+    state.snapshot.distance = 2750;
+    state.spawn = 0;
+    advance(state, 0.01, idle, () => 0);
+    expect(state.zone).toBe(0);
+    expect(state.zoneRows).toBe(1);
+  });
   it('lands with bounded feedback and preserves the coin scoring rule', () => {
     const s = initialState();
     advance(s, 0.01, { ...idle, action: true });
@@ -130,7 +183,7 @@ describe('Angkor Runner lanes', () => {
   });
   it('leaves a reachable lane and coin path open in every generated row', () => {
     for (let i = 0; i < 100; i++) {
-      const row = makeRow(i, () => (i % 3) / 3);
+      const row = makeRow(i, () => (i % 3) / 3, i % 5, i % 12);
       const blocked = row.filter((o) => o.kind !== 'coin').map((o) => o.lane);
       expect(new Set(blocked).size).toBeLessThan(3);
       for (const coin of row.filter((o) => o.kind === 'coin'))
